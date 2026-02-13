@@ -1,5 +1,5 @@
 <Solution>
-  <Project Path="DungeonsAndAuctions.Application/DungeonsAndAuctionsApplication.csproj" />
+  <Project Path="DungeonsAndAuctions.Application/DungeonsAndAuctions.Application.csproj" />
   <Project Path="DungeonsAndAuctions.Infraestructure/DungeonsAndAuctions.Infraestructure.csproj" />
   <Project Path="DungeonsAndAuctions.Web/DungeonsAndAuctions.Web.csproj" />
 </Solution>

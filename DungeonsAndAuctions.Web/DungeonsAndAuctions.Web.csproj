@@ -7,4 +7,9 @@
     <RootNamespace>DNDA.Web</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DungeonsAndAuctions.Application\DungeonsAndAuctions.Application.csproj" />
+    <ProjectReference Include="..\DungeonsAndAuctions.Infraestructure\DungeonsAndAuctions.Infraestructure.csproj" />
+  </ItemGroup>
+
 </Project>
