@@ -45,7 +45,7 @@ CREATE TABLE Qualities(
     Quality NVARCHAR(50)
 );
 
-CREATE TABLE AunctionState(
+CREATE TABLE AuctionState(
     idstate INT IDENTITY(1,1) PRIMARY KEY,
     name NVARCHAR(50)
 );
@@ -187,7 +187,7 @@ VALUES
 ('luna_mod','Luna','Martinez',0x4D6F64313233,'2000-09-15',1,3,'Moderador activo.','luna.mod@mail.com',NULL,3,0,'2026-02-20',NULL,1);
 
 
-Insert into AunctionState(Name) 
+Insert into AuctionState(Name) 
 VALUES
 ('Open'),
 ('Close'),
@@ -263,7 +263,7 @@ ALTER TABLE Objects ADD FOREIGN KEY (idCondition) REFERENCES Conditions(Id);
 ALTER TABLE Objects ADD FOREIGN KEY (idimage) REFERENCES Images(Id);
 ALTER TABLE Objects ADD FOREIGN KEY (idState) REFERENCES Qualities(ID);
 
-ALTER TABLE Auctions ADD FOREIGN KEY (idstate) REFERENCES AunctionState(idstate);
+ALTER TABLE Auctions ADD FOREIGN KEY (idstate) REFERENCES AuctionState(idstate);
 ALTER TABLE Auctions ADD FOREIGN KEY (idusercreator) REFERENCES Users(Id);
 ALTER TABLE Auctions ADD FOREIGN KEY (idobject) REFERENCES Objects(Id);
 

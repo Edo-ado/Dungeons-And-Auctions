@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace D_A.Application.DTOs
 {
-    public record CountryDTO
+    public record CountriesDTO
     {
         [DisplayName("ID")]
         public int Id { get; init; }

@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 
 namespace D_A.Application.DTOs
 {
-    public record GenderDTO
+    public record PaymentStatusDTO
     {
-        [DisplayName("ID")]
-        public int Id { get; init; }
+        [DisplayName("Id")]
+        public int Id { get; set; }
 
-        [DisplayName("Género")]
-        public string Name { get; init; } = string.Empty;
+        [DisplayName("Status")]
+        public string Status { get; set; } = string.Empty;
+
     }
 }

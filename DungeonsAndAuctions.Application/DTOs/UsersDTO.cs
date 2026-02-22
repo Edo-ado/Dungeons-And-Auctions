@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace D_A.Application.DTOs
 {
-    public record UserDTO
+    public record UsersDTO
     {
 
         [DisplayName("ID User")]

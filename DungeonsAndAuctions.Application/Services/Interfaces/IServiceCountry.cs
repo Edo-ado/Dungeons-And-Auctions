@@ -9,6 +9,6 @@ namespace D_A.Application.Services.Interfaces
 {
     public interface IServiceCountry
     {
-        Task<ICollection<CountryDTO>> ListAsync();
+        Task<ICollection<CountriesDTO>> ListAsync();
     }
 }

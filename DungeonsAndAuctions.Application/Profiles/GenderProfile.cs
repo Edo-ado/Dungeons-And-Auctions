@@ -13,7 +13,7 @@ namespace D_A.Application.Profiles
     {
         public GenderProfile()
         {
-            CreateMap<GenderDTO, Genders>().ReverseMap();
+            CreateMap<GendersDTO, Genders>().ReverseMap();
         }
     }
 }

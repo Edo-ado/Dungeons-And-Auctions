@@ -13,7 +13,7 @@ namespace D_A.Application.Profiles
     {
         public CountryProfile()
         {
-            CreateMap<CountryDTO, Countries>().ReverseMap();
+            CreateMap<CountriesDTO, Countries>().ReverseMap();
         }
     }
 }

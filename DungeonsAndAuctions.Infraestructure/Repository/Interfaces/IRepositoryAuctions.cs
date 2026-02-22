@@ -8,5 +8,8 @@ namespace D_A.Infraestructure.Repository.Interfaces
 {
     public interface IRepositoryAuctions
     {
+
+        Task<List<Models.Auctions>> GetAllAuctions();
+        Task<List<Models.Auctions?>> GetSpecificViewList();
     }
 }

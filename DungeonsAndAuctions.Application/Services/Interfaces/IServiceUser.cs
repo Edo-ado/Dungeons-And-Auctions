@@ -11,9 +11,9 @@ namespace D_A.Application.Services.Interfaces
     public interface IServiceUser
     {
 
-      Task<List<UserDTO>> ListAsync();
+      Task<List<UsersDTO>> ListAsync();
 
-        Task<UserDTO> FindByIdAsync(int id);
+        Task<UsersDTO> FindByIdAsync(int id);
 
 
     }
