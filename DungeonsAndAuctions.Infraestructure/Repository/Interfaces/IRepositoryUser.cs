@@ -8,11 +8,11 @@ using D_A.Infraestructure.Models;
 
 namespace D_A.Infraestructure.Repository.Interfaces
 {
-    internal interface IRepositoryUsers
+    public interface IRepositoryUser
     {
 
         Task<ICollection<Users>> ListAsync();
-        Task<Users> FindByIdAsync(int id);
+        Task<Users?> FindByIdAsync(int id);
 
     }
 

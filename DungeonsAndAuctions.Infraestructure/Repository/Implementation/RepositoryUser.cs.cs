@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace D_A.Infraestructure.Repository.Implementation
 {
-    public class RepositoryUser : IRepositoryUsers
+    public class RepositoryUser : IRepositoryUser
 
     {
         private readonly DAContext _context;
@@ -20,9 +20,11 @@ namespace D_A.Infraestructure.Repository.Implementation
             _context = context;
         }
 
-        public Task<Users> FindByIdAsync(int id)
+        public async Task<Users?> FindByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Set<Users>()
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<ICollection<Users>> ListAsync()
