@@ -20,7 +20,7 @@ public partial class DAContext : DbContext
 
     public virtual DbSet<Auctions> Auctions { get; set; }
 
-    public virtual DbSet<AunctionState> AunctionState { get; set; }
+    public virtual DbSet<AuctionState> AuctionState { get; set; }
 
     public virtual DbSet<Categories> Categories { get; set; }
 
@@ -132,7 +132,7 @@ public partial class DAContext : DbContext
             entity.HasOne(d => d.IdstateNavigation).WithMany(p => p.Auctions)
                 .HasForeignKey(d => d.Idstate)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Auctions_AunctionState");
+                .HasConstraintName("FK_Auctions_AuctionState");
 
             entity.HasOne(d => d.IdusercreatorNavigation).WithMany(p => p.Auctions)
                 .HasForeignKey(d => d.Idusercreator)
@@ -140,7 +140,7 @@ public partial class DAContext : DbContext
                 .HasConstraintName("FK_Auctions_Users");
         });
 
-        modelBuilder.Entity<AunctionState>(entity =>
+        modelBuilder.Entity<AuctionState>(entity =>
         {
             entity.HasKey(e => e.Idstate);
 

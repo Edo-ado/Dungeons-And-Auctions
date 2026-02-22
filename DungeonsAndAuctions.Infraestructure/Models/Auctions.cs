@@ -25,13 +25,11 @@ public partial class Auctions
 
     public virtual ICollection<AuctionBidHistory> AuctionBidHistory { get; set; } = new List<AuctionBidHistory>();
 
-    public virtual ICollection<AuctionHistory> AuctionHistory { get; set; } = new List<AuctionHistory>();
-
     public virtual ICollection<AuctionWinner> AuctionWinner { get; set; } = new List<AuctionWinner>();
 
     public virtual Objects IdobjectNavigation { get; set; } = null!;
 
-    public virtual AunctionState IdstateNavigation { get; set; } = null!;
+    public virtual AuctionState IdstateNavigation { get; set; } = null!;
 
     public virtual Users IdusercreatorNavigation { get; set; } = null!;
 
