@@ -21,22 +21,34 @@ namespace D_A.Infraestructure.Repository.Implementation
             _context = context;
         }
 
-        public async Task<List<Auctions?>> GetSpecificViewList()
+        public async Task<List<Auctions>> GetSpecificViewList()
         {
-            var result = await _context.Auctions
+          return await _context.Auctions
         .AsNoTracking()
-        .Where(a => a.IsActive)
         .Include(a => a.IdobjectNavigation)
-          .ThenInclude(o => o.IdimageNavigation)
-        .Include(a => a.AuctionBidHistory) 
+            .ThenInclude(o => o.IdimageNavigation)
+        .Include(u => u.IdusercreatorNavigation)
+        .Include(s => s.IdstateNavigation)
         .ToListAsync();
 
-            
-         
-            return result;
+
         }
 
-        public async Task<List<Auctions>> GetAllAuctions()
+        public async Task<Auctions?> allDetails(int id)
+        {
+            var detail = await _context.Auctions
+                .AsNoTracking()
+                .Where(a => a.Id == id)
+                .Include(a => a.IdobjectNavigation)
+                .ThenInclude(o => o.IdimageNavigation)
+                .Include(a => a.AuctionBidHistory)
+                .Include(u => u.IdusercreatorNavigation)
+                .FirstOrDefaultAsync();
+
+            return detail;
+        }
+
+        public async Task<List<Auctions?>> GetAllAuctions()
         {
             return await _context.Auctions.ToListAsync();
 

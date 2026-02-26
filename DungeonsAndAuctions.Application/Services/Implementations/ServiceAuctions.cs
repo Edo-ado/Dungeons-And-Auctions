@@ -1,12 +1,13 @@
-﻿using System;
+﻿using AutoMapper;
+using D_A.Application.DTOs;
+using D_A.Application.Services.Interfaces;
+using D_A.Infraestructure.Models;
+using D_A.Infraestructure.Repository.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AutoMapper;
-using D_A.Infraestructure.Repository.Interfaces;
-using D_A.Application.DTOs;
-using D_A.Application.Services.Interfaces;
 
 namespace D_A.Application.Services.Implementations
 {
@@ -38,6 +39,12 @@ namespace D_A.Application.Services.Implementations
         {
             var auctions = await _repository.GetSpecificViewList();
             return _mapper.Map<List<AuctionsDTO>>(auctions);
+        }
+
+        public async Task<Auctions?> allDetails(int id)
+        {
+            var auction = await _repository.allDetails(id);
+            return _mapper.Map<Auctions?>(auction);
         }
 
 

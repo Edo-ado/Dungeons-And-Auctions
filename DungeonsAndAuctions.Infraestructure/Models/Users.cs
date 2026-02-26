@@ -42,13 +42,15 @@ public partial class Users
 
     public virtual ICollection<Auctions> Auctions { get; set; } = new List<Auctions>();
 
-    public virtual Countries Country { get; set; } = null!;
-
-    public virtual Genders Gender { get; set; } = null!;
+    
 
     public virtual ICollection<Objects> Objects { get; set; } = new List<Objects>();
 
     public virtual ICollection<ProceduresHistory> ProceduresHistory { get; set; } = new List<ProceduresHistory>();
 
     public virtual Roles Role { get; set; } = null!;
+
+    public virtual Countries Country { get; set; } = null!;
+
+    public virtual Genders Gender { get; set; } = null!;
 }

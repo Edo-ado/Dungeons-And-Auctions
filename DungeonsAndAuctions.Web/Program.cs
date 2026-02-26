@@ -79,6 +79,7 @@ builder.Host.UseSerilog(Log.Logger);
 //Controllers y Views
 builder.Services.AddControllersWithViews();
 
+
 //Repositories
 builder.Services.AddScoped<IRepositoryUser, RepositoryUser>();
 builder.Services.AddScoped<IRepositoryAuctionBidHistory, RepositoryAuctionBidHistory>();
@@ -93,11 +94,13 @@ builder.Services.AddScoped<IServiceAuctionBidHistory, ServiceAuctionBidHistory>(
 builder.Services.AddScoped<IServiceObject, ServiceObject>();
 
 
+
 //AutoMapper
 builder.Services.AddAutoMapper(config =>
 {
     config.AddProfile<UserProfile>();
     config.AddProfile<ObjectProfile>();
+    config.AddProfile<AuctionProfile>();
 
 });
 
