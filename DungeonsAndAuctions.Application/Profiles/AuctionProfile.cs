@@ -1,19 +1,17 @@
 ﻿using System;
+using AutoMapper;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AutoMapper;
 using D_A.Application.DTOs;
 using D_A.Infraestructure.Models;
-
-namespace D_A.Application.Profiles
+public class AuctionProfile : Profile
 {
-    public class RolProfile:Profile
+    public AuctionProfile()
     {
-        public RolProfile()
-        {
-            CreateMap<RoleDTO, Roles>().ReverseMap();
-        }
+        CreateMap<Auctions, AuctionsDTO>();
+        CreateMap<AuctionsDTO, Auctions>();
+           
     }
 }
