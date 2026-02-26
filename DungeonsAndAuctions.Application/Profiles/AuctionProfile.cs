@@ -1,17 +1,25 @@
-﻿using System;
-using AutoMapper;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 using D_A.Application.DTOs;
 using D_A.Infraestructure.Models;
-public class AuctionProfile : Profile
+
+namespace D_A.Application.Profiles
 {
-    public AuctionProfile()
+    public class AuctionProfile : Profile
     {
-        CreateMap<Auctions, AuctionsDTO>();
-        CreateMap<AuctionsDTO, Auctions>();
-           
+        public AuctionProfile()
+        {
+            CreateMap<Auctions, AuctionsDTO>()
+                
+                .ForMember(d => d.ObjectName, opt => opt.MapFrom(src => src.IdobjectNavigation.Name))
+                .ForMember(d => d.StateName, opt => opt.MapFrom(src => src.IdstateNavigation.Name))
+                .ForMember(d => d.UserCreatorName, opt => opt.MapFrom(src => src.IdusercreatorNavigation.UserName));
+            
+
+
+
+
+
+            CreateMap<AuctionsDTO, Auctions>();
+        }
     }
 }

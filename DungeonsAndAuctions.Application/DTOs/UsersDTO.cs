@@ -49,14 +49,7 @@ namespace D_A.Application.DTOs
         [DisplayName("RoleID")]
         public int RoleId { get; set; }
 
-        [DisplayName("RoleName")]
-        public string RoleName { get; set; } = string.Empty;
 
-        [DisplayName("CountryName")]
-        public string CountryName { get; set; } = string.Empty;
-
-        [DisplayName("GenderName")]
-        public string GenderName { get; set; } = string.Empty;
 
         [DisplayName("IsBlocked")]
         public bool IsBlocked { get; set; }
@@ -79,8 +72,14 @@ namespace D_A.Application.DTOs
 
 
 
+        [DisplayName("RoleName")]
+        public string RoleName { get; set; } = string.Empty;
 
+        [DisplayName("CountryName")]
+        public string CountryName { get; set; } = string.Empty;
 
+        [DisplayName("GenderName")]
+        public string GenderName { get; set; } = string.Empty;
 
 
     }

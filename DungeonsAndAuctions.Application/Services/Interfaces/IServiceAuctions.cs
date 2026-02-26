@@ -1,4 +1,5 @@
 ﻿using D_A.Application.DTOs;
+using D_A.Infraestructure.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,9 @@ namespace D_A.Application.Services.Interfaces
 
         Task<List<AuctionsDTO>> GetSpecificViewList();
         Task<int> CountAuctionsBySellerAsync(int userId);
+
+
+        Task<Auctions?> allDetails(int id);
 
 
     }

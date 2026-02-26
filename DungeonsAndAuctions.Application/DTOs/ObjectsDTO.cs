@@ -35,8 +35,6 @@ namespace D_A.Application.DTOs
         [DisplayName("IsActive")]
         public bool IsActive { get; set; }
 
-        [DisplayName("IdCondition")]
-        public int? IdCondition { get; set; }
 
         [DisplayName("IdState")]
         public int? IdState { get; set; }

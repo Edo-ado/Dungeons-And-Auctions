@@ -13,59 +13,58 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Id)
+                @Html.DisplayNameFor(model => model.ObjectName)
             </th>
+
             <th>
-                @Html.DisplayNameFor(model => model.IsActive)
+                @Html.DisplayNameFor(model => model.UserCreatorName)
             </th>
+
             <th>
                 @Html.DisplayNameFor(model => model.BasePrice)
             </th>
+
             <th>
                 @Html.DisplayNameFor(model => model.IncrementoMinimo)
             </th>
+
             <th>
-                @Html.DisplayNameFor(model => model.Idstate)
+                @Html.DisplayNameFor(model => model.StateName)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Idusercreator)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Idobject)
-            </th>
+
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsActive)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BasePrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IncrementoMinimo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Idstate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Idusercreator)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Idobject)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ObjectName)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserCreatorName)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.BasePrice)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.IncrementoMinimo)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.StateName)
+                </td>
+
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
