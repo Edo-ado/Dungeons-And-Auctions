@@ -13,6 +13,7 @@ namespace D_A.Infraestructure.Repository.Implementation
     public class RepositoryUser : IRepositoryUser
 
     {
+        //Repository se encarga de tener las consultas
         private readonly DAContext _context;
 
         public RepositoryUser(DAContext context)
@@ -24,16 +25,18 @@ namespace D_A.Infraestructure.Repository.Implementation
         {
             return await _context.Set<Users>()
                 .AsNoTracking()
+                .Include(u => u.Gender)
+                .Include(u => u.Country)
+                .Include(u => u.Role)//asuñonga hay q añadirlo para q los demas tmb puedan ver el atributo
                 .FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<ICollection<Users>> ListAsync()
         {
-            //Select * from Autor
-            var collection = await _context.Set<Users>()
-            .AsNoTracking()
-            .ToListAsync();
-            return collection;
+            return await _context.Users
+                .Include(u => u.Role)   
+                .AsNoTracking()
+                .ToListAsync();
         }
 
 

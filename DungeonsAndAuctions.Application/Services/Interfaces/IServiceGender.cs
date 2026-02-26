@@ -10,5 +10,8 @@ namespace D_A.Application.Services.Interfaces
     public interface IServiceGender
     {
         Task<ICollection<GendersDTO>> ListAsync();
+
+        Task<GendersDTO> GetGenderById(int id);
+
     }
 }

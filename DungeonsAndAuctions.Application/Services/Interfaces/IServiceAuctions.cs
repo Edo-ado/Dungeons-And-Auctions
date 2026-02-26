@@ -13,6 +13,7 @@ namespace D_A.Application.Services.Interfaces
         Task<List<AuctionsDTO>> GetAllAuctions();
 
         Task<List<AuctionsDTO>> GetSpecificViewList();
+        Task<int> CountAuctionsBySellerAsync(int userId);
 
 
     }

@@ -9,6 +9,8 @@ namespace D_A.Application.Services.Interfaces
 {
     public interface IServiceRole
     {
-        Task<ICollection<RoleDTO>> ListAsync();
+        Task<ICollection<RolesDTO>> ListAsync();
+        Task<RolesDTO> GetRolById(int id);
+
     }
 }

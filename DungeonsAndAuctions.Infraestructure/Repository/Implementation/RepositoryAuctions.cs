@@ -27,7 +27,7 @@ namespace D_A.Infraestructure.Repository.Implementation
         .AsNoTracking()
         .Where(a => a.IsActive)
         .Include(a => a.IdobjectNavigation)
-            .ThenInclude(o => o.IdimageNavigation)
+          .ThenInclude(o => o.IdimageNavigation)
         .Include(a => a.AuctionBidHistory) 
         .ToListAsync();
 
@@ -42,6 +42,11 @@ namespace D_A.Infraestructure.Repository.Implementation
 
         }
 
+        public async Task<int> CountAuctionsBySellerAsync(int userId)
+        {
+            return await _context.Auctions  
+                .CountAsync(a => a.Idusercreator == userId && _context.Users.Any(u => u.Id == userId && u.RoleId == 2));
+        }
 
     }
 }

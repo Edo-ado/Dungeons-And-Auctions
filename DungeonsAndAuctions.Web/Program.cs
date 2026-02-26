@@ -1,3 +1,4 @@
+using D_A.Application.Profiles;
 using D_A.Application.Services.Implementations;
 using D_A.Application.Services.Interfaces;
 using D_A.Infraestructure.Data;
@@ -80,14 +81,24 @@ builder.Services.AddControllersWithViews();
 
 //Repositories
 builder.Services.AddScoped<IRepositoryUser, RepositoryUser>();
+builder.Services.AddScoped<IRepositoryAuctionBidHistory, RepositoryAuctionBidHistory>();
+builder.Services.AddScoped<IRepositoryAuctions, RepositoryAuctions>();
+builder.Services.AddScoped<IRepositoryObject, RepositoryObject>();
+
 
 //Services
 builder.Services.AddScoped<IServiceUser, ServiceUser>();
+builder.Services.AddScoped<IServiceAuctions, ServiceAuctions>();
+builder.Services.AddScoped<IServiceAuctionBidHistory, ServiceAuctionBidHistory>();
+builder.Services.AddScoped<IServiceObject, ServiceObject>();
+
 
 //AutoMapper
 builder.Services.AddAutoMapper(config =>
 {
     config.AddProfile<UserProfile>();
+    config.AddProfile<ObjectProfile>();
+
 });
 
 

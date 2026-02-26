@@ -22,6 +22,12 @@ namespace D_A.Application.Services.Implementations
             _mapper = mapper;
         }
 
+        public async Task<int> CountAuctionsBySellerAsync(int userId)
+        {
+            var contauctions = await _repository.CountAuctionsBySellerAsync(userId);
+            return _mapper.Map<int>(contauctions);
+        }
+
         public async Task<List<AuctionsDTO>> GetAllAuctions()
         {
             var auctions = await _repository.GetAllAuctions();

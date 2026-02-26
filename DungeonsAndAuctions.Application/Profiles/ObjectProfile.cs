@@ -9,11 +9,15 @@ using D_A.Infraestructure.Models;
 
 namespace D_A.Application.Profiles
 {
-    public class CountryProfile:Profile
+    public class ObjectProfile : Profile
     {
-        public CountryProfile()
+        public ObjectProfile()
         {
-            CreateMap<CountriesDTO, Countries>().ReverseMap();
+
+            CreateMap<Objects, ObjectsDTO>();//users a DTO es cuando lees de una BN
+
+
         }
     }
 }
+

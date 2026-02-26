@@ -26,5 +26,8 @@ namespace D_A.Application.DTOs
         [DisplayName("Id")]
         public string Id { get; set; } = string.Empty;
 
+        [DisplayName("TotalBids")]
+        public int TotalBids { get; set; }
+
     }
 }

@@ -15,13 +15,15 @@ namespace D_A.Application.Services.Implementations
         private readonly IRepositoryUser _repository;
         private readonly IMapper _mapper;
 
+        //service es el cerebro, es la capa de logica de negocio y el mapeo mismo del DTO,
+       
         public ServiceUser(IRepositoryUser repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
         }
 
-        public async Task<List<UsersDTO>> ListAsync()
+        public async Task<List<UsersDTO>> ListAsync()//controller llama los metodos
         {
             var users = await _repository.ListAsync();
             return _mapper.Map<List<UsersDTO>>(users);

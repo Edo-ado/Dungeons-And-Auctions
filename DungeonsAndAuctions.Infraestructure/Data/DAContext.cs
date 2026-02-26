@@ -14,7 +14,6 @@ public partial class DAContext : DbContext
 
     public virtual DbSet<AuctionBidHistory> AuctionBidHistory { get; set; }
 
-    public virtual DbSet<AuctionHistory> AuctionHistory { get; set; }
 
     public virtual DbSet<AuctionWinner> AuctionWinner { get; set; }
 
@@ -66,21 +65,6 @@ public partial class DAContext : DbContext
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_AuctionBidHistory_Users");
-        });
-
-        modelBuilder.Entity<AuctionHistory>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__AuctionH__3214EC077971FC48");
-
-            entity.HasOne(d => d.Auction).WithMany(p => p.AuctionHistory)
-                .HasForeignKey(d => d.AuctionId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_AuctionHistory_Auctions");
-
-            entity.HasOne(d => d.User).WithMany(p => p.AuctionHistory)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_AuctionHistory_Users");
         });
 
         modelBuilder.Entity<AuctionWinner>(entity =>

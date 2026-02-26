@@ -7,11 +7,9 @@ using D_A.Application.DTOs;
 
 namespace D_A.Application.Services.Interfaces
 {
-    public interface IServiceCountry
+    public interface IServiceObject
     {
-        Task<ICollection<CountriesDTO>> ListAsync();
-
-        Task<CountriesDTO> GetCountryById(int id);
-
+        Task<ICollection<ObjectsDTO>> ListAsync();
+        Task<ObjectsDTO> GetObjectById(int id);
     }
 }
