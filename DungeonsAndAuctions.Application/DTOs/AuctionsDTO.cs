@@ -14,17 +14,17 @@ namespace D_A.Application.DTOs
 
         [DisplayName("Id")]
         public int Id { get; set; }
-        [DisplayName("StartDate")]
+        [DisplayName("Start Date")]
         public DateOnly StartDate { get; set; } = new DateOnly();
-        [DisplayName("EndDate")]
+        [DisplayName("End Date")]
         public DateOnly EndDate { get; set; } = new DateOnly();
-        [DisplayName("IsActive")]
+        [DisplayName("Active?")]
         public bool IsActive { get; set; }
 
-        [DisplayName("BasePrice")]
+        [DisplayName("Base price")]
         public decimal BasePrice { get; set; } = 0;
 
-        [DisplayName("IncrementoMinimo")]
+        [DisplayName("Minimum bid")]
         public decimal IncrementoMinimo { get; set; } = 0;
 
         [DisplayName("IdState")]
