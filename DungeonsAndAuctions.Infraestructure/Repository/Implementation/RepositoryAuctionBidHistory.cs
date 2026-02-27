@@ -34,5 +34,16 @@ namespace D_A.Infraestructure.Repository.Implementation
                 .ToListAsync();
         }
 
+
+        // Implementación del método CountBidsByAuction
+        public async Task<int> CountBidsByAuction(int AuctionId)
+        {
+            return await _context.AuctionBidHistory
+                .CountAsync(bid => bid.AuctionId == AuctionId);
+
+            
+
+        }
+
     }
 }

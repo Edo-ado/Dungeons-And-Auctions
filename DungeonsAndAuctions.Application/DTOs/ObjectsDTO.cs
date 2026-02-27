@@ -1,4 +1,5 @@
-﻿using System;
+﻿using D_A.Infraestructure.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -41,6 +42,10 @@ namespace D_A.Application.DTOs
 
         [DisplayName("Idimage")]
         public int? Idimage { get; set; }
+
+        public List<CategoriesDTO> Categories { get; set; } = new List<CategoriesDTO>();
+
+        public  Qualities? IdQualityNavigation { get; set; }
 
 
     }
