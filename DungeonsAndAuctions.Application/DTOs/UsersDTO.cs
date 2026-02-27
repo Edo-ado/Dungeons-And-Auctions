@@ -49,13 +49,13 @@ namespace D_A.Application.DTOs
         [DisplayName("RoleID")]
         public int RoleId { get; set; }
 
-        [DisplayName("RoleName")]
+        [DisplayName("Role Name")]
         public string RoleName { get; set; } = string.Empty;
 
-        [DisplayName("CountryName")]
+        [DisplayName("Country Name")]
         public string CountryName { get; set; } = string.Empty;
 
-        [DisplayName("GenderName")]
+        [DisplayName("Gender Name")]
         public string GenderName { get; set; } = string.Empty;
 
         [DisplayName("IsBlocked")]

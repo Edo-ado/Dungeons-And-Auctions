@@ -27,6 +27,14 @@ namespace D_A.Infraestructure.Repository.Implementation
                     _context.Users.Any(u => u.Id == bid.UserId && u.RoleId == 1));
         }
 
+        public async Task<List<AuctionBidHistory>> GetAllAuctionsByIdOBject(int IDOBject)
+        {
+            return await _context.AuctionBidHistory
+                .Include(bid => bid.Auction)
+                .Where(bid => bid.Auction.Idobject == IDOBject)
+                .ToListAsync();
+        }
+
         public async Task<ICollection<AuctionBidHistory>> ListAsync()
         {
             return await _context.Set<AuctionBidHistory>()
