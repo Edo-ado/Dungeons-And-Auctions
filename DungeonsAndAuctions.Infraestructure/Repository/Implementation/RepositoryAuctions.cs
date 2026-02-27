@@ -1,0 +1,64 @@
+﻿using D_A.Infraestructure.Data;
+using D_A.Infraestructure.Models;
+using D_A.Infraestructure.Repository.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace D_A.Infraestructure.Repository.Implementation
+{
+    public class RepositoryAuctions : IRepositoryAuctions
+    {
+
+        private readonly DAContext _context;
+
+
+        public RepositoryAuctions(DAContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<List<Auctions>> GetSpecificViewList()
+        {
+          return await _context.Auctions
+        .AsNoTracking()
+        .Include(a => a.IdobjectNavigation)
+            .ThenInclude(o => o.IdimageNavigation)
+        .Include(u => u.IdusercreatorNavigation)
+        .Include(s => s.IdstateNavigation)
+        .ToListAsync();
+
+
+        }
+
+        public async Task<Auctions?> allDetails(int id)
+        {
+            var detail = await _context.Auctions
+                .AsNoTracking()
+                .Where(a => a.Id == id)
+                .Include(a => a.IdobjectNavigation)
+                .ThenInclude(o => o.IdimageNavigation)
+                .Include(a => a.AuctionBidHistory)
+                .Include(u => u.IdusercreatorNavigation)
+                .FirstOrDefaultAsync();
+
+            return detail;
+        }
+
+        public async Task<List<Auctions?>> GetAllAuctions()
+        {
+            return await _context.Auctions.ToListAsync();
+
+        }
+
+        public async Task<int> CountAuctionsBySellerAsync(int userId)
+        {
+            return await _context.Auctions  
+                .CountAsync(a => a.Idusercreator == userId && _context.Users.Any(u => u.Id == userId && u.RoleId == 2));
+        }
+
+    }
+}

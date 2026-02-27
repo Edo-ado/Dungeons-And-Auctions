@@ -8,18 +8,37 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Auction\**" />
+    <Compile Remove="Views\Bid\**" />
+    <Content Remove="Views\Auction\**" />
+    <Content Remove="Views\Bid\**" />
+    <EmbeddedResource Remove="Views\Auction\**" />
+    <EmbeddedResource Remove="Views\Bid\**" />
+    <None Remove="Views\Auction\**" />
+    <None Remove="Views\Bid\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DungeonsAndAuctions.Application\DungeonsAndAuctions.Application.csproj" />
     <ProjectReference Include="..\DungeonsAndAuctions.Infraestructure\DungeonsAndAuctions.Infraestructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Logs\" />
-    <Folder Include="Views\Auction\" />
-    <Folder Include="Views\Bid\" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNet.WebPages" Version="3.3.0" />
+    <None Include="wwwroot\Images\Logo\ShortLogo.png" />
+    <None Include="wwwroot\Images\Textures\LayoutTextureWoodPizzaraCupria.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.12" />
+    <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
+    <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+    <PackageReference Include="X.PagedList" Version="10.5.9" />
+    <PackageReference Include="X.PagedList.Mvc.Core" Version="10.5.9" />
   </ItemGroup>
 
 </Project>
