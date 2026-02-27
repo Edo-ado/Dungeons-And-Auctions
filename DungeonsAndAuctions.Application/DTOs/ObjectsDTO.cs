@@ -42,6 +42,8 @@ namespace D_A.Application.DTOs
         [DisplayName("Idimage")]
         public int? Idimage { get; set; }
 
+        public List<CategoriesDTO> Categories { get; set; } = new List<CategoriesDTO>();
+
 
     }
 }

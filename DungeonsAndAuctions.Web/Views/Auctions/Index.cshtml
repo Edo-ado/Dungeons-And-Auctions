@@ -1,70 +1,103 @@
 ﻿@model IEnumerable<D_A.Application.DTOs.AuctionsDTO>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Auctions";
 }
 
-<h1>Index</h1>
+<div class="max-w-7xl mx-auto px-6 py-10">
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ObjectName)
-            </th>
+    <!-- HEADER -->
+    <div class="flex justify-between items-start mb-8 pb-4 border-b border-gray-200">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-800">
+                Auctions
+            </h1>
+            <p class="text-gray-500 mt-1">
+                Overview and management of all auction records
+            </p>
+        </div>
 
-            <th>
-                @Html.DisplayNameFor(model => model.UserCreatorName)
-            </th>
 
-            <th>
-                @Html.DisplayNameFor(model => model.BasePrice)
-            </th>
+       
 
-            <th>
-                @Html.DisplayNameFor(model => model.IncrementoMinimo)
-            </th>
 
-            <th>
-                @Html.DisplayNameFor(model => model.StateName)
-            </th>
+    </div>
 
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ObjectName)
-                </td>
+    @if (!Model.Any())
+    {
+        <div class="text-center py-16 text-gray-400 italic">
+            No auctions available.
+        </div>
+    }
+    else
+    {
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.UserCreatorName)
-                </td>
+            @foreach (var item in Model)
+            {
+                var badgeColor = item.StateName?.ToLower() switch
+                {
+                    "open" => "bg-green-100 text-green-700",
+                    "close" => "bg-gray-200 text-gray-700",
+                    "banned" => "bg-red-100 text-red-700",
+                    _ => "bg-gray-100 text-gray-600"
+                };
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.BasePrice)
-                </td>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition p-6 flex flex-col">
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.IncrementoMinimo)
-                </td>
+                    <!-- TITLE -->
+                    <div class="mb-4">
+                        <h2 class="text-lg font-semibold text-gray-800">
+                            @item.ObjectName
+                        </h2>
+                        <p class="text-sm text-gray-500 mt-1">
+                            Created by @item.UserCreatorName
+                        </p>
+                    </div>
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.StateName)
-                </td>
+                    <div class="border-t border-gray-100 my-4"></div>
 
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                    <!-- DETAILS -->
+                    <div class="space-y-2 text-sm text-gray-700">
+                        <div>
+                            <span class="font-medium">Base Price:</span>
+                            $@item.BasePrice
+                        </div>
+
+                        <div>
+                            <span class="font-medium">Minimum Increment:</span>
+                            $@item.IncrementoMinimo
+                        </div>
+
+                        <div class="flex items-center">
+                            <span class="font-medium mr-2">Status:</span>
+                            <span class="px-3 py-1 rounded-full text-xs font-medium @badgeColor">
+                                @item.StateName
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- ACTIONS -->
+                    <div class="mt-auto pt-6 border-t border-gray-100 flex justify-between">
+                        <a asp-action="Edit"
+                           asp-route-id="@item.Id"
+                           class="text-yellow-600 hover:text-yellow-700 text-sm font-medium">
+                            Edit
+                        </a>
+
+                        @Html.ActionLink("Details", "Details", new { id = item.Id })
+
+                        <a asp-action="Delete"
+                           asp-route-id="@item.Id"
+                           class="text-red-600 hover:text-red-700 text-sm font-medium">
+                            Delete
+                        </a>
+                    </div>
+
+                </div>
+            }
+
+        </div>
+    }
+
+</div>

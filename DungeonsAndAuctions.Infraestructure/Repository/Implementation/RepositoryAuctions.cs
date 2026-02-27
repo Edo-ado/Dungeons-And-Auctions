@@ -21,10 +21,11 @@ namespace D_A.Infraestructure.Repository.Implementation
             _context = context;
         }
 
-        public async Task<List<Auctions>> GetSpecificViewList()
+        public async Task<List<Auctions?>> GetSpecificViewList()
         {
           return await _context.Auctions
         .AsNoTracking()
+        
         .Include(a => a.IdobjectNavigation)
             .ThenInclude(o => o.IdimageNavigation)
         .Include(u => u.IdusercreatorNavigation)
@@ -34,15 +35,22 @@ namespace D_A.Infraestructure.Repository.Implementation
 
         }
 
+
+        /* necesito que me muestre las categorias de los objetos*/
         public async Task<Auctions?> allDetails(int id)
         {
             var detail = await _context.Auctions
                 .AsNoTracking()
                 .Where(a => a.Id == id)
+
                 .Include(a => a.IdobjectNavigation)
-                .ThenInclude(o => o.IdimageNavigation)
+                .ThenInclude(o => o.Category)
+                
+
                 .Include(a => a.AuctionBidHistory)
                 .Include(u => u.IdusercreatorNavigation)
+                
+               
                 .FirstOrDefaultAsync();
 
             return detail;

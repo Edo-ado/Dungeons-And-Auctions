@@ -17,7 +17,7 @@ namespace D_A.Application.Services.Interfaces
         Task<int> CountAuctionsBySellerAsync(int userId);
 
 
-        Task<Auctions?> allDetails(int id);
+        Task<AuctionsDTO?> allDetails(int id);
 
 
     }

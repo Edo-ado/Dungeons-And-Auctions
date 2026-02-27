@@ -15,5 +15,8 @@ namespace D_A.Application.DTOs
         public string? Name { get; set; } = string.Empty;
         [DisplayName("Description")] 
         public string? Description { get; set; } = string.Empty;
+
+        public List<ObjectsDTO> IdObject { get; set; } = new();
+
     }
 }

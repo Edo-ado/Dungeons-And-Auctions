@@ -41,10 +41,10 @@ namespace D_A.Application.Services.Implementations
             return _mapper.Map<List<AuctionsDTO>>(auctions);
         }
 
-        public async Task<Auctions?> allDetails(int id)
+        public async Task<AuctionsDTO?> allDetails(int id)
         {
             var auction = await _repository.allDetails(id);
-            return _mapper.Map<Auctions?>(auction);
+            return _mapper.Map<AuctionsDTO?>(auction);
         }
 
 

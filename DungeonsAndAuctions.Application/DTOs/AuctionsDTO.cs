@@ -50,7 +50,13 @@ namespace D_A.Application.DTOs
         [DisplayName("User Creator Name")]
         public string UserCreatorName { get; set; } = string.Empty;
 
+        
 
+        public List<AuctionBidHistoryDTO> BidHistory { get; set; } = new List<AuctionBidHistoryDTO>();
+
+
+        [DisplayName("Categories")]
+        public List<CategoriesDTO> Categories { get; set; } = new List<CategoriesDTO>();
 
 
 

@@ -9,10 +9,12 @@ namespace D_A.Application.Profiles
         public AuctionProfile()
         {
             CreateMap<Auctions, AuctionsDTO>()
-                
+
                 .ForMember(d => d.ObjectName, opt => opt.MapFrom(src => src.IdobjectNavigation.Name))
                 .ForMember(d => d.StateName, opt => opt.MapFrom(src => src.IdstateNavigation.Name))
                 .ForMember(d => d.UserCreatorName, opt => opt.MapFrom(src => src.IdusercreatorNavigation.UserName));
+                
+               
             
 
 

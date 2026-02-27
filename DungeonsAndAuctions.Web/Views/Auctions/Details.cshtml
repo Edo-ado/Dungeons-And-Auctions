@@ -11,16 +11,38 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
+            @Html.DisplayNameFor(model => model.ObjectName)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Id)
+            @Html.DisplayFor(model => model.ObjectName)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsActive)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsActive)
+        <dt class="col-12 col-md-4 text-muted"> @Html.DisplayNameFor(Model => Model.Categories)</dt>
+        <dd class="col-12 col-md-8">
+
+            @if (Model.Categories != null && Model.Categories.Any())
+            {
+                if (Model.Categories.Count == 1)
+                {
+                    <span class="badge text-bg-light border">
+                        Categoría: @Model.Categories[0].Name
+                    </span>
+                }
+                else
+                {
+                    <div class="d-flex flex-wrap gap-2">
+                        @foreach (var c in Model.Categories)
+                        {
+                            <span class="badge text-bg-light border">
+                                <i class="bi bi-tag me-1"></i>@c.Name
+                            </span>
+                        }
+                    </div>
+                }
+            }
+            else
+            {
+                <span class="text-muted">Sin categorías asociadas.</span>
+            }
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.BasePrice)
