@@ -23,7 +23,7 @@ public partial class DAContext : DbContext
 
     public virtual DbSet<Categories> Categories { get; set; }
 
-    public virtual DbSet<Conditions> Conditions { get; set; }
+    
 
     public virtual DbSet<Countries> Countries { get; set; }
 
@@ -144,12 +144,7 @@ public partial class DAContext : DbContext
             entity.Property(e => e.Name).HasMaxLength(100);
         });
 
-        modelBuilder.Entity<Conditions>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__Conditio__3214EC0794F4A031");
-
-            entity.Property(e => e.Name).HasMaxLength(100);
-        });
+       
 
         modelBuilder.Entity<Countries>(entity =>
         {
@@ -177,15 +172,13 @@ public partial class DAContext : DbContext
             entity.HasKey(e => e.Id).HasName("PK__Objects__3214EC077F2EF0BC");
 
             entity.Property(e => e.Description).HasMaxLength(255);
-            entity.Property(e => e.IdCondition).HasColumnName("idCondition");
+          
             entity.Property(e => e.IdState).HasColumnName("idState");
             entity.Property(e => e.Idimage).HasColumnName("idimage");
             entity.Property(e => e.MarketPrice).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.Name).HasMaxLength(100);
 
-            entity.HasOne(d => d.IdConditionNavigation).WithMany(p => p.Objects)
-                .HasForeignKey(d => d.IdCondition)
-                .HasConstraintName("FK_Objects_Conditions");
+         
 
             entity.HasOne(d => d.IdStateNavigation).WithMany(p => p.Objects)
                 .HasForeignKey(d => d.IdState)

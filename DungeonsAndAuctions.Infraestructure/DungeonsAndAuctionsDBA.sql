@@ -50,10 +50,7 @@ CREATE TABLE AuctionState(
     name NVARCHAR(50)
 );
 
-CREATE TABLE Conditions(
-    Id INT IDENTITY(1,1) PRIMARY KEY,
-    Name NVARCHAR(100) NOT NULL
-);
+
 
 CREATE TABLE Categories(
     Id INT IDENTITY(1,1) PRIMARY KEY,
@@ -93,9 +90,8 @@ CREATE TABLE Objects(
     Year INT,
     Description NVARCHAR(255),
     RegistrationDate DATE NOT NULL,
-    MarketPrice DECIMAL(10,2) NOT NULL,
+    MarketPrice DECIMAL(10,2),
     IsActive BIT NOT NULL,
-    idCondition INT,
     idState INT,
     idimage INT
 );
@@ -224,14 +220,14 @@ VALUES
 ('Bow',''),
 ('Magician`s staff',''),
 ('Book',''),
-('Bow',''),
+('Soul',''),
 ('Mask',''),
 ('Armor',''),
 ('Helmet',''),
-('Bow',''),
+('Elemental',''),
 ('Chess Plate',''),
 ('Leg Armour',''),
-('Bow',''),
+('Crossbow',''),
 ('Armoured Boots',''),
 ('Iron',''),
 ('Alloys',''),
@@ -250,6 +246,36 @@ VALUES
 ('Cursed','');
 
 
+
+
+		Insert into Objects(UserId, Name, Year, Description, RegistrationDate, MarketPrice, IsActive, idState, idimage) values (2, 'Wooden bow', 1976, 'a wooden bow', GETDATE(),null, 0,  null, null)
+		Insert into ObjectCategories(ObjectId, CategoryId)values( 1,2)
+		Insert into ObjectCategories(ObjectId, CategoryId)values( 1,4)
+		Insert into ObjectCategories(ObjectId, CategoryId)values( 1,6)
+		Insert into ObjectCategories(ObjectId, CategoryId)values( 1,20)
+	
+		Insert into Objects(UserId, Name, Year, Description, RegistrationDate, MarketPrice, IsActive,  idState, idimage) values (2, 'Diamond sword', 550, 'A diamond sword form MC', GETDATE(),null, 0, null, null)
+		Insert into ObjectCategories(ObjectId, CategoryId)values( 2,2)
+		Insert into ObjectCategories(ObjectId, CategoryId)values( 2,5)
+		Insert into ObjectCategories(ObjectId, CategoryId)values( 2,22)
+		
+
+		Insert into Objects(UserId, Name, Year, Description, RegistrationDate, MarketPrice, IsActive, idState, idimage) values (2, 'Great hero soul', null, 'Consume to obtain 20,000 souls.', GETDATE(),null, 0, null, null)
+		Insert into ObjectCategories(ObjectId, CategoryId)values( 3,21)
+		
+
+		Insert into Objects(UserId, Name, Year, Description, RegistrationDate, MarketPrice, IsActive,  idState, idimage) values (2, 'Zweihander', null, 'Ultra greatsword with a large, long blade. Wielded with two hands, yet still requiring great strength due to its weight. ', GETDATE(),null, 0, null, null)
+		Insert into ObjectCategories(ObjectId, CategoryId)values( 4,2)
+		Insert into ObjectCategories(ObjectId, CategoryId)values( 4,5)
+		Insert into ObjectCategories(ObjectId, CategoryId)values(4,18)
+
+
+		Insert into Auctions(StartDate, EndDate, IsActive, BasePrice,IncrementoMinimo,idstate,idusercreator,idobject) values (GETDATE(), GETDATE()+1, 1, 20000, 1000, 2, 2, 1 	)
+
+
+
+
+
 /* =========================
    FOREIGN KEYS
 ========================= */
@@ -259,7 +285,6 @@ ALTER TABLE Users ADD FOREIGN KEY (GenderId) REFERENCES Genders(Id);
 ALTER TABLE Users ADD FOREIGN KEY (RoleId) REFERENCES Roles(Id);
 
 ALTER TABLE Objects ADD FOREIGN KEY (UserId) REFERENCES Users(Id);
-ALTER TABLE Objects ADD FOREIGN KEY (idCondition) REFERENCES Conditions(Id);
 ALTER TABLE Objects ADD FOREIGN KEY (idimage) REFERENCES Images(Id);
 ALTER TABLE Objects ADD FOREIGN KEY (idState) REFERENCES Qualities(ID);
 

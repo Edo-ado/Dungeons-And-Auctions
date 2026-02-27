@@ -1,0 +1,90 @@
+﻿<nav class="bg-[#2a1f1a]
+            border-t-4 border-yellow-700
+            border-b border-yellow-900
+            shadow-[0_12px_30px_rgba(0,0,0,0.85)]">
+
+    <div class="mx-auto px-8">
+        <div class="flex items-center justify-between h-24">
+
+            <!-- Logo -->
+            <div class="flex items-center">
+                <img src="/Images/Logo/ShortLogo.png"
+                     class="h-20 md:h-20 object-contain
+                            drop-shadow-[0_0_8px_rgba(255,0,0,0.25)]"
+                     alt="Logo" />
+            </div>
+
+            <!-- Centro: Links principales -->
+            <div class="hidden md:flex flex-1 justify-center">
+                <div class="flex space-x-16
+                            text-2xl
+                            font-['Cinzel']
+                            text-red-500
+                            tracking-[0.2em]
+                            uppercase">
+
+                    <a class="hover:text-yellow-400
+                              transition duration-300
+                              hover:drop-shadow-[0_0_8px_rgba(255,215,0,0.8)]"
+                       asp-controller="Home" asp-action="Index">
+                        Inicio
+                    </a>
+
+                    <a class="hover:text-yellow-400
+                              transition duration-300
+                              hover:drop-shadow-[0_0_8px_rgba(255,215,0,0.8)]"
+                       asp-controller="Auctions" asp-action="Index">
+                        Subastas
+                    </a>
+
+                    <a class="hover:text-yellow-400
+                              transition duration-300
+                              hover:drop-shadow-[0_0_8px_rgba(255,215,0,0.8)]"
+                       asp-controller="Perfil" asp-action="Index">
+                        Mi Perfil
+                    </a>
+                </div>
+            </div>
+
+            <!-- Derecha -->
+            <div class="flex items-center gap-8">
+
+                <!-- Separador sutil -->
+                <div class="hidden lg:block w-px h-10 bg-yellow-700 opacity-40"></div>
+
+                <!-- Enlaces secundarios -->
+                <div class="hidden lg:flex flex-col text-right
+                            text-xs
+                            font-['Cinzel']
+                            text-red-500
+                            uppercase
+                            tracking-widest">
+
+                    <a class="hover:text-yellow-400 transition"
+                       asp-controller="User" asp-action="Index">
+                        All Users
+                    </a>
+
+                    <a class="hover:text-yellow-400 transition"
+                       asp-controller="Object" asp-action="Index">
+                        All Objects
+                    </a>
+                </div>
+
+                <!-- Logout -->
+                <div class="flex items-center gap-3">
+                    <a class="text-red-500
+                              hover:text-yellow-400
+                              font-semibold
+                              transition
+                              uppercase
+                              tracking-wide"
+                       asp-controller="Auth" asp-action="Logout">
+                        Cerrar sesión
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</nav>

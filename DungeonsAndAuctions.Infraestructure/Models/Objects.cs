@@ -17,11 +17,11 @@ public partial class Objects
 
     public DateOnly RegistrationDate { get; set; }
 
-    public decimal MarketPrice { get; set; }
+    public decimal? MarketPrice { get; set; }
 
     public bool IsActive { get; set; }
 
-    public int? IdCondition { get; set; }
+ 
 
     public int? IdState { get; set; }
 
@@ -29,7 +29,7 @@ public partial class Objects
 
     public virtual ICollection<Auctions> Auctions { get; set; } = new List<Auctions>();
 
-    public virtual Conditions? IdConditionNavigation { get; set; }
+
 
     public virtual Qualities? IdStateNavigation { get; set; }
 

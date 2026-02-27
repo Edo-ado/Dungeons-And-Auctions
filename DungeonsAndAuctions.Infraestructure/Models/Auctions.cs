@@ -34,4 +34,7 @@ public partial class Auctions
     public virtual Users IdusercreatorNavigation { get; set; } = null!;
 
     public virtual ICollection<Payment> Payment { get; set; } = new List<Payment>();
+
+
+
 }

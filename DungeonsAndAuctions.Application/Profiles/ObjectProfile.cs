@@ -17,6 +17,8 @@ namespace D_A.Application.Profiles
             CreateMap<Objects, ObjectsDTO>();//users a DTO es cuando lees de una BN
 
 
+
+
         }
     }
 }
