@@ -11,13 +11,14 @@ namespace D_A.Application.Services.Interfaces
     public interface IServiceAuctions
     {
 
-        Task<List<AuctionsDTO>> GetAllAuctions();
-
-        Task<List<AuctionsDTO>> GetSpecificViewList();
+        Task<List<AuctionsDTO?>> GetAllAuctionsActive();
+        Task<List<AuctionsDTO?>> GetAllAuctionsInactive();
+        Task<AuctionsDTO?> AllDetails(int id);
         Task<int> CountAuctionsBySellerAsync(int userId);
+      
 
-
-        Task<AuctionsDTO?> allDetails(int id);
+        
+    
 
 
     }

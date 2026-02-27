@@ -14,7 +14,7 @@ namespace D_A.Application.Profiles
         public ObjectProfile()
         {
 
-            CreateMap<Objects, ObjectsDTO>();//users a DTO es cuando lees de una BN
+            CreateMap<Objects, ObjectsDTO>().ReverseMap();//users a DTO es cuando lees de una BN
 
 
 

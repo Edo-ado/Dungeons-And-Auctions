@@ -29,21 +29,22 @@ namespace D_A.Application.Services.Implementations
             return _mapper.Map<int>(contauctions);
         }
 
-        public async Task<List<AuctionsDTO>> GetAllAuctions()
+        public async Task<List<AuctionsDTO?>> GetAllAuctionsActive()
         {
-            var auctions = await _repository.GetAllAuctions();
-            return _mapper.Map<List<AuctionsDTO>>(auctions);
+            var auctions = await _repository.GetAllAuctionsActive();
+            return _mapper.Map<List<AuctionsDTO?>>(auctions);
         }
 
-        public async Task<List<AuctionsDTO>> GetSpecificViewList()
+        public async Task<List<AuctionsDTO?>> GetAllAuctionsInactive()
         {
-            var auctions = await _repository.GetSpecificViewList();
-            return _mapper.Map<List<AuctionsDTO>>(auctions);
+            var auctions = await _repository.GetAllAuctionsInactive();
+            return _mapper.Map<List<AuctionsDTO?>>(auctions);
         }
 
-        public async Task<AuctionsDTO?> allDetails(int id)
+
+        public async Task<AuctionsDTO?> AllDetails(int id)
         {
-            var auction = await _repository.allDetails(id);
+            var auction = await _repository.AllDetails(id);
             return _mapper.Map<AuctionsDTO?>(auction);
         }
 
