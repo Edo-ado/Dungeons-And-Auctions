@@ -1,0 +1,38 @@
+﻿<nav class="bg-[#2a1f1a] border-t-4 border-b-4 border-yellow-600 shadow-lg">
+    <div class="mx-auto px-6">
+        <div class="flex items-center justify-between h-20">
+
+            <!-- Logo -->
+            <div class="flex items-center">
+                <img src="/Images/Logo/ShortLogo.png" class="h-16 md:h-20" alt="Logo" />
+            </div>
+
+            <!-- Centro: Links principales -->
+            <div class="hidden md:flex justify-start flex-1">
+                <div class="flex space-x-12 text-2xl font-serif text-red-600 tracking-wide uppercase">
+                    <a class="hover:text-yellow-500  transition" asp-controller="Home" asp-action="Index">INICIO</a>
+                    <a class="hover:text-yellow-500 transition" asp-controller="Auctions" asp-action="Index">SUBASTAS</a>
+                    <a class="hover:text-yellow-500 transition" asp-controller="Perfil" asp-action="Index">MI PERFIL</a>
+                </div>
+            </div>
+
+            <!-- Derecha: Panel con enlaces apilados y cierre de sesión -->
+            <div class="flex items-center gap-6">
+
+                <!-- Enlaces apilados (All Users / All Objects) -->
+                <div class="hidden lg:flex flex-col text-right text-sm text-red-600 uppercase tracking-wide">
+                    <a class="hover:text-yellow-500 transition" asp-controller="User" asp-action="Index">All Users</a>
+                    <a class="hover:text-yellow-500 transition" asp-controller="Object" asp-action="Index">All Objects</a>
+                </div>
+
+                <!-- Icono usuario + Cerrar sesión -->
+                <div class="flex items-center gap-3">
+                    
+
+                    <a class="text-red-600 hover:text-yellow-500 font-semibold transition uppercase" asp-controller="Auth" asp-action="Logout">Cerrar sesión</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</nav>
