@@ -11,7 +11,7 @@ namespace D_A.Application.DTOs
     {
         // el DTO es el modelo q llega a la vista (no es el modelo DB)
         //ES NADA MÁS LO Q SALE A LA VISTA, aqui podemos añadir atributos q necesitemos
-      
+        //
 
         [DisplayName("ID User")]
         public int Id { get; set; }
@@ -49,14 +49,7 @@ namespace D_A.Application.DTOs
         [DisplayName("RoleID")]
         public int RoleId { get; set; }
 
-        [DisplayName("Role Name")]
-        public string RoleName { get; set; } = string.Empty;
 
-        [DisplayName("Country Name")]
-        public string CountryName { get; set; } = string.Empty;
-
-        [DisplayName("Gender Name")]
-        public string GenderName { get; set; } = string.Empty;
 
         [DisplayName("IsBlocked")]
         public bool IsBlocked { get; set; }
@@ -75,6 +68,18 @@ namespace D_A.Application.DTOs
 
         [DisplayName("NumberBidMade")]
         public int NumberBidMade{ get; set; }//si es comprador (cantidad de pujas realizadas)
+
+
+
+
+        [DisplayName("RoleName")]
+        public string RoleName { get; set; } = string.Empty;
+
+        [DisplayName("CountryName")]
+        public string CountryName { get; set; } = string.Empty;
+
+        [DisplayName("GenderName")]
+        public string GenderName { get; set; } = string.Empty;
 
 
     }
