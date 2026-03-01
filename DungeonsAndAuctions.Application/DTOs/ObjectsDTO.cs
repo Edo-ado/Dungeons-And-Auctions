@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,6 +37,8 @@ namespace D_A.Application.DTOs
         [DisplayName("IsActive")]
         public bool IsActive { get; set; }
 
+        [DisplayName("Categories")]
+        public List<CategoriesDTO> Categories { get; set; } = new();
 
         [DisplayName("IdState")]
         public int? IdState { get; set; }
@@ -43,10 +46,12 @@ namespace D_A.Application.DTOs
         [DisplayName("Idimage")]
         public int? Idimage { get; set; }
 
-        public List<CategoriesDTO> Categories { get; set; } = new List<CategoriesDTO>();
+        [Display(Name = "Imagen Libro")]
+        public byte[] Imagen { get; set; } = Array.Empty<byte>();
 
-        public  Qualities? IdQualityNavigation { get; set; }
+        [DisplayName("AuctionsObjects")]
 
+        public List<AuctionsDTO> Auctions { get; set; } = new();
 
     }
 }

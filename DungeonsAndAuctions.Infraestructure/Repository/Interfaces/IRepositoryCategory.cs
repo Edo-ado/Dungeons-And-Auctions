@@ -7,11 +7,8 @@ using D_A.Infraestructure.Models;
 
 namespace D_A.Infraestructure.Repository.Interfaces
 {
-    public interface IRepositoryObject
+    public interface IRepositoryCategory
     {
-        Task<ICollection<Objects>> ListAsync();
-        Task<Objects?> FindByIdAsync(int id);
-        Task<List<Categories>> GetCategoriesByIdObject(int id);
-
+        Task<ICollection<Categories>> ListAsync();
     }
 }

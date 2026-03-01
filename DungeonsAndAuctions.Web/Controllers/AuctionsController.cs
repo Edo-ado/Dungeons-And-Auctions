@@ -33,7 +33,6 @@ namespace DNDA.Web.Controllers
         }
 
 
-
         public async Task<IActionResult> Index()
         {
 
@@ -42,7 +41,6 @@ namespace DNDA.Web.Controllers
 
             return View(collections);
         }
-
 
 
 

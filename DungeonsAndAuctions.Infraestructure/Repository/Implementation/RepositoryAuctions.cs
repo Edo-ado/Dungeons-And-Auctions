@@ -102,8 +102,12 @@ namespace D_A.Infraestructure.Repository.Implementation
                 .CountAsync(a => a.Idusercreator == userId && _context.Users.Any(u => u.Id == userId && u.RoleId == 2));
         }
 
-
-
-
+        public async Task<List<Auctions>> GetAuctionsByObjectID(int id)
+        {
+            return await _context.Auctions
+                .AsNoTracking()
+                 .Where(a => a.Idobject == id)
+                .ToListAsync();
+        }
     }
 }

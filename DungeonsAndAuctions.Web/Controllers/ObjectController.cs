@@ -10,6 +10,8 @@ namespace DNDA.Web.Controllers
     {
         private readonly IServiceObject _serviceObject;
     
+
+
         public ObjectController(IServiceObject serviceObject)
         {
             _serviceObject = serviceObject;
@@ -17,6 +19,7 @@ namespace DNDA.Web.Controllers
 
         }
         [HttpGet]
+
         public async Task<IActionResult> Index()
         {
             //llama service
@@ -26,11 +29,8 @@ namespace DNDA.Web.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var objects = await _serviceObject.GetObjectById(id);
-
             if (objects == null)
                 return NotFound();
-
- 
 
             return View(objects);
         }

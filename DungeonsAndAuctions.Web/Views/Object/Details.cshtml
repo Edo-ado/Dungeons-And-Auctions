@@ -1,73 +1,105 @@
 ﻿@model D_A.Application.DTOs.ObjectsDTO
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Inspección de Reliquia";
 }
 
-<h1>Details</h1>
+<div class="min-h-screen bg-[#1a1412] py-12 px-4 font-['Cinzel'] flex justify-center items-center">
 
-<div>
-    <h4>ObjectsDTO</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UserId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UserId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Year)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Year)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MarketPrice)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MarketPrice)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsActive)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsActive)
-        </dd>
-        
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IdState)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IdState)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Idimage)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Idimage)
-        </dd>
-    </dl>
-</div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
+    <div class="max-w-4xl w-full bg-[#2a1f1a] border-2 border-yellow-900 shadow-[0_0_50px_rgba(0,0,0,0.9)] relative overflow-hidden">
+
+        <div class="absolute top-0 right-0 w-32 h-32 bg-yellow-900/10 rotate-45 translate-x-16 -translate-y-16 border border-yellow-800"></div>
+
+        <div class="p-8 md:p-12">
+            <div class="border-b-2 border-yellow-800 pb-6 mb-8 flex flex-col md:flex-row justify-between items-end gap-4">
+                <div>
+                    <span class="text-yellow-700 text-xs tracking-[0.3em] uppercase">Identificación de Objeto</span>
+                    <h1 class="text-4xl md:text-5xl font-bold text-red-600 drop-shadow-md">@Model.Name</h1>
+                </div>
+                <div class="text-right">
+                    <span class="block text-stone-500 text-[10px] uppercase font-mono tracking-widest">Referencia Real</span>
+                    <span class="text-yellow-600 font-bold font-mono text-xl">#@Model.Id</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+
+                <div class="space-y-6">
+                    <div class="aspect-square border-4 border-yellow-900 shadow-inner bg-[#1a1412] overflow-hidden group">
+                        @if (Model.Imagen != null && Model.Imagen.Length > 0)
+                        {
+                            <img class="w-full h-full object-cover sepia-[0.3] hover:sepia-0 transition-all duration-700 scale-105 hover:scale-100"
+                                 src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Imagen)"
+                                 alt="@Model.Name" />
+                        }
+                        else
+                        {
+                            <div class="w-full h-full flex items-center justify-center text-yellow-900/20">
+                                <span class="text-8xl">🛡️</span>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="flex justify-between items-center bg-[#1a1412]/50 p-4 border border-yellow-900/50">
+                        <div>
+                            <p class="text-[10px] text-yellow-800 uppercase tracking-widest font-bold">Estado Actual</p>
+                            @if (Model.IsActive)
+                            {
+                                <span class="text-green-500 font-bold text-sm tracking-widest uppercase">● En Subasta</span>
+                            }
+                            else
+                            {
+                                <span class="text-red-700 font-bold text-sm tracking-widest uppercase">● Vendido</span>
+                            }
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[10px] text-yellow-800 uppercase tracking-widest font-bold">Era de Origen</p>
+                            <span class="text-stone-300 font-mono text-lg">@Model.Year</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col justify-between">
+                    <div class="space-y-8">
+                        <div>
+                            <h3 class="text-yellow-700 text-xs font-bold uppercase tracking-widest mb-2">Clasificación</h3>
+                            <p class="text-stone-200 text-lg italic border-l-2 border-yellow-700 pl-4">
+                                @(Model.Categories != null && Model.Categories.Any()
+                                                                ? string.Join(", ", Model.Categories.Select(c => c.Name))
+                                                                : "Sin clasificar")
+                            </p>
+                        </div>
+
+                        <div>
+                            <h3 class="text-yellow-700 text-xs font-bold uppercase tracking-widest mb-2">Crónica de la Reliquia</h3>
+                            <p class="text-stone-400 leading-relaxed text-sm font-serif">
+                                @Model.Description
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 pt-4">
+                            <div>
+                                <h3 class="text-yellow-700 text-[10px] font-bold uppercase tracking-widest mb-1">Forjador (User ID)</h3>
+                                <p class="text-stone-300 font-mono">#@Model.UserId</p>
+                            </div>
+                            <div>
+                                <h3 class="text-yellow-700 text-[10px] font-bold uppercase tracking-widest mb-1">Tasación Actual</h3>
+                                <p class="text-2xl font-bold text-yellow-600">@Model.MarketPrice.ToString("N0") <span class="text-xs">G</span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-10 flex gap-4">
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="flex-1 text-center bg-yellow-800 hover:bg-yellow-700 text-yellow-100 py-3 uppercase text-xs font-bold tracking-widest transition-all border border-yellow-600 shadow-lg">
+                            Reforjar
+                        </a>
+                        <a asp-action="Index" class="flex-1 text-center bg-transparent hover:bg-stone-900 text-stone-500 py-3 uppercase text-[10px] font-bold tracking-widest transition-all border border-stone-800">
+                            Volver al Tesoro
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

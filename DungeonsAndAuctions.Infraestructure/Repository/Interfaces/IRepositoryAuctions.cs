@@ -21,5 +21,10 @@ namespace D_A.Infraestructure.Repository.Interfaces
         Task<int> CountAuctionsBySellerAsync(int userId);//cantidad subastas de vendedor (RoleId=2)
 
 
+        Task<int> CountAuctionsBySellerAsync(int userId);//cantidad subastas de vendedor (RoleId=2)
+
+        Task<List<Auctions?>> GetAuctionsByObjectID(int id);
+
+
     }
 }

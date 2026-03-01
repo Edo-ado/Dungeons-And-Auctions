@@ -1,69 +1,90 @@
 ﻿@model IEnumerable<D_A.Application.DTOs.UsersDTO>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Registro de Ciudadanos";
 }
 
-<h1>Index</h1>
+<div class="min-h-screen bg-[#1a1412] py-12 px-4 sm:px-6 lg:px-8 font-['Cinzel']">
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-      
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-           
-            <th>
-                @Html.DisplayNameFor(model => model.RoleName)
-            </th>
-           
-            <th>
-                @Html.DisplayNameFor(model => model.Active)
-            </th>
-           
+    <div class="max-w-7xl mx-auto mb-10 flex justify-between items-end border-b-2 border-yellow-700 pb-4">
+        <div>
+            <h1 class="text-4xl font-bold text-red-600 tracking-widest uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                Registro de Usuarios
+            </h1>
+            <p class="text-yellow-700 italic mt-2 text-lg">"Gobernando los reinos con mano de hierro y datos precisos"</p>
+        </div>
 
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-          
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>      
-           
+        <a asp-action="Create" class="bg-yellow-800 hover:bg-yellow-600 text-yellow-100 px-6 py-2 rounded-sm border border-yellow-500 transition-all duration-300 shadow-[0_0_15px_rgba(180,83,9,0.3)] uppercase tracking-tighter font-bold">
+            + Reclutar Nuevo
+        </a>
+    </div>
 
-            <td>
-                    @Html.DisplayFor(modelItem => item.RoleName)
-            </td>
-         
-            <td>
-                @Html.DisplayFor(modelItem => item.Active)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
+    <div class="max-w-7xl mx-auto overflow-hidden rounded-lg border border-yellow-900 shadow-[0_20px_50px_rgba(0,0,0,0.9)] bg-[#2a1f1a]">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-[#3d2b24] text-yellow-500 uppercase text-sm tracking-[0.15em] border-b border-yellow-800">
+                        <th class="px-6 py-5 font-bold">@Html.DisplayNameFor(model => model.Id)</th>
+                        <th class="px-6 py-5 font-bold">Nombre Completo</th>
+                        <th class="px-6 py-5 font-bold">@Html.DisplayNameFor(model => model.RoleName)</th>
+                        <th class="px-6 py-5 font-bold text-center">Estado</th>
+                        <th class="px-6 py-5 font-bold text-right">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="text-stone-300 divide-y divide-yellow-900/30">
+                    @foreach (var item in Model)
+                    {
+                        <tr class="hover:bg-[#362822] transition-colors duration-200 group">
+                            <td class="px-6 py-4 font-mono text-yellow-700">
+                                #@Html.DisplayFor(modelItem => item.Id)
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="text-lg font-semibold text-stone-200 group-hover:text-yellow-400 transition-colors">
+                                    @item.FirstName @item.LastName
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="px-3 py-1 rounded-full bg-red-900/30 border border-red-800 text-red-400 text-xs uppercase">
+                                    @Html.DisplayFor(modelItem => item.RoleName)
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                @if (item.Active)
+                                {
+                                    <span class="inline-flex items-center text-green-500">
+                                        <span class="h-2 w-2 rounded-full bg-green-500 mr-2 shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
+                                        Activo
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="inline-flex items-center text-red-700">
+                                        <span class="h-2 w-2 rounded-full bg-red-700 mr-2"></span>
+                                        Caído
+                                    </span>
+                                }
+                            </td>
+                            <td class="px-6 py-4 text-right text-sm font-bold">
+                                <div class="flex justify-end space-x-4">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="text-yellow-600 hover:text-yellow-400 transition-all uppercase tracking-widest">Editar</a>
+                                    <span class="text-yellow-900">|</span>
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="text-blue-500 hover:text-blue-300 transition-all uppercase tracking-widest">Ver</a>
+                                    <span class="text-yellow-900">|</span>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="text-red-700 hover:text-red-500 transition-all uppercase tracking-widest">Desterrar</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-
-}
-    </tbody>
-</table>
+    <div class="mt-8 text-center">
+        <div class="flex justify-center items-center gap-4 opacity-30">
+            <div class="h-px w-24 bg-yellow-700"></div>
+            <img src="/Images/Logo/ShortLogo.png" class="h-8 grayscale" alt="sepia-logo" />
+            <div class="h-px w-24 bg-yellow-700"></div>
+        </div>
+    </div>
+</div>
