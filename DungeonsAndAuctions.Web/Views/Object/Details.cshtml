@@ -70,6 +70,54 @@
                             </p>
                         </div>
 
+
+                        @if (ViewBag.AuctionsObjects != null && ViewBag.AuctionsObjects.Count > 0)
+                        {
+                            <div class="mt-8 border-t border-yellow-900 pt-6">
+                                
+                                <h3 class="text-yellow-700 text-xs font-bold uppercase tracking-widest mb-4">Subastas Activas</h3>
+                                <div class="space-y-3">
+                                    @foreach (var auction in ViewBag.AuctionsObjects)
+                                    {
+                                        <div class="bg-[#1a1412] border border-yellow-900/50 p-4 flex justify-between items-center">
+                                            <div>
+
+                                                <p class="text-stone-500 text-xs">ID: @auction.Id</p>
+
+                                                <p class="text-stone-300 text-sm">Precio base: 
+                                                    <span class="text-yellow-500 font-bold">@auction.BasePrice.ToString("N0") G</span></p>
+                                                <p class="text-stone-500 text-xs">@auction.StartDate → @auction.EndDate</p>
+
+                                                <p class="text-stone-500 text-xs">State: @auction.IdstateNavigation</p>
+
+
+
+
+                                            </div>
+
+                                            <a asp-controller="Auctions" asp-action="Details" asp-route-id="@auction.Id"
+                                               class="text-yellow-600 hover:text-yellow-400 text-xs uppercase tracking-widest">
+                                                Ver detalle
+                                            </a>
+                                        </div>
+
+                                    }
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="mt-8 border-t border-yellow-900 pt-6">
+                                <h3 class="text-yellow-700 text-xs font-bold uppercase tracking-widest mb-4">Subastas</h3>
+                                <p class="text-stone-500 italic text-sm border-l-2 border-yellow-900 pl-4">
+                                    Esta reliquia no tiene subastas activas.
+                                </p>
+                            </div>
+
+                        }
+
+
+
                         <div>
                             <h3 class="text-yellow-700 text-xs font-bold uppercase tracking-widest mb-2">Crónica de la Reliquia</h3>
                             <p class="text-stone-400 leading-relaxed text-sm font-serif">

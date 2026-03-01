@@ -106,7 +106,7 @@ namespace D_A.Infraestructure.Repository.Implementation
         {
             return await _context.Auctions
                 .AsNoTracking()
-                 .Where(a => a.Idobject == id)
+                .Where(a => a.Idobject == id)
                 .ToListAsync();
         }
 

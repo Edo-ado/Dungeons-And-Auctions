@@ -44,8 +44,6 @@ namespace D_A.Application.DTOs
         public int TotalBids { get; set; }
 
 
-
-
         [DisplayName("Object Name")]
         public  Objects IdobjectNavigation { get; set; } = null!;
 
@@ -54,20 +52,12 @@ namespace D_A.Application.DTOs
         [DisplayName("User Creator Name")]
         public  Users IdusercreatorNavigation { get; set; } = null!;
 
-        [DisplayName("Object Name")]
-        public string ObjectName { get; set; } = string.Empty;
-
-        [DisplayName("State Name")]
-        public string StateName { get; set; } = string.Empty;
-
-        [DisplayName("User Creator Name")]
-        public string UserCreatorName { get; set; } = string.Empty;
 
 
         public List<AuctionBidHistoryDTO> BidHistory { get; set; } = new List<AuctionBidHistoryDTO>();
 
 
-        
+
 
        
     }

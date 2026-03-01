@@ -51,7 +51,6 @@ namespace DNDA.Web.Controllers
 
                 return View(auction);
 
-
         }
     }
 }
