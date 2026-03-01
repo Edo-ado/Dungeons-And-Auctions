@@ -1,85 +1,102 @@
 ﻿@model IEnumerable<D_A.Application.DTOs.ObjectsDTO>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Tesoro del Reino";
 }
 
-<h1>Index</h1>
+<div class="min-h-screen bg-[#1a1412] py-12 px-4 sm:px-8 font-['Cinzel']">
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Year)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MarketPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsActive)
-            </th>
-          
-            <th>
-                @Html.DisplayNameFor(model => model.IdState)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Idimage)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Year)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MarketPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsActive)
-            </td>
-           
-            <td>
-                @Html.DisplayFor(modelItem => item.IdState)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Idimage)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new {    }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div class="max-w-7xl mx-auto mb-10 flex flex-col md:flex-row justify-between items-center border-b-2 border-yellow-700 pb-6 gap-6">
+        <div>
+            <h1 class="text-4xl md:text-5xl font-bold text-red-600 tracking-widest uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                Inventario Real
+            </h1>
+            <p class="text-yellow-700 italic mt-2 text-lg">"Reliquias forjadas en fuego, custodiadas por el linaje."</p>
+        </div>
+
+        <a asp-action="Create" class="bg-yellow-800 hover:bg-yellow-600 text-yellow-100 px-6 py-2 rounded-sm border border-yellow-500 transition-all duration-300 shadow-[0_0_15px_rgba(180,83,9,0.3)] uppercase tracking-tighter font-bold">
+            + Forjar Nuevo
+        </a>
+    </div>
+
+    <div class="max-w-7xl mx-auto overflow-hidden rounded-sm border border-yellow-900 shadow-[0_20px_50px_rgba(0,0,0,0.9)] bg-[#2a1f1a]">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-[#3d2b24] text-yellow-500 uppercase text-xs tracking-[0.2em] border-b border-yellow-800">
+                        <th class="px-6 py-5 font-bold">Reliquia</th>
+                        <th class="px-6 py-5 font-bold">Nombre del Objeto</th>
+                        <th class="px-6 py-5 font-bold">Categoría</th>
+                        <th class="px-6 py-5 font-bold text-center">Estado</th>
+                        <th class="px-6 py-5 font-bold text-right">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="text-stone-300 divide-y divide-yellow-900/30">
+                    @foreach (var item in Model)
+                    {
+                        <tr class="hover:bg-[#362822] transition-colors duration-200 group">
+
+                            <td class="px-6 py-4">
+                                <div class="w-20 h-20 border-2 border-yellow-900 bg-[#1a1412] overflow-hidden group-hover:border-yellow-600 transition-all">
+                                    @if (item.Imagen != null && item.Imagen.Length > 0)
+                                    {
+                                        <img class="w-full h-full object-cover sepia-[0.2] group-hover:sepia-0 transition-all duration-500"
+                                             src="data:image/jpeg;base64,@Convert.ToBase64String(item.Imagen)"
+                                             alt="@item.Name" />
+                                    }
+                                    else
+                                    {
+                                        <div class="w-full h-full flex items-center justify-center text-yellow-900 opacity-40">
+                                            <span class="text-2xl">🛡️</span>
+                                        </div>
+                                    }
+                                </div>
+                            </td>
+
+                            <td class="px-6 py-4">
+                                <div class="text-lg font-bold text-stone-200 group-hover:text-yellow-400 transition-colors uppercase tracking-tight">
+                                    @item.Name
+                                </div>
+                                <div class="text-[10px] text-yellow-800 font-mono mt-1 uppercase">Ref: #@item.Id</div>
+                            </td>
+
+                            <td class="px-6 py-4">
+                                <span class="text-stone-400 italic">
+                                    @(string.Join(", ", item.Categories.Select(c => c.Name)))
+                                </span>
+                            </td>
+
+                            <td class="px-6 py-4 text-center">
+                                @if (item.IsActive)
+                                {
+                                    <span class="inline-flex items-center text-green-500 uppercase text-[10px] font-bold tracking-widest">
+                                        <span class="h-2 w-2 rounded-full bg-green-500 mr-2 shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
+                                        En Subasta
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="inline-flex items-center text-red-700 uppercase text-[10px] font-bold tracking-widest">
+                                        <span class="h-2 w-2 rounded-full bg-red-700 mr-2"></span>
+                                        Vendido
+                                    </span>
+                                }
+                            </td>
+
+                            <td class="px-6 py-4 text-right text-sm font-bold">
+                                <div class="flex justify-end space-x-4">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="text-yellow-600 hover:text-yellow-400 transition-all uppercase tracking-widest">Editar</a>
+                                    <span class="text-yellow-900">|</span>
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="text-blue-500 hover:text-blue-300 transition-all uppercase tracking-widest">Ver</a>
+                                    <span class="text-yellow-900">|</span>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="text-red-700 hover:text-red-500 transition-all uppercase tracking-widest">Destruir</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

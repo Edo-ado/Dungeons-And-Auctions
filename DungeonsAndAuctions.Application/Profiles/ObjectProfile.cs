@@ -13,12 +13,11 @@ namespace D_A.Application.Profiles
     {
         public ObjectProfile()
         {
+            CreateMap<Objects, ObjectsDTO>().ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.Category))
+                .ForMember(dest => dest.Auctions, opt => opt.MapFrom(src => src.Auctions));
 
-            CreateMap<Objects, ObjectsDTO>();//users a DTO es cuando lees de una BN
-
-
-
-
+            CreateMap<Categories, CategoriesDTO>();
+            CreateMap<Auctions, AuctionsDTO>();
         }
     }
 }

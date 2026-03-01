@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using D_A.Application.DTOs;
 using D_A.Application.Services.Interfaces;
+using D_A.Infraestructure.Models;
 using D_A.Infraestructure.Repository.Interfaces;
 
 namespace D_A.Application.Services.Implementations
@@ -20,6 +21,13 @@ namespace D_A.Application.Services.Implementations
             _repository = repository;
             _mapper = mapper;
         }
+
+        public async Task<Categories?> GetCategoriesByIdObject(int id)
+        {
+            var categories = await _repository.GetCategoriesByIdObject(id);
+            return _mapper.Map<Categories>(categories);
+        }
+
         public async Task<ObjectsDTO> GetObjectById(int id)
         {
             var objects = await _repository.FindByIdAsync(id);

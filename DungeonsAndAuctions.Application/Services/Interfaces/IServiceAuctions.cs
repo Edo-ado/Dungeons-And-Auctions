@@ -16,7 +16,7 @@ namespace D_A.Application.Services.Interfaces
         Task<List<AuctionsDTO>> GetSpecificViewList();
         Task<int> CountAuctionsBySellerAsync(int userId);
 
-
+        Task<List<AuctionsDTO>> GetAuctionsByObjectID(int id);
         Task<Auctions?> allDetails(int id);
 
 

@@ -85,6 +85,12 @@ builder.Services.AddScoped<IRepositoryUser, RepositoryUser>();
 builder.Services.AddScoped<IRepositoryAuctionBidHistory, RepositoryAuctionBidHistory>();
 builder.Services.AddScoped<IRepositoryAuctions, RepositoryAuctions>();
 builder.Services.AddScoped<IRepositoryObject, RepositoryObject>();
+builder.Services.AddScoped<IRepositoryRole, RepositoryRole>();
+builder.Services.AddScoped<IRepositoryCategory, RepositoryCategory>();
+builder.Services.AddScoped<IRepositoryGender, RepositoryGender>();
+
+
+
 
 
 //Services

@@ -30,7 +30,6 @@ namespace DNDA.Web.Controllers
         }
 
 
-
         public async Task<IActionResult> Index()
         {
 
@@ -42,7 +41,6 @@ namespace DNDA.Web.Controllers
 
 
 
-
         public async Task<IActionResult> Details(int id)
         {
             var auction = await _ServiceAuctions.allDetails(id);
@@ -50,12 +48,6 @@ namespace DNDA.Web.Controllers
 
 
             return View(auction);
-
-
-
-
-
-
 
 
         }

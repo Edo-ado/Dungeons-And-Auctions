@@ -167,9 +167,9 @@ INSERT INTO Genders (Name) VALUES
 
 
 INSERT INTO Roles (Name,Description) VALUES
-('Admin','Full access to the system, user management and auctions.'),
-('User','Standard user: bid, create auctions and items.'),
-('Moderator',' Can block users and review suspicious bids.'),
+('Comprador','Full access to the system, user management and auctions.'),
+('Vendedor','Standard user: bid, create auctions and items.'),
+('Admin',' Can block users and review suspicious bids.'),
 ('Guest',' Can only view the auctions, cannot interact without logging in')
 ;
 

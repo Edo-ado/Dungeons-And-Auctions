@@ -49,8 +49,6 @@ namespace D_A.Application.DTOs
         [DisplayName("RoleID")]
         public int RoleId { get; set; }
 
-
-
         [DisplayName("IsBlocked")]
         public bool IsBlocked { get; set; }
 
@@ -68,9 +66,6 @@ namespace D_A.Application.DTOs
 
         [DisplayName("NumberBidMade")]
         public int NumberBidMade{ get; set; }//si es comprador (cantidad de pujas realizadas)
-
-
-
 
         [DisplayName("RoleName")]
         public string RoleName { get; set; } = string.Empty;

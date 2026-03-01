@@ -47,8 +47,12 @@ namespace D_A.Application.Services.Implementations
             return _mapper.Map<Auctions?>(auction);
         }
 
+        public async Task<List<AuctionsDTO>> GetAuctionsByObjectID(int id)
+        {
+            var auctions = await _repository.GetAuctionsByObjectID(id);
+            return _mapper.Map<List<AuctionsDTO>>(auctions);
+        }
 
-
-
+     
     }
 }

@@ -24,15 +24,29 @@ namespace D_A.Infraestructure.Repository.Implementation
         public async Task<Objects?> FindByIdAsync(int id)
         {
             return await _context.Set<Objects>()
-                   .AsNoTracking()      
+                   .AsNoTracking()
+                   .Include(o => o.Category)
+                   .Include(o => o.Auctions)
+                   .Include(o => o.User)
                    .FirstOrDefaultAsync(u => u.Id == id);
+        }
+        public async Task<List<Categories>> GetCategoriesByIdObject(int id)
+        {
+            return await _context.Set<Objects>()
+                .AsNoTracking()
+                .Where(o => o.Id == id)
+                .SelectMany(o => o.Category)
+                .ToListAsync();
         }
 
         public async Task<ICollection<Objects>> ListAsync()
         {
             return await _context.Objects
                .AsNoTracking()
+               .Include(o => o.Category)
                .ToListAsync();
         }
+
+     
     }
 }
