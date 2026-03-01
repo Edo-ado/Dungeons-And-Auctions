@@ -9,7 +9,7 @@ namespace D_A.Application.Profiles
         public AuctionProfile()
         {
             CreateMap<Auctions, AuctionsDTO>();
-          
+         
             CreateMap<AuctionsDTO, Auctions>();
         }
     }

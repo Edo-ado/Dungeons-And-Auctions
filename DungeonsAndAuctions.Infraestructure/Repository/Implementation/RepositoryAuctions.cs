@@ -106,8 +106,19 @@ namespace D_A.Infraestructure.Repository.Implementation
         {
             return await _context.Auctions
                 .AsNoTracking()
-                 .Where(a => a.Idobject == id)
+                .Where(a => a.Idobject == id)
                 .ToListAsync();
+        }
+
+        public async Task<List<Auctions>> GetSpecificViewList()
+        {
+            return await _context.Auctions
+       .AsNoTracking()
+       .Include(a => a.IdobjectNavigation)
+           .ThenInclude(o => o.IdimageNavigation)
+       .Include(u => u.IdusercreatorNavigation)
+       .Include(s => s.IdstateNavigation)
+       .ToListAsync();
         }
     }
 }

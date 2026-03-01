@@ -44,7 +44,6 @@ namespace D_A.Application.DTOs
         public int TotalBids { get; set; }
 
 
-
         [DisplayName("Object Name")]
         public  Objects IdobjectNavigation { get; set; } = null!;
 
@@ -58,7 +57,7 @@ namespace D_A.Application.DTOs
         public List<AuctionBidHistoryDTO> BidHistory { get; set; } = new List<AuctionBidHistoryDTO>();
 
 
-        
+
 
        
     }

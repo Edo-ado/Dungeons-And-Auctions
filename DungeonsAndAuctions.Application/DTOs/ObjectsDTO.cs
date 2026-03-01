@@ -28,6 +28,11 @@ namespace D_A.Application.DTOs
         [DisplayName("Description")]
         public string? Description { get; set; } = string.Empty;
 
+
+        [DisplayName("UserNameOwner")]
+        public string? UserNameOwner { get; set; } = string.Empty;
+
+
         [DisplayName("RegistrationDate")]
         public DateOnly RegistrationDate { get; set; }
 
@@ -46,12 +51,14 @@ namespace D_A.Application.DTOs
         [DisplayName("Idimage")]
         public int? Idimage { get; set; }
 
+        public Qualities? IdQualityNavigation { get; set; }
+
         [Display(Name = "Imagen Libro")]
         public byte[] Imagen { get; set; } = Array.Empty<byte>();
 
         [DisplayName("AuctionsObjects")]
-
         public List<AuctionsDTO> Auctions { get; set; } = new();
+
 
     }
 }

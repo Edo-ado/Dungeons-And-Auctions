@@ -14,10 +14,17 @@ namespace D_A.Application.Profiles
         public ObjectProfile()
         {
             CreateMap<Objects, ObjectsDTO>().ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.Category))
-                .ForMember(dest => dest.Auctions, opt => opt.MapFrom(src => src.Auctions));
+                .ForMember(dest => dest.Auctions, opt => opt.MapFrom(src => src.Auctions))
+                .ForMember(dest => dest.UserNameOwner, opt => opt.MapFrom(src => src. User.UserName))
+
+                .ReverseMap();
 
             CreateMap<Categories, CategoriesDTO>();
             CreateMap<Auctions, AuctionsDTO>();
+      
+
+
+
         }
     }
 }
