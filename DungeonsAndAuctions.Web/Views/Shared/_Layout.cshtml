@@ -1,50 +1,47 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - D&A.Web</title>
     <script type="importmap"></script>
-
- 
     <script src="https://cdn.tailwindcss.com"></script>
-   
-
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/D_A.Web.styles.css" asp-append-version="true" />
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
 </head>
-
-
 <body class="min-h-screen flex flex-col antialiased bg-gray-50 text-gray-900">
-
-    <!-- Header -->
     <header class="sticky top-0 z-50">
         @await Html.PartialAsync("_Header")
     </header>
-
-
-
-    <!-- Contenido principal -->
-   <main class="flex-grow bg-gray-100">
-    <div class=" mx-auto px-8 py-12">
-        <div class="bg-white shadow-sm rounded-xl p-8">
-            @RenderBody()
+    <main class="flex-grow bg-gray-100">
+        <div class="mx-auto px-8 py-12">
+            <div class="bg-white shadow-sm rounded-xl p-8">
+                @RenderBody()
+            </div>
         </div>
-    </div>
-</main>
-
-
-
-
-    <!-- Footer -->
-    <footer class="mt-auto border-t bg-[#1a1410] text-yellow-600 border-t-4 border-yellow-700 mt-auto" >
+    </main>
+    <footer class="mt-auto border-t bg-[#1a1410] text-yellow-600 border-t-4 border-yellow-700">
         @await Html.PartialAsync("_Footer")
     </footer>
 
- 
-
+    <!-- jQuery primero, luego tu script -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#subastas-toggle').on('click', function (e) {
+                e.stopPropagation();
+                $('#subastas-dropdown').slideToggle(200);
+                $('#subastas-arrow').toggleClass('rotate-180');
+            });
+            $(document).on('click', function () {
+                $('#subastas-dropdown').slideUp(200);
+                $('#subastas-arrow').removeClass('rotate-180');
+            });
+            $('#subastas-dropdown').on('click', function (e) {
+                e.stopPropagation();
+            });
+        });
+    </script>
 </body>
 </html>
-

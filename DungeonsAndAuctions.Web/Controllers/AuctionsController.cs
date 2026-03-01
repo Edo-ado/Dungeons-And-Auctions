@@ -42,6 +42,18 @@ namespace DNDA.Web.Controllers
             return View(collections);
         }
 
+        public async Task<IActionResult> GetAllAuctionsInactive()
+        {
+            var collections =  await _ServiceAuctions.GetAllAuctionsInactive();
+
+            ViewBag.AuctionsNoActive = collections;
+
+            return View(collections)
+                
+                ;
+
+        }
+
 
 
         public async Task<IActionResult> Details(int id)
