@@ -21,42 +21,84 @@ namespace D_A.Infraestructure.Repository.Implementation
             _context = context;
         }
 
-        public async Task<List<Auctions>> GetSpecificViewList()
-        {
-          return await _context.Auctions
-        .AsNoTracking()
-        .Include(a => a.IdobjectNavigation)
-            .ThenInclude(o => o.IdimageNavigation)
-        .Include(u => u.IdusercreatorNavigation)
-        .Include(s => s.IdstateNavigation)
-        .ToListAsync();
-
-
-        }
-
-        public async Task<Auctions?> allDetails(int id)
+        public async Task<Auctions?> AllDetails(int id)
         {
             var detail = await _context.Auctions
                 .AsNoTracking()
                 .Where(a => a.Id == id)
+
+                .Include(a => a.IdobjectNavigation)
+                .ThenInclude(o => o.Category)
+
                 .Include(a => a.IdobjectNavigation)
                 .ThenInclude(o => o.IdimageNavigation)
+
+                 .Include(a => a.IdobjectNavigation)
+                .ThenInclude(o => o.IdQualityNavigation)
+
+
                 .Include(a => a.AuctionBidHistory)
+               .ThenInclude(b => b.User)
+
                 .Include(u => u.IdusercreatorNavigation)
+
+
+                .Include(a => a.IdobjectNavigation)
+         .ThenInclude(o => o.IdimageNavigation)
+
+         .Include(a => a.IdobjectNavigation)
+
+
+     .Include(u => u.IdusercreatorNavigation)
+     .Include(s => s.IdstateNavigation)
+
+
                 .FirstOrDefaultAsync();
 
             return detail;
         }
 
-        public async Task<List<Auctions?>> GetAllAuctions()
+        public async Task<List<Auctions?>> GetAllAuctionsActive()
         {
-            return await _context.Auctions.ToListAsync();
+            var detail = await _context.Auctions
+     .AsNoTracking()
+     .Where(a => a.Idstate == 1)
+
+     .Include(a => a.IdobjectNavigation)
+         .ThenInclude(o => o.IdimageNavigation)
+
+         .Include(a => a.IdobjectNavigation)
+         
+
+     .Include(u => u.IdusercreatorNavigation)
+     .Include(s => s.IdstateNavigation)
+     .ToListAsync();
+
+            return detail;
+
+
+        }
+
+        public async Task<List<Auctions?>> GetAllAuctionsInactive()
+        {
+            var detail = await _context.Auctions
+    .AsNoTracking()
+    .Where(a => a.Idstate != 1)
+
+    .Include(a => a.IdobjectNavigation)
+        .ThenInclude(o => o.IdimageNavigation)
+    .Include(u => u.IdusercreatorNavigation)
+    .Include(s => s.IdstateNavigation)
+    .ToListAsync();
+
+            return detail;
+
 
         }
 
         public async Task<int> CountAuctionsBySellerAsync(int userId)
         {
-            return await _context.Auctions  
+            return await _context.Auctions
                 .CountAsync(a => a.Idusercreator == userId && _context.Users.Any(u => u.Id == userId && u.RoleId == 2));
         }
 
@@ -66,6 +108,17 @@ namespace D_A.Infraestructure.Repository.Implementation
                 .AsNoTracking()
                  .Where(a => a.Idobject == id)
                 .ToListAsync();
+        }
+
+        public async Task<List<Auctions>> GetSpecificViewList()
+        {
+            return await _context.Auctions
+       .AsNoTracking()
+       .Include(a => a.IdobjectNavigation)
+           .ThenInclude(o => o.IdimageNavigation)
+       .Include(u => u.IdusercreatorNavigation)
+       .Include(s => s.IdstateNavigation)
+       .ToListAsync();
         }
     }
 }

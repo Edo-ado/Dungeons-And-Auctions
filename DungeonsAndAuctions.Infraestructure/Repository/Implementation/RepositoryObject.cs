@@ -44,6 +44,8 @@ namespace D_A.Infraestructure.Repository.Implementation
             return await _context.Objects
                .AsNoTracking()
                .Include(o => o.Category)
+               .Include(o => o.User)
+
                .ToListAsync();
         }
 
