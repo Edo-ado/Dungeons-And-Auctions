@@ -1,4 +1,5 @@
-﻿using System;
+﻿using D_A.Infraestructure.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -26,8 +27,10 @@ namespace D_A.Application.DTOs
         [DisplayName("Id")]
         public string Id { get; set; } = string.Empty;
 
-        [DisplayName("TotalBids")]
-        public int TotalBids { get; set; }
+     
 
+
+        [DisplayName("User")]
+        public  Users User { get; set; } = null!;
     }
 }

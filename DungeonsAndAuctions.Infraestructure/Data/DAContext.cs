@@ -180,7 +180,7 @@ public partial class DAContext : DbContext
 
          
 
-            entity.HasOne(d => d.IdStateNavigation).WithMany(p => p.Objects)
+            entity.HasOne(d => d.IdQualityNavigation).WithMany(p => p.Objects)
                 .HasForeignKey(d => d.IdState)
                 .HasConstraintName("FK_Objects_Qualities1");
 

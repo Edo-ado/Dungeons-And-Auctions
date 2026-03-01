@@ -31,7 +31,7 @@ public partial class Objects
 
 
 
-    public virtual Qualities? IdStateNavigation { get; set; }
+    public virtual Qualities? IdQualityNavigation { get; set; }
 
     public virtual Images? IdimageNavigation { get; set; }
 

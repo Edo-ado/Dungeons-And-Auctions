@@ -1,4 +1,5 @@
-﻿using System;
+﻿using D_A.Infraestructure.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -39,20 +40,26 @@ namespace D_A.Application.DTOs
         [DisplayName("IdObject")]
         public int idobject { get; set; }
 
+        [DisplayName("TotalBids")]
+        public int TotalBids { get; set; }
+
 
 
         [DisplayName("Object Name")]
-        public string ObjectName { get; set; } = string.Empty;
+        public  Objects IdobjectNavigation { get; set; } = null!;
 
         [DisplayName("State Name")]
-        public string StateName { get; set; } = string.Empty;
-
+        public  AuctionState IdstateNavigation { get; set; } = null!;
         [DisplayName("User Creator Name")]
-        public string UserCreatorName { get; set; } = string.Empty;
+        public  Users IdusercreatorNavigation { get; set; } = null!;
 
 
 
+        public List<AuctionBidHistoryDTO> BidHistory { get; set; } = new List<AuctionBidHistoryDTO>();
 
 
+        
+
+       
     }
 }
