@@ -6,6 +6,14 @@
 
 <div class="min-h-screen bg-[#1a1412] py-12 px-4 font-['Cinzel'] flex justify-center items-center">
 
+
+    <div class="min-h-screen bg-[#1a1412] py-12 px-4 font-['Cinzel'] flex justify-center items-center" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%224%22 height=%224%22%3E%3Crect width=%224%22 height=%224%22 fill=%22%231a1412%22/%3E%3Ccircle cx=%221%22 cy=%221%22 r=%220.5%22 fill=%22%23ffffff08%22/%3E%3Ccircle cx=%223%22 cy=%223%22 r=%220.5%22 fill=%22%23ffffff05%22/%3E%3C/svg%3E');">
+
+        <div class="grain-overlay"></div>
+
+
+
+
     <div class="max-w-4xl w-full bg-[#2a1f1a] border-2 border-yellow-900 shadow-[0_0_50px_rgba(0,0,0,0.9)] relative overflow-hidden">
 
         <div class="absolute top-0 right-0 w-32 h-32 bg-yellow-900/10 rotate-45 translate-x-16 -translate-y-16 border border-yellow-800"></div>
@@ -156,3 +164,33 @@
         </div>
     </div>
 </div>
+
+    <style>
+        @@keyframes grain {
+            0%, 100% {
+                transform: translate(0, 0);
+            }
+
+            25% {
+                transform: translate(1px, 1px);
+            }
+
+            50% {
+                transform: translate(-1px, 0);
+            }
+
+            75% {
+                transform: translate(0, -1px);
+            }
+        }
+
+        .grain-overlay {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0.035;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            animation: grain 0.5s steps(1) infinite;
+        }
+    </style>

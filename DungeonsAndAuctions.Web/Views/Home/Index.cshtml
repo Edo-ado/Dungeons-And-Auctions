@@ -1,4 +1,203 @@
 ﻿@{
-    ViewData["Title"] = "D&A";
+    ViewData["Title"] = "El Reino de las Subastas";
 }
 
+<div class="relative min-h-screen overflow-hidden font-['Cinzel']" style="background-color: #1a1412; background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%224%22 height=%224%22%3E%3Crect width=%224%22 height=%224%22 fill=%22%231a1412%22/%3E%3Ccircle cx=%221%22 cy=%221%22 r=%220.5%22 fill=%22%23ffffff08%22/%3E%3Ccircle cx=%223%22 cy=%223%22 r=%220.5%22 fill=%22%23ffffff05%22/%3E%3C/svg%3E');">
+    <!-- Fondo con textura y velas -->
+    <div class="grain-overlay"></div>
+    <div class="absolute inset-0 bg-[url('/Images/Textures/TexturePapyrusGeneral.jpg')] opacity-10 bg-cover bg-center"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80"></div>
+
+    <!-- Partículas de brasa flotantes -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="ember ember-1"></div>
+        <div class="ember ember-2"></div>
+        <div class="ember ember-3"></div>
+        <div class="ember ember-4"></div>
+        <div class="ember ember-5"></div>
+        <div class="ember ember-6"></div>
+    </div>
+
+    <!-- Línea decorativa superior -->
+    <div class="relative z-10 h-1 bg-gradient-to-r from-transparent via-yellow-600 to-transparent"></div>
+
+    <!-- HERO SECTION -->
+    <div class="relative z-10 flex flex-col items-center justify-center min-h-[80vh] px-6 text-center">
+
+        <!-- Ornamento superior -->
+        <div class="flex items-center gap-4 mb-8 mt-8 animate-fade-in">
+            <div class="h-px w-24 bg-gradient-to-r from-transparent to-yellow-700"></div>
+            <svg class="w-6 h-6 text-yellow-700" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" />
+            </svg>
+            <div class="h-px w-24 bg-gradient-to-l from-transparent to-yellow-700"></div>
+        </div>
+
+        <!-- Título principal -->
+        <div class="animate-rise mb-0">
+            <p class="text-yellow-600 text-xs tracking-[0.5em] uppercase mb-2">
+                Bienvenido a
+            </p>
+            <img src="/Images/Logo/Logo.png"
+                 class="h-64 md:h-80 lg:h-96 object-contain drop-shadow-[0_0_30px_rgba(180,0,0,0.5)] -mb-16"
+                 alt="Dungeons & Auctions" />
+        </div>
+
+        <!-- Separador dragón -->
+        <div class="my-2 flex items-center gap-6 animate-fade-in-delay">
+            <div class="h-px w-32 md:w-48 bg-gradient-to-r from-transparent via-yellow-800 to-yellow-600"></div>
+            <div class="text-red-700 text-3xl drop-shadow-[0_0_12px_rgba(180,0,0,0.6)]">⚔</div>
+            <div class="h-px w-32 md:w-48 bg-gradient-to-l from-transparent via-yellow-800 to-yellow-600"></div>
+        </div>
+
+        <!-- Descripción -->
+        <p class="max-w-2xl text-stone-400 text-sm md:text-base leading-relaxed font-serif italic mb-12 animate-fade-in-delay">
+            "Las reliquias más antiguas de los Siete Reinos aguardan a quien tenga el valor
+            y el oro para reclamarlas. Aquí, bajo la llama eterna, se celebran las subastas
+            más legendarias del reino conocido."
+        </p>
+
+        <!-- Botones de acción -->
+        <div class="flex flex-col sm:flex-row gap-4 animate-rise-delay mb-8">
+            <a asp-controller="Auctions" asp-action="Index"
+               class="group relative px-10 py-4 bg-red-900 border border-red-700 text-yellow-100 uppercase tracking-[0.2em] text-sm font-bold transition-all duration-300 hover:bg-red-800 hover:border-yellow-600 hover:shadow-[0_0_30px_rgba(180,0,0,0.4)]">
+                <span class="relative z-10">Explorar Subastas</span>
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-red-800/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            </a>
+            <a asp-controller="Object" asp-action="Index"
+               class="group px-10 py-4 bg-transparent border border-yellow-800 text-yellow-600 uppercase tracking-[0.2em] text-sm font-bold transition-all duration-300 hover:border-yellow-500 hover:text-yellow-400 hover:shadow-[0_0_20px_rgba(180,130,0,0.2)]">
+                Ver Inventario
+            </a>
+        </div>
+
+    </div>
+
+    <!-- SECCIÓN DE 3 PILARES -->
+    <div class="relative z-10 max-w-6xl mx-auto px-6 pb-20">
+
+        <!-- Línea divisoria -->
+        <div class="flex items-center gap-4 mb-16">
+            <div class="h-px flex-1 bg-gradient-to-r from-transparent to-yellow-900"></div>
+            <span class="text-yellow-800 text-xs tracking-[0.4em] uppercase">El Código del Reino</span>
+            <div class="h-px flex-1 bg-gradient-to-l from-transparent to-yellow-900"></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+            <!-- Pilar 1 -->
+            <div class="group relative border border-yellow-900/50 bg-[#2a1f1a]/80 p-8 hover:border-yellow-700 transition-all duration-500 hover:shadow-[0_0_30px_rgba(100,60,0,0.2)]">
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#1a1412] px-3">
+                    <span class="text-red-700 text-2xl">⚜</span>
+                </div>
+                <h3 class="text-yellow-600 uppercase tracking-[0.2em] text-xs mb-4 mt-2 text-center">Honor & Lealtad</h3>
+                <p class="text-stone-500 text-sm leading-relaxed text-center font-serif italic">
+                    Cada transacción sellada bajo el fuego sagrado del reino. Tu palabra es tu escudo, tu oro es tu honor.
+                </p>
+            </div>
+
+            <!-- Pilar 2 (central, destacado) -->
+            <div class="group relative border-2 border-yellow-700/70 bg-[#2a1f1a] p-8 hover:border-yellow-500 transition-all duration-500 hover:shadow-[0_0_40px_rgba(150,100,0,0.3)] -translate-y-4">
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#1a1412] px-3">
+                    <span class="text-yellow-500 text-2xl">♛</span>
+                </div>
+                <div class="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-yellow-700"></div>
+                <div class="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-yellow-700"></div>
+                <div class="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-yellow-700"></div>
+                <div class="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-yellow-700"></div>
+                <h3 class="text-yellow-500 uppercase tracking-[0.2em] text-xs mb-4 mt-2 text-center">Reliquias Legendarias</h3>
+                <p class="text-stone-400 text-sm leading-relaxed text-center font-serif italic">
+                    Artefactos forjados en fuego y tiempo. Cada objeto cuenta la historia de batallas ganadas y reinos perdidos.
+                </p>
+            </div>
+
+            <!-- Pilar 3 -->
+            <div class="group relative border border-yellow-900/50 bg-[#2a1f1a]/80 p-8 hover:border-yellow-700 transition-all duration-500 hover:shadow-[0_0_30px_rgba(100,60,0,0.2)]">
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#1a1412] px-3">
+                    <span class="text-red-700 text-2xl">🗡</span>
+                </div>
+                <h3 class="text-yellow-600 uppercase tracking-[0.2em] text-xs mb-4 mt-2 text-center">Pugna & Victoria</h3>
+                <p class="text-stone-500 text-sm leading-relaxed text-center font-serif italic">
+                    Solo el más audaz se alza con el trofeo. Haz tu puja, mantén tu posición, reclama tu legado.
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Línea decorativa inferior -->
+    <div class="relative z-10 h-1 bg-gradient-to-r from-transparent via-yellow-600 to-transparent"></div>
+
+</div>
+
+<style>
+    @@keyframes rise {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @@keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    @@keyframes float {
+        0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+        10% { opacity: 1; }
+        90% { opacity: 0.6; }
+        100% { transform: translateY(-100vh) translateX(20px); opacity: 0; }
+    }
+
+    .animate-rise { animation: rise 1s ease-out forwards; }
+    .animate-rise-delay { animation: rise 1s ease-out 0.4s both; }
+    .animate-fade-in { animation: fadeIn 1.5s ease-out forwards; }
+    .animate-fade-in-delay { animation: fadeIn 1.5s ease-out 0.6s both; }
+
+    .ember {
+        position: absolute;
+        width: 3px;
+        height: 3px;
+        border-radius: 50%;
+        background: #f97316;
+        box-shadow: 0 0 6px #f97316, 0 0 12px #ea580c;
+        animation: float linear infinite;
+    }
+    .ember-1 { left: 10%; animation-duration: 8s; animation-delay: 0s; }
+    .ember-2 { left: 25%; animation-duration: 11s; animation-delay: 2s; }
+    .ember-3 { left: 50%; animation-duration: 9s; animation-delay: 4s; }
+    .ember-4 { left: 70%; animation-duration: 13s; animation-delay: 1s; }
+    .ember-5 { left: 85%; animation-duration: 7s; animation-delay: 3s; }
+    .ember-6 { left: 40%; animation-duration: 10s; animation-delay: 5s; }
+
+    html, body {
+        margin: 0;
+        padding: 0;
+        background-color: #1a1412;
+    }
+
+
+    @@keyframes grain {
+        0%, 100% {
+            transform: translate(0, 0);
+        }
+
+        25% {
+            transform: translate(1px, 1px);
+        }
+
+        50% {
+            transform: translate(-1px, 0);
+        }
+
+        75% {
+            transform: translate(0, -1px);
+        }
+    }
+
+    .grain-overlay {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 100;
+        opacity: 0.035;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        animation: grain 0.5s steps(1) infinite;
+    }
+</style>
