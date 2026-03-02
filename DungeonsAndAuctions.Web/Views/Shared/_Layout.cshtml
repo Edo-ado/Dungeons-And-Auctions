@@ -14,12 +14,8 @@
     <header class="sticky top-0 z-50">
         @await Html.PartialAsync("_Header")
     </header>
-    <main class="flex-grow bg-gray-100">
-        <div class="mx-auto px-8 py-12">
-            <div class="bg-white shadow-sm rounded-xl p-8">
-                @RenderBody()
-            </div>
-        </div>
+    <main class="flex-grow">
+        @RenderBody()
     </main>
     <footer class="mt-auto border-t bg-[#1a1410] text-yellow-600 border-t-4 border-yellow-700">
         @await Html.PartialAsync("_Footer")
