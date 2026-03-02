@@ -17,7 +17,7 @@
     <main class="flex-grow">
         @RenderBody()
     </main>
-    <footer class="mt-auto border-t bg-[#1a1410] text-yellow-600 border-t-4 border-yellow-700">
+    <footer class="mt-auto border-t-4 border-yellow-700 bg-[#2a1f1a] shadow-[0_-12px_30px_rgba(0,0,0,0.85)]">
         @await Html.PartialAsync("_Footer")
     </footer>
 
@@ -39,5 +39,36 @@
             });
         });
     </script>
+
+
+    <audio id="hover-sound" src="/Sounds/SwordDraw.mp3" preload="auto"></audio>
+
+    <script>
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                const sound = document.getElementById('hover-sound');
+                sound.currentTime = 0;
+                sound.volume = 0.3;
+                sound.play().catch(() => {});
+            });
+        });
+    </script>
+
+
+
+
 </body>
 </html>
+
+<style>
+    * {
+        cursor: url('/Images/SwordCur2.png') 16 16, crosshair;
+    }
+
+    a, button {
+        cursor: url('/Images/SwordCur2.png') 16 16, pointer;
+    }
+
+
+
+</style>
