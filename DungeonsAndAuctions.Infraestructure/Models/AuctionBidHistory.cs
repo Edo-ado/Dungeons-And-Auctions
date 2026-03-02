@@ -5,6 +5,8 @@ namespace D_A.Infraestructure.Models;
 
 public partial class AuctionBidHistory
 {
+    public int Id { get; set; }
+
     public int UserId { get; set; }
 
     public int AuctionId { get; set; }
@@ -14,8 +16,6 @@ public partial class AuctionBidHistory
     public decimal Amount { get; set; }
 
     public bool IsLastBid { get; set; }
-
-    public string Id { get; set; } = null!;
 
     public virtual Auctions Auction { get; set; } = null!;
 

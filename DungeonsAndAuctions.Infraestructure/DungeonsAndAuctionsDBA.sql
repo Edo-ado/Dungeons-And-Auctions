@@ -248,32 +248,50 @@ VALUES
 
 
 
-		Insert into Objects(UserId, Name, Year, Description, RegistrationDate, MarketPrice, IsActive, idState, idimage) values (2, 'Wooden bow', 1976, 'a wooden bow', GETDATE(),null, 0,  null, null)
+
+		Insert into Objects(UserId, Name, Year, Description, RegistrationDate, MarketPrice, IsActive, idState, idimage) values (2, 'Wooden bow', 1976, 'a wooden bow', GETDATE(),null, 1,  2, null)
 		Insert into ObjectCategories(ObjectId, CategoryId)values( 1,2)
 		Insert into ObjectCategories(ObjectId, CategoryId)values( 1,4)
 		Insert into ObjectCategories(ObjectId, CategoryId)values( 1,6)
 		Insert into ObjectCategories(ObjectId, CategoryId)values( 1,20)
 	
-		Insert into Objects(UserId, Name, Year, Description, RegistrationDate, MarketPrice, IsActive,  idState, idimage) values (2, 'Diamond sword', 550, 'A diamond sword form MC', GETDATE(),null, 0, null, null)
+		Insert into Objects(UserId, Name, Year, Description, RegistrationDate, MarketPrice, IsActive,  idState, idimage) values (2, 'Diamond sword', 550, 'A diamond sword form MC', GETDATE(),null, 1, 1, null)
 		Insert into ObjectCategories(ObjectId, CategoryId)values( 2,2)
 		Insert into ObjectCategories(ObjectId, CategoryId)values( 2,5)
 		Insert into ObjectCategories(ObjectId, CategoryId)values( 2,22)
 		
 
-		Insert into Objects(UserId, Name, Year, Description, RegistrationDate, MarketPrice, IsActive, idState, idimage) values (2, 'Great hero soul', null, 'Consume to obtain 20,000 souls.', GETDATE(),null, 0, null, null)
+		Insert into Objects(UserId, Name, Year, Description, RegistrationDate, MarketPrice, IsActive, idState, idimage) values (2, 'Great hero soul', null, 'Consume to obtain 20,000 souls.', GETDATE(),null,1, 5, null)
 		Insert into ObjectCategories(ObjectId, CategoryId)values( 3,21)
 		
 
-		Insert into Objects(UserId, Name, Year, Description, RegistrationDate, MarketPrice, IsActive,  idState, idimage) values (2, 'Zweihander', null, 'Ultra greatsword with a large, long blade. Wielded with two hands, yet still requiring great strength due to its weight. ', GETDATE(),null, 0, null, null)
+		Insert into Objects(UserId, Name, Year, Description, RegistrationDate, MarketPrice, IsActive,  idState, idimage) values (2, 'Zweihander', null, 'Ultra greatsword with a large, long blade. Wielded with two hands, yet still requiring great strength due to its weight. ', GETDATE(),null, 1, 3, null)
 		Insert into ObjectCategories(ObjectId, CategoryId)values( 4,2)
 		Insert into ObjectCategories(ObjectId, CategoryId)values( 4,5)
 		Insert into ObjectCategories(ObjectId, CategoryId)values(4,18)
 
 
-		Insert into Auctions(StartDate, EndDate, IsActive, BasePrice,IncrementoMinimo,idstate,idusercreator,idobject) values (GETDATE(), GETDATE()+1, 1, 20000, 1000, 2, 2, 1 	)
+		Insert into Auctions(StartDate, EndDate, IsActive, BasePrice,IncrementoMinimo,idstate,idusercreator,idobject) values (GETDATE(), GETDATE()+1, 1, 250, 10, 1, 2, 1 	)
+		Insert into Auctions(StartDate, EndDate, IsActive, BasePrice,IncrementoMinimo,idstate,idusercreator,idobject) values (GETDATE(), GETDATE()+1, 1, 700, 30, 1, 2, 2 	)
+		Insert into Auctions(StartDate, EndDate, IsActive, BasePrice,IncrementoMinimo,idstate,idusercreator,idobject) values (GETDATE(), GETDATE()+1, 1, 20000, 1200, 2, 2, 3 	)
+		Insert into Auctions(StartDate, EndDate, IsActive, BasePrice,IncrementoMinimo,idstate,idusercreator,idobject) values (GETDATE(), GETDATE()+1, 1, 6000, 350, 3, 2, 4	)
 
 
+        Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,25,1,0,GETDATE())
+         Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,30,1,0,GETDATE())
+          Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,74,1,0,GETDATE())
+           Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,12,1,1,GETDATE())
 
+
+            Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,40,2,0,GETDATE())
+             Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,30,2,0,GETDATE())
+              Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,70,2,0,GETDATE())
+               Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,100,2,1,GETDATE())
+
+
+                Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,1200,1,0,GETDATE())
+                 Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,1500,1,0,GETDATE())
+                  Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,1600,1,1,GETDATE())
 
 
 /* =========================

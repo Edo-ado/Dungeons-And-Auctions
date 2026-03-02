@@ -50,9 +50,9 @@ public partial class DAContext : DbContext
         modelBuilder.Entity<AuctionBidHistory>(entity =>
         {
             entity.Property(e => e.Id)
-                .HasMaxLength(10)
-                .IsFixedLength()
-                .HasColumnName("id");
+                .HasColumnName("id")
+                .ValueGeneratedOnAdd();
+
             entity.Property(e => e.Amount).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.BidDate).HasColumnType("datetime");
 

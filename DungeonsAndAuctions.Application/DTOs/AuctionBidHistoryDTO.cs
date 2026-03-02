@@ -27,7 +27,7 @@ namespace D_A.Application.DTOs
         [DisplayName("Id")]
         public string Id { get; set; } = string.Empty;
 
-     
+        public  Auctions Auction { get; set; } = null!;
 
 
         [DisplayName("User")]

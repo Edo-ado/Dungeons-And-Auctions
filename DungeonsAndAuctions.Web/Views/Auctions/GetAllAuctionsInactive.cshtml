@@ -77,17 +77,17 @@
                     <div class="space-y-2 text-sm text-gray-700">
                         <div>
                             <span class="font-medium">Base Price:</span>
-                            $@item.BasePrice
+                            @item.BasePrice.ToString("N2")Oz
                         </div>
 
                         <div>
                             <span class="font-medium">Minimum Increment:</span>
-                            $@item.IncrementoMinimo
+                            @item.IncrementoMinimo.ToString("N2")Oz
                         </div>
 
                         <div>
                             <span class="font-medium">Total Bids:</span>
-                            @item.TotalBids
+                            @item.TotalBids 
                         </div>
 
                         <div class="flex items-center">

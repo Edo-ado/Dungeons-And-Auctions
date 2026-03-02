@@ -52,13 +52,12 @@ namespace D_A.Application.DTOs
         [DisplayName("User Creator Name")]
         public  Users IdusercreatorNavigation { get; set; } = null!;
 
-
-
         public List<AuctionBidHistoryDTO> BidHistory { get; set; } = new List<AuctionBidHistoryDTO>();
 
+        public  ICollection<AuctionBidHistory> AuctionBidHistory { get; set; } = new List<AuctionBidHistory>();
 
 
 
-       
+
     }
 }
