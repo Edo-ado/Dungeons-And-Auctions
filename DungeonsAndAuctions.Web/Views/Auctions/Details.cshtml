@@ -61,7 +61,7 @@
 
                     <div>
                         <dt class="font-medium">Condición</dt>
-                        <dd class="mt-1">@Model.IdobjectNavigation?.IdQualityNavigation?.Quality?.ToString() </dd>
+                        <dd class="mt-1">@Model.IdobjectNavigation?.IdQualityNavigation?.Quality </dd>
                     </div>
 
                     <div>
@@ -76,7 +76,7 @@
 
                     <div>
                         <dt class="font-medium">Precio de mercado</dt>
-                        <dd class="mt-1">@((Model.IdobjectNavigation?.MarketPrice.HasValue ?? false) ? Model.IdobjectNavigation.MarketPrice.Value.ToString("C") : "No hay registros")</dd>
+                        <dd class="mt-1">@((Model.IdobjectNavigation?.MarketPrice.HasValue ?? false) ? Model.IdobjectNavigation.MarketPrice.Value.ToString("N2") + "Oz" : "No hay registros")</dd>
                     </div>
                 </dl>
             </section>
@@ -110,12 +110,12 @@
 
                     <div>
                         <dt class="font-medium">Precio base</dt>
-                        <dd class="mt-1">@Model.BasePrice.ToString("C")</dd>
+                        <dd class="mt-1">@Model.BasePrice.ToString("N2")Oz</dd>
                     </div>
 
                     <div>
                         <dt class="font-medium">Incremento mínimo</dt>
-                        <dd class="mt-1">@Model.IncrementoMinimo.ToString("C")</dd>
+                        <dd class="mt-1">@Model.IncrementoMinimo.ToString("N2")Oz</dd>
                     </div>
 
                     <div>
@@ -123,18 +123,18 @@
                         <dd class="mt-1 font-semibold">@Model.TotalBids</dd>
                     </div>
 
-                  
-
                     <div>
                         <dt class="font-medium">Creador </dt>
-                        <dd class="mt-1">@Model.IdusercreatorNavigation.FirstName @Model.IdusercreatorNavigation.LastName </dd>
+                        <dd class="mt-1">@Model.IdusercreatorNavigation?.FirstName @Model.IdusercreatorNavigation?.LastName </dd>
                     </div>
 
                     <div class="sm:col-span-2">
                         <dt class="font-medium">Detalles adicionales</dt>
                         <dd class="mt-1 text-gray-600">
+
                             @* Muestra si hay historial de pujas *@
-                            @if (Model.BidHistory != null && Model.BidHistory.Any())
+
+                            @if (Model.AuctionBidHistory != null && Model.AuctionBidHistory.Any())
                             {
                                 <div class="mt-2">
                                     <table class="w-full text-sm">
@@ -146,12 +146,12 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach (var bh in Model.BidHistory.OrderByDescending(b => b.BidDate).Take(10))
+                                            @foreach (var bh in Model.AuctionBidHistory.OrderByDescending(b => b.BidDate).Take(10))
                                             {
                                                 <tr class="border-t">
-                                                    <td class="py-2">@bh.BidDate.ToString("yyyy-MM-dd HH:mm")</td>
-                                                    <td class="py-2">@bh.User.UserName ?? bh.UserId.ToString()</td>
-                                                    <td class="py-2">@bh.Amount.ToString("C")</td>
+                                                    <td class="py-2">@bh.BidDate</td>
+                                                    <td class="py-2">@bh.User.UserName</td>
+                                                    <td class="py-2">@bh.Amount.ToString("N2")Oz</td>
                                                 </tr>
                                             }
                                         </tbody>
