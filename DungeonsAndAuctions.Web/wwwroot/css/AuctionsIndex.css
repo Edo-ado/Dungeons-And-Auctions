@@ -1,0 +1,224 @@
+﻿@@keyframes rise {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@@keyframes grain {
+    0%, 100% {
+        transform: translate(0,0);
+    }
+
+    25% {
+        transform: translate(1px,1px);
+    }
+
+    50% {
+        transform: translate(-1px,0);
+    }
+
+    75% {
+        transform: translate(0,-1px);
+    }
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #1a1412;
+}
+
+.animate-rise {
+    animation: rise 1s ease-out forwards;
+}
+
+.animate-fade-in-delay {
+    animation: fadeIn 1.2s ease-out 0.4s both;
+}
+
+.grain-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    animation: grain 0.5s steps(1) infinite;
+}
+
+.filter-pill {
+    padding: 0.35rem 1.1rem;
+    border: 1px solid #78350f80;
+    color: #78716c;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-family: 'Cinzel',serif;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+    .filter-pill:hover, .filter-pill.active {
+        border-color: #b45309;
+        color: #fbbf24;
+        background: rgba(120,53,15,0.15);
+    }
+
+.tab-count {
+    font-size: 0.55rem;
+    background: rgba(120,53,15,0.3);
+    border: 1px solid #78350f60;
+    padding: 0.05rem 0.4rem;
+    color: #a16207;
+}
+
+.filter-pill.active .tab-count {
+    background: rgba(180,83,9,0.3);
+    border-color: #b45309;
+    color: #fbbf24;
+}
+
+/* Shared styles consumed by all partials */
+.auction-card {
+    animation: rise 0.7s ease-out both;
+}
+
+#auctions-grid .auction-card:nth-child(1) {
+    animation-delay: 0.05s;
+}
+
+#auctions-grid .auction-card:nth-child(2) {
+    animation-delay: 0.10s;
+}
+
+#auctions-grid .auction-card:nth-child(3) {
+    animation-delay: 0.15s;
+}
+
+#auctions-grid .auction-card:nth-child(4) {
+    animation-delay: 0.20s;
+}
+
+#auctions-grid .auction-card:nth-child(5) {
+    animation-delay: 0.25s;
+}
+
+#auctions-grid .auction-card:nth-child(6) {
+    animation-delay: 0.30s;
+}
+
+#auctions-grid .auction-card:nth-child(7) {
+    animation-delay: 0.35s;
+}
+
+#auctions-grid .auction-card:nth-child(8) {
+    animation-delay: 0.40s;
+}
+
+#auctions-grid .auction-card:nth-child(9) {
+    animation-delay: 0.45s;
+}
+
+#auctions-grid .auction-card:nth-child(10) {
+    animation-delay: 0.50s;
+}
+
+#auctions-grid .auction-card:nth-child(11) {
+    animation-delay: 0.55s;
+}
+
+#auctions-grid .auction-card:nth-child(12) {
+    animation-delay: 0.60s;
+}
+
+.stat-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.6rem 0.75rem;
+    background: rgba(0,0,0,0.25);
+    border: 1px solid rgba(120,83,15,0.2);
+}
+
+.stat-label {
+    font-size: 0.55rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: #78716c;
+    font-family: 'Cinzel',serif;
+}
+
+.stat-value {
+    font-size: 0.9rem;
+    color: #fcd34d;
+    font-family: 'Cinzel',serif;
+    font-weight: 600;
+}
+
+.badge-open {
+    display: inline-block;
+    padding: 0.2rem 0.75rem;
+    border: 1px solid #15803d;
+    color: #4ade80;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-family: 'Cinzel',serif;
+    background: rgba(21,128,61,0.15);
+}
+
+.badge-closed {
+    display: inline-block;
+    padding: 0.2rem 0.75rem;
+    border: 1px solid #44403c;
+    color: #a8a29e;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-family: 'Cinzel',serif;
+    background: rgba(68,64,60,0.15);
+}
+
+.badge-banned {
+    display: inline-block;
+    padding: 0.2rem 0.75rem;
+    border: 1px solid #991b1b;
+    color: #f87171;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-family: 'Cinzel',serif;
+    background: rgba(153,27,27,0.15);
+}
+
+.badge-default {
+    display: inline-block;
+    padding: 0.2rem 0.75rem;
+    border: 1px solid #44403c;
+    color: #a8a29e;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-family: 'Cinzel',serif;
+    background: rgba(68,64,60,0.15);
+}

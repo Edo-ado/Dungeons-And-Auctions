@@ -4,71 +4,49 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - D&A.Web</title>
-    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/css/MainPage.css" asp-append-version="true" />
+
+
+    <link rel="icon" type="image/x-icon" href="~/Images/Logo/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="~/Images/Logo/favicon-32.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="~/Images/Logo/favicon-192.png" />
+
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/D_A.Web.styles.css" asp-append-version="true" />
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
+
+
 </head>
 <body class="min-h-screen flex flex-col antialiased bg-gray-50 text-gray-900">
     <header class="sticky top-0 z-50">
+
         @await Html.PartialAsync("_Header")
     </header>
+
     <main class="flex-grow">
+
         @RenderBody()
+
     </main>
-    <footer class="mt-auto border-t-4 border-yellow-700 bg-[#2a1f1a] shadow-[0_-12px_30px_rgba(0,0,0,0.85)]">
-        @await Html.PartialAsync("_Footer")
-    </footer>
 
     <!-- jQuery primero, luego tu script -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('#subastas-toggle').on('click', function (e) {
-                e.stopPropagation();
-                $('#subastas-dropdown').slideToggle(200);
-                $('#subastas-arrow').toggleClass('rotate-180');
-            });
-            $(document).on('click', function () {
-                $('#subastas-dropdown').slideUp(200);
-                $('#subastas-arrow').removeClass('rotate-180');
-            });
-            $('#subastas-dropdown').on('click', function (e) {
-                e.stopPropagation();
-            });
-        });
-    </script>
-
-
     <audio id="hover-sound" src="/Sounds/SwordDraw.mp3" preload="auto"></audio>
 
-    <script>
-        document.querySelectorAll('a, button').forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                const sound = document.getElementById('hover-sound');
-                sound.currentTime = 0;
-                sound.volume = 0.3;
-                sound.play().catch(() => {});
-            });
-        });
-    </script>
+    <footer class="mt-auto border-t-4 border-yellow-700 bg-[#2a1f1a] shadow-[0_-12px_30px_rgba(0,0,0,0.85)]">
 
+        @await Html.PartialAsync("_Footer")
 
+     
+    </footer>
 
+    
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="~/js/site.js"></script>
 
 </body>
+
+
+
+
 </html>
 
-<style>
-    * {
-        cursor: url('/Images/SwordCur2.png') 16 16, crosshair;
-    }
-
-    a, button {
-        cursor: url('/Images/SwordCur2.png') 16 16, pointer;
-    }
-
-
-
-</style>
