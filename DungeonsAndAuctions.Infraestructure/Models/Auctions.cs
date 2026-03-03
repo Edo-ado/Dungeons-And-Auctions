@@ -35,6 +35,6 @@ public partial class Auctions
 
     public virtual ICollection<Payment> Payment { get; set; } = new List<Payment>();
 
-
+    public virtual ICollection<Images> Images { get; set; } = new List<Images>();
 
 }

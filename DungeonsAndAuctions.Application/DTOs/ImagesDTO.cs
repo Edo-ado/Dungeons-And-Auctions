@@ -1,4 +1,5 @@
-﻿using System;
+﻿using D_A.Infraestructure.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -13,11 +14,18 @@ namespace D_A.Application.DTOs
         [DisplayName("Id")]
         public int Id { get; set; }
 
+
+        [DisplayName("Idobject")]
+        public int Idobject { get; set; }
+
         [DisplayName("Name")]
         public string? Name { get; set; } = string.Empty;
 
         [DisplayName("ImageData")]
         public byte[] ImageData { get; set; } = null!;
+
+
+        public virtual ICollection<Objects> Objects { get; set; } = new List<Objects>();
 
     }
 }
