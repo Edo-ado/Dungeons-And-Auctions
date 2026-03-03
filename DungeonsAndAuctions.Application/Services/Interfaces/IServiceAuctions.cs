@@ -12,6 +12,11 @@ namespace D_A.Application.Services.Interfaces
     {
         Task<List<AuctionsDTO?>> GetAllAuctionsActive();
         Task<List<AuctionsDTO?>> GetAllAuctionsInactive();
+        Task<List<AuctionsDTO?>> GetAllAuctionsBanned();
+        Task<List<AuctionsDTO?>> GetAllAuctionsClosed();
+        Task<List<AuctionsDTO>> GetAllAuctions();
+
+
         Task<AuctionsDTO?> AllDetails(int id);
         Task<int> CountAuctionsBySellerAsync(int userId);
         Task<List<AuctionsDTO>> GetSpecificViewList();
