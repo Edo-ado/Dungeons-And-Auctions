@@ -36,32 +36,30 @@ namespace DNDA.Web.Controllers
         public async Task<IActionResult> Index()
         {
 
-            var collections = await _ServiceAuctions.GetAllAuctionsActive();
+            var all = await _ServiceAuctions.GetAllAuctions();        
+            var active = await _ServiceAuctions.GetAllAuctionsActive();
+            var closed = await _ServiceAuctions.GetAllAuctionsClosed();
+            var banned = await _ServiceAuctions.GetAllAuctionsBanned();
+            var Inactive = await _ServiceAuctions.GetAllAuctionsInactive();
 
+            ViewBag.Open = active;
+            ViewBag.Close = closed;
+            ViewBag.Banned = banned;
+            ViewBag.Inactive = Inactive;
 
-            return View(collections);
+            return View(all);
+
+           
         }
 
-        public async Task<IActionResult> GetAllAuctionsInactive()
-        {
-            var collections =  await _ServiceAuctions.GetAllAuctionsInactive();
-
-            ViewBag.AuctionsNoActive = collections;
-
-            return View(collections)
-                
-                ;
-
-        }
-
-
+ 
 
         public async Task<IActionResult> Details(int id)
         {
             var auction = await _ServiceAuctions.AllDetails(id);
 
 
-                return View(auction);
+            return View(auction);
 
         }
     }

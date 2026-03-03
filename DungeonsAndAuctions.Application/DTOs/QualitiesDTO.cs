@@ -1,4 +1,5 @@
-﻿using System;
+﻿using D_A.Infraestructure.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -15,5 +16,8 @@ namespace D_A.Application.DTOs
 
         [DisplayName("Quality")]
         public string? Quality { get; set; } = string.Empty;
+
+
+        public  ICollection<Objects> Objects { get; set; } = new List<Objects>();
     }
 }

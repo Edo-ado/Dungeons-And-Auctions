@@ -58,5 +58,25 @@ namespace D_A.Application.Services.Implementations
             var auctions = await _repository.GetSpecificViewList();
             return _mapper.Map<List<AuctionsDTO>>(auctions);
         }
+
+        public async Task<List<AuctionsDTO?>> GetAllAuctionsBanned()
+        {
+            var auctions = await _repository.GetAllAuctionsBanned();
+            return _mapper.Map<List<AuctionsDTO?>>(auctions);
+        }
+
+        public async Task<List<AuctionsDTO?>> GetAllAuctionsClosed()
+        {
+            
+            var auctions = await _repository.GetAllAuctionsClosed();
+            return _mapper.Map<List<AuctionsDTO?>>(auctions);
+        }
+
+        public async Task<List<AuctionsDTO>> GetAllAuctions()
+        {
+            var auctions = await _repository.GetAllAuctions();
+            return _mapper.Map<List<AuctionsDTO>>(auctions);
+
+        }
     }
 }

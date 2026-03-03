@@ -13,7 +13,7 @@ public partial class AuctionWinner
 
     public DateTime Closeddate { get; set; }
 
-    public string Bidwinningid { get; set; } = null!;
+    public int Bidwinningid { get; set; }
 
     public int Idauctionwinner { get; set; }
 
