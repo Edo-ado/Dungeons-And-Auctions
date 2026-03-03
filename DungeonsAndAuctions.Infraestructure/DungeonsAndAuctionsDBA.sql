@@ -250,7 +250,7 @@ VALUES
 
 
 
-		Insert into Objects(UserId, Name, Year, Description, RegistrationDate, MarketPrice, IsActive, idState, idimage) values (2, 'Wooden bow', 1976, 'a wooden bow', GETDATE(),null, 1,  2, null)
+		Insert into Objects(UserId, Name, Year, Description, RegistrationDate, MarketPrice, IsActive, idState) values (2, 'Wooden bow', 1976, 'a wooden bow', GETDATE(),null, 1,  2, null)
 		Insert into ObjectCategories(ObjectId, CategoryId)values( 1,2)
 		Insert into ObjectCategories(ObjectId, CategoryId)values( 1,4)
 		Insert into ObjectCategories(ObjectId, CategoryId)values( 1,6)
