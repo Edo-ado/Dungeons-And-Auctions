@@ -24,36 +24,36 @@ namespace D_A.Infraestructure.Repository.Implementation
         public async Task<Auctions?> AllDetails(int id)
         {
             var detail = await _context.Auctions
-                .AsNoTracking()
-                .Where(a => a.Id == id)
+            .AsNoTracking()
+            .Where(a => a.Id == id)
 
-                .Include(a => a.IdobjectNavigation)
-                .ThenInclude(o => o.Category)
+            .Include(a => a.IdobjectNavigation)
+            .ThenInclude(o => o.Category)
 
-                .Include(a => a.IdobjectNavigation)
-                .ThenInclude(o => o.IdimageNavigation)
+            .Include(a => a.IdobjectNavigation)
+            .ThenInclude(o => o.IdimageNavigation)
 
-                 .Include(a => a.IdobjectNavigation)
-                .ThenInclude(o => o.IdQualityNavigation)
-
-
-                .Include(a => a.AuctionBidHistory)
-               .ThenInclude(b => b.User)
-
-                .Include(u => u.IdusercreatorNavigation)
+            .Include(a => a.IdobjectNavigation)
+            .ThenInclude(o => o.IdQualityNavigation)
 
 
-                .Include(a => a.IdobjectNavigation)
-         .ThenInclude(o => o.IdimageNavigation)
+            .Include(a => a.AuctionBidHistory)
+            .ThenInclude(b => b.User)
 
-         .Include(a => a.IdobjectNavigation)
-
-
-     .Include(u => u.IdusercreatorNavigation)
-     .Include(s => s.IdstateNavigation)
+            .Include(u => u.IdusercreatorNavigation)
 
 
-                .FirstOrDefaultAsync();
+            .Include(a => a.IdobjectNavigation)
+            .ThenInclude(o => o.IdimageNavigation)
+
+            .Include(a => a.IdobjectNavigation)
+
+
+            .Include(u => u.IdusercreatorNavigation)
+            .Include(s => s.IdstateNavigation)
+
+
+            .FirstOrDefaultAsync();
 
             return detail;
         }
@@ -61,18 +61,18 @@ namespace D_A.Infraestructure.Repository.Implementation
         public async Task<List<Auctions?>> GetAllAuctionsActive()
         {
             var detail = await _context.Auctions
-     .AsNoTracking()
-     .Where(a => a.Idstate == 1)
+            .AsNoTracking()
+            .Where(a => a.Idstate == 1)
 
-     .Include(a => a.IdobjectNavigation)
-         .ThenInclude(o => o.IdimageNavigation)
+            .Include(a => a.IdobjectNavigation)
+            .ThenInclude(o => o.IdimageNavigation)
 
-         .Include(a => a.IdobjectNavigation)
-         
+            .Include(a => a.IdobjectNavigation)
 
-     .Include(u => u.IdusercreatorNavigation)
-     .Include(s => s.IdstateNavigation)
-     .ToListAsync();
+
+            .Include(u => u.IdusercreatorNavigation)
+            .Include(s => s.IdstateNavigation)
+            .ToListAsync();
 
             return detail;
 
@@ -82,14 +82,48 @@ namespace D_A.Infraestructure.Repository.Implementation
         public async Task<List<Auctions?>> GetAllAuctionsInactive()
         {
             var detail = await _context.Auctions
-    .AsNoTracking()
-    .Where(a => a.Idstate != 1)
+            .AsNoTracking()
+            .Where(a => a.Idstate == 4)
 
-    .Include(a => a.IdobjectNavigation)
-        .ThenInclude(o => o.IdimageNavigation)
-    .Include(u => u.IdusercreatorNavigation)
-    .Include(s => s.IdstateNavigation)
-    .ToListAsync();
+            .Include(a => a.IdobjectNavigation)
+            .ThenInclude(o => o.IdimageNavigation)
+            .Include(u => u.IdusercreatorNavigation)
+            .Include(s => s.IdstateNavigation)
+            .ToListAsync();
+
+            return detail;
+
+
+        }
+
+        public async Task<List<Auctions?>> GetAllAuctionsBanned()
+        {
+            var detail = await _context.Auctions
+            .AsNoTracking()
+            .Where(a => a.Idstate == 3)
+
+            .Include(a => a.IdobjectNavigation)
+            .ThenInclude(o => o.IdimageNavigation)
+            .Include(u => u.IdusercreatorNavigation)
+            .Include(s => s.IdstateNavigation)
+            .ToListAsync();
+
+            return detail;
+
+
+        }
+
+        public async Task<List<Auctions?>> GetAllAuctionsClosed()
+        {
+            var detail = await _context.Auctions
+            .AsNoTracking()
+            .Where(a => a.Idstate == 2)
+
+            .Include(a => a.IdobjectNavigation)
+            .ThenInclude(o => o.IdimageNavigation)
+            .Include(u => u.IdusercreatorNavigation)
+            .Include(s => s.IdstateNavigation)
+            .ToListAsync();
 
             return detail;
 
@@ -99,26 +133,40 @@ namespace D_A.Infraestructure.Repository.Implementation
         public async Task<int> CountAuctionsBySellerAsync(int userId)
         {
             return await _context.Auctions
-                .CountAsync(a => a.Idusercreator == userId && _context.Users.Any(u => u.Id == userId && u.RoleId == 2));
+            .CountAsync(a => a.Idusercreator == userId && _context.Users.Any(u => u.Id == userId && u.RoleId == 2));
         }
 
         public async Task<List<Auctions>> GetAuctionsByObjectID(int id)
         {
             return await _context.Auctions
-                .AsNoTracking()
-                .Where(a => a.Idobject == id)
-                .ToListAsync();
+            .AsNoTracking()
+            .Where(a => a.Idobject == id)
+            .ToListAsync();
         }
 
         public async Task<List<Auctions>> GetSpecificViewList()
         {
             return await _context.Auctions
-       .AsNoTracking()
-       .Include(a => a.IdobjectNavigation)
-           .ThenInclude(o => o.IdimageNavigation)
-       .Include(u => u.IdusercreatorNavigation)
-       .Include(s => s.IdstateNavigation)
-       .ToListAsync();
+            .AsNoTracking()
+            .Include(a => a.IdobjectNavigation)
+            .ThenInclude(o => o.IdimageNavigation)
+            .Include(u => u.IdusercreatorNavigation)
+            .Include(s => s.IdstateNavigation)
+            .ToListAsync();
+        }
+
+
+        public async Task<List<Auctions>> GetAllAuctions()
+        {
+            var detail = await _context.Auctions
+            .AsNoTracking()
+            .Include(a => a.IdobjectNavigation)
+            .ThenInclude(o => o.IdimageNavigation)
+            .Include(u => u.IdusercreatorNavigation)
+            .Include(s => s.IdstateNavigation)
+            .ToListAsync();
+
+            return detail;
         }
     }
 }

@@ -1,124 +1,336 @@
 ﻿@model IEnumerable<D_A.Application.DTOs.AuctionsDTO>
-
+@using D_A.Application.DTOs
 @{
-    ViewData["Title"] = "Auctions";
+    ViewData["Title"] = "El Reino de las Subastas";
+    var activeTab = ViewData["ActiveTab"]?.ToString() ?? "all";
 }
 
-<div class="max-w-7xl mx-auto px-6 py-10">
+<div class="relative min-h-screen overflow-hidden font-['Cinzel']" style="background-color: #1a1412;">
 
-    <!-- HEADER -->
-    <div class="flex justify-between items-start mb-8 pb-4 border-b border-gray-200">
-        <div>
-            <h1 class="text-3xl font-bold text-gray-800">
-                Auctions
+    <div class="grain-overlay"></div>
+
+    <div class="relative z-10 h-1 bg-gradient-to-r from-transparent via-yellow-600 to-transparent"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
+         style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%224%22 height=%224%22%3E%3Crect width=%224%22 height=%224%22 fill=%22%231a1412%22/%3E%3Ccircle cx=%221%22 cy=%221%22 r=%220.5%22 fill=%22%23ffffff08%22/%3E%3Ccircle cx=%223%22 cy=%223%22 r=%220.5%22 fill=%22%23ffffff05%22/%3E%3C/svg%3E');">
+
+        <!-- HEADER -->
+        <div class="flex flex-col items-center text-center mb-16 animate-rise">
+            <div class="flex items-center gap-4 mb-6">
+                <div class="h-px w-20 bg-gradient-to-r from-transparent to-yellow-700"></div>
+                <svg class="w-5 h-5 text-yellow-700" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" />
+                </svg>
+                <div class="h-px w-20 bg-gradient-to-l from-transparent to-yellow-700"></div>
+            </div>
+            <p class="text-yellow-600 text-xs tracking-[0.5em] uppercase mb-3">Sala del Consejo</p>
+            <h1 class="text-4xl md:text-5xl text-yellow-100 tracking-[0.15em] uppercase mb-4"
+                style="text-shadow: 0 0 40px rgba(180,130,0,0.3);">
+                Subastas Activas
             </h1>
-            <p class="text-gray-500 mt-1">
-                Overview and management of all auction records
+            <div class="flex items-center gap-6 mb-6">
+                <div class="h-px w-24 md:w-36 bg-gradient-to-r from-transparent via-yellow-800 to-yellow-600"></div>
+                <div class="text-red-700 text-2xl drop-shadow-[0_0_12px_rgba(180,0,0,0.6)]">⚔</div>
+                <div class="h-px w-24 md:w-36 bg-gradient-to-l from-transparent via-yellow-800 to-yellow-600"></div>
+            </div>
+            <p class="text-stone-400 text-sm font-serif italic max-w-xl leading-relaxed">
+                "Reliquias forjadas en batallas olvidadas aguardan a su nuevo portador. Que el más audaz reclame su legado."
             </p>
         </div>
+
+        <!-- TABS -->
+        <div class="flex items-center justify-center gap-3 flex-wrap mb-10 animate-fade-in-delay">
+            <button class="filter-pill @(activeTab == "all" ? "active" : "")" data-tab="all">
+                Todas <span class="tab-count">@Model.Count()</span>
+            </button>
+            <button class="filter-pill @(activeTab == "open" ? "active" : "")" data-tab="open">
+                Abiertas <span class="tab-count">  @Enumerable.Count(ViewBag.Open)  </span>
+            </button>
+            <button class="filter-pill @(activeTab == "close" ? "active" : "")" data-tab="close">
+                Cerradas  <span class="tab-count">  @Enumerable.Count(ViewBag.Close)  </span>
+            </button>
+            <button class="filter-pill @(activeTab == "banned" ? "active" : "")" data-tab="banned">
+                Baneadas  <span class="tab-count">  @Enumerable.Count(ViewBag.Banned)  </span>
+            </button>
+            <button class="filter-pill @(activeTab == "Inactive" ? "active" : "")" data-tab="Inactive">
+                Incactivas  <span class="tab-count">  @Enumerable.Count(ViewBag.Inactive)  </span>
+            </button>
+        </div>
+
+        <!-- DIVIDER -->
+        <div class="flex items-center gap-4 mb-12">
+            <div class="h-px flex-1 bg-gradient-to-r from-transparent to-yellow-900/60"></div>
+            <span class="text-yellow-900 text-xs tracking-[0.3em] uppercase">⚜ Reliquias en pugna ⚜</span>
+            <div class="h-px flex-1 bg-gradient-to-l from-transparent to-yellow-900/60"></div>
+        </div>
+
+        <!-- TAB PANELS -->
+        <div id="tab-all" class="tab-panel @(activeTab == "all" ? "" : "hidden")">
+            @await Html.PartialAsync("_SubastasActivas", Model)
+        </div>
+        <div id="tab-open" class="tab-panel @(activeTab == "open" ? "" : "hidden")">
+            @await Html.PartialAsync("_SubastasActivas", (IEnumerable<AuctionsDTO>)ViewBag.Open))
+        </div>
+        <div id="tab-close" class="tab-panel @(activeTab == "close" ? "" : "hidden")">
+            @await Html.PartialAsync("_SubastasInactivas", (IEnumerable<AuctionsDTO>)ViewBag.Close))
+        </div>
+        <div id="tab-banned" class="tab-panel @(activeTab == "banned" ? "" : "hidden")">
+            @await Html.PartialAsync("_SubastasBaneadas", (IEnumerable<AuctionsDTO>)ViewBag.Banned))
+        </div>
+        <div id="tab-banned" class="tab-panel @(activeTab == "banned" ? "" : "hidden")">
+            @await Html.PartialAsync("_SubastasBaneadas", (IEnumerable<AuctionsDTO>)ViewBag.Inactive))
+        </div>
+
+        <!-- FOOTER -->
+        <div class="mt-20 text-center">
+            <div class="flex justify-center items-center gap-4 opacity-20">
+                <div class="h-px w-24 bg-yellow-700"></div>
+                <img src="/Images/Logo/ShortLogo.png" class="h-8 grayscale" alt="logo" />
+                <div class="h-px w-24 bg-yellow-700"></div>
+            </div>
+        </div>
+
     </div>
 
-    @if (!Model.Any())
-    {
-        <div class="text-center py-16 text-gray-400 italic">
-            No auctions available.
-        </div>
-    }
-    else
-    {
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
-            @foreach (var item in Model)
-            {
-                var badgeColor = item.IdstateNavigation.Name?.ToLower() switch
-                {
-                    "open" => "bg-green-100 text-green-700",
-                    "close" => "bg-gray-200 text-gray-700",
-                    "banned" => "bg-red-100 text-red-700",
-                    _ => "bg-gray-100 text-gray-600"
-                };
-
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition p-6 flex flex-col">
-
-                    <!-- TITLE -->
-                    <div class="mb-4">
-                        <h2 class="text-lg font-semibold text-gray-800">
-                            @item.IdobjectNavigation.Name
-                        </h2>
-                        <p class="text-sm text-gray-500 mt-1">
-                            Created by @item.IdusercreatorNavigation.UserName
-                        </p>
-                    </div>
-
-                    <div class="border-t border-gray-100 my-4"></div>
-                    <!--imagen-->
-                    <div class="col-span-12 lg:col-span-5 bg-gray-100">
-                        <div class="relative w-full aspect-[4/3]">
-
-                            @if (item.IdobjectNavigation.IdimageNavigation != null && item.IdobjectNavigation.IdimageNavigation.ImageData.Length > 0)
-                            {
-                                <img class="absolute inset-0 w-full h-full object-cover"
-                                     src="data:image/jpeg;base64,@Convert.ToBase64String(item.IdobjectNavigation.IdimageNavigation.ImageData)"
-                                     alt="Portada del libro @item.IdobjectNavigation.IdimageNavigation.Name"
-                                     loading="lazy" />
-                            }
-                            else
-                            {
-                                <div class="absolute inset-0 flex flex-col justify-center items-center text-gray-400">
-                                    <i class="bi bi-image text-4xl"></i>
-                                    <span class="text-sm">Sin imagen</span>
-                                </div>
-                            }
-
-                        </div>
-                    </div>
-
-                    <!-- DETAILS -->
-                    <div class="space-y-2 text-sm text-gray-700">
-                        <div>
-                            <span class="font-medium">Base Price:</span>
-                            @item.BasePrice.ToString("N2")Oz
-                        </div>
-
-                        <div>
-                            <span class="font-medium">Minimum Increment:</span>
-                            @item.IncrementoMinimo.ToString("N2")Oz
-                        </div>
-
-                        <div>
-                            <span class="font-medium">Total Bids:</span>
-                            @item.TotalBids
-                        </div>
-
-                        <div class="flex items-center">
-                            <span class="font-medium mr-2">Status:</span>
-                            <span class="px-3 py-1 rounded-full text-xs font-medium @badgeColor">
-                                @item.IdstateNavigation.Name
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- ACTIONS -->
-                    <div class="mt-auto pt-6 border-t border-gray-100 flex justify-between">
-                        <a asp-action="Edit"
-                           asp-route-id="@item.Id"
-                           class="text-yellow-600 hover:text-yellow-700 text-sm font-medium">
-                            Edit
-                        </a>
-
-                        @Html.ActionLink("Details", "Details", new { id = item.Id })
-
-                        <a asp-action="Delete"
-                           asp-route-id="@item.Id"
-                           class="text-red-600 hover:text-red-700 text-sm font-medium">
-                            Delete
-                        </a>
-                    </div>
-
-                </div>
-            }
-
-        </div>
-    }
-
+    <div class="relative z-10 h-1 bg-gradient-to-r from-transparent via-yellow-600 to-transparent mt-4"></div>
 </div>
+
+<style>
+    @@keyframes rise {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    @@keyframes grain {
+        0%, 100% {
+            transform: translate(0,0);
+        }
+
+        25% {
+            transform: translate(1px,1px);
+        }
+
+        50% {
+            transform: translate(-1px,0);
+        }
+
+        75% {
+            transform: translate(0,-1px);
+        }
+    }
+
+    html, body {
+        margin: 0;
+        padding: 0;
+        background-color: #1a1412;
+    }
+
+    .animate-rise {
+        animation: rise 1s ease-out forwards;
+    }
+
+    .animate-fade-in-delay {
+        animation: fadeIn 1.2s ease-out 0.4s both;
+    }
+
+    .grain-overlay {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 100;
+        opacity: 0.035;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        animation: grain 0.5s steps(1) infinite;
+    }
+
+    .filter-pill {
+        padding: 0.35rem 1.1rem;
+        border: 1px solid #78350f80;
+        color: #78716c;
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        font-family: 'Cinzel',serif;
+        background: transparent;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+        .filter-pill:hover, .filter-pill.active {
+            border-color: #b45309;
+            color: #fbbf24;
+            background: rgba(120,53,15,0.15);
+        }
+
+    .tab-count {
+        font-size: 0.55rem;
+        background: rgba(120,53,15,0.3);
+        border: 1px solid #78350f60;
+        padding: 0.05rem 0.4rem;
+        color: #a16207;
+    }
+
+    .filter-pill.active .tab-count {
+        background: rgba(180,83,9,0.3);
+        border-color: #b45309;
+        color: #fbbf24;
+    }
+
+    /* Shared styles consumed by all partials */
+    .auction-card {
+        animation: rise 0.7s ease-out both;
+    }
+
+    #auctions-grid .auction-card:nth-child(1) {
+        animation-delay: 0.05s;
+    }
+
+    #auctions-grid .auction-card:nth-child(2) {
+        animation-delay: 0.10s;
+    }
+
+    #auctions-grid .auction-card:nth-child(3) {
+        animation-delay: 0.15s;
+    }
+
+    #auctions-grid .auction-card:nth-child(4) {
+        animation-delay: 0.20s;
+    }
+
+    #auctions-grid .auction-card:nth-child(5) {
+        animation-delay: 0.25s;
+    }
+
+    #auctions-grid .auction-card:nth-child(6) {
+        animation-delay: 0.30s;
+    }
+
+    #auctions-grid .auction-card:nth-child(7) {
+        animation-delay: 0.35s;
+    }
+
+    #auctions-grid .auction-card:nth-child(8) {
+        animation-delay: 0.40s;
+    }
+
+    #auctions-grid .auction-card:nth-child(9) {
+        animation-delay: 0.45s;
+    }
+
+    #auctions-grid .auction-card:nth-child(10) {
+        animation-delay: 0.50s;
+    }
+
+    #auctions-grid .auction-card:nth-child(11) {
+        animation-delay: 0.55s;
+    }
+
+    #auctions-grid .auction-card:nth-child(12) {
+        animation-delay: 0.60s;
+    }
+
+    .stat-block {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+        padding: 0.6rem 0.75rem;
+        background: rgba(0,0,0,0.25);
+        border: 1px solid rgba(120,83,15,0.2);
+    }
+
+    .stat-label {
+        font-size: 0.55rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: #78716c;
+        font-family: 'Cinzel',serif;
+    }
+
+    .stat-value {
+        font-size: 0.9rem;
+        color: #fcd34d;
+        font-family: 'Cinzel',serif;
+        font-weight: 600;
+    }
+
+    .badge-open {
+        display: inline-block;
+        padding: 0.2rem 0.75rem;
+        border: 1px solid #15803d;
+        color: #4ade80;
+        font-size: 0.6rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        font-family: 'Cinzel',serif;
+        background: rgba(21,128,61,0.15);
+    }
+
+    .badge-closed {
+        display: inline-block;
+        padding: 0.2rem 0.75rem;
+        border: 1px solid #44403c;
+        color: #a8a29e;
+        font-size: 0.6rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        font-family: 'Cinzel',serif;
+        background: rgba(68,64,60,0.15);
+    }
+
+    .badge-banned {
+        display: inline-block;
+        padding: 0.2rem 0.75rem;
+        border: 1px solid #991b1b;
+        color: #f87171;
+        font-size: 0.6rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        font-family: 'Cinzel',serif;
+        background: rgba(153,27,27,0.15);
+    }
+
+    .badge-default {
+        display: inline-block;
+        padding: 0.2rem 0.75rem;
+        border: 1px solid #44403c;
+        color: #a8a29e;
+        font-size: 0.6rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        font-family: 'Cinzel',serif;
+        background: rgba(68,64,60,0.15);
+    }
+</style>
+
+<script>
+    document.querySelectorAll('.filter-pill').forEach(pill => {
+    pill.addEventListener('click', function () {
+    document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+    this.classList.add('active');
+    const tab = this.dataset.tab;
+    document.querySelectorAll('.tab-panel').forEach(panel => {
+    panel.classList.toggle('hidden', panel.id !== `tab-${tab}`);
+    });
+    });
+    });
+</script>
