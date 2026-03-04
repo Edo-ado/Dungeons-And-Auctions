@@ -16,7 +16,7 @@ namespace D_A.Application.Profiles
             CreateMap<Objects, ObjectsDTO>().ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.Category))
                 .ForMember(dest => dest.Auctions, opt => opt.MapFrom(src => src.Auctions))
                 .ForMember(dest => dest.UserNameOwner, opt => opt.MapFrom(src => src. User.UserName))
-
+                .ForMember(dest => dest.Imagenes, opt => opt.MapFrom(src => src.IdImageNavigation.Select(i => i.ImageData).ToList()))
                 .ReverseMap();
 
             CreateMap<Categories, CategoriesDTO>();

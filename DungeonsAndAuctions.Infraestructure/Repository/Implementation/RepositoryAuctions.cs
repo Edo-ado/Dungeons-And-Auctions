@@ -140,6 +140,7 @@ namespace D_A.Infraestructure.Repository.Implementation
             return await _context.Auctions
             .AsNoTracking()
             .Where(a => a.Idobject == id)
+              .Include(a => a.IdstateNavigation)
             .ToListAsync();
         }
 

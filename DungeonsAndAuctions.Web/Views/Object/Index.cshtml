@@ -37,22 +37,17 @@
                         <tr class="hover:bg-[#362822] transition-colors duration-200 group">
 
                             <td class="px-6 py-4">
-                                <div class="w-20 h-20 border-2 border-yellow-900 bg-[#1a1412] overflow-hidden group-hover:border-yellow-600 transition-all">
-                                    @if (item.Imagen != null && item.Imagen.Length > 0)
-                                    {
-                                        <img class="w-full h-full object-cover sepia-[0.2] group-hover:sepia-0 transition-all duration-500"
-                                             src="data:image/jpeg;base64,@Convert.ToBase64String(item.Imagen)"
-                                             alt="@item.Name" />
-                                    }
-                                    else
-                                    {
-                                        <div class="w-full h-full flex items-center justify-center text-yellow-900 opacity-40">
-                                            <span class="text-2xl">🛡️</span>
-                                        </div>
-                                    }
-                                </div>
+                                @if (item.Imagenes != null && item.Imagenes.Any())
+                                {
+                                    <img class="w-16 h-16 object-cover sepia-[0.3]"
+                                         src="data:image/jpeg;base64,@Convert.ToBase64String(item.Imagenes.First())"
+                                         alt="@item.Name" />
+                                }
+                                else
+                                {
+                                    <span class="text-3xl">🛡️</span>
+                                }
                             </td>
-
                             <td class="px-6 py-4">
                                 <div class="text-lg font-bold text-stone-200 group-hover:text-yellow-400 transition-colors uppercase tracking-tight">
                                     @item.Name
