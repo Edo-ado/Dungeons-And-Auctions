@@ -37,6 +37,7 @@ namespace D_A.Infraestructure.Repository.Implementation
             .Include(a => a.IdobjectNavigation)
             .ThenInclude(o => o.IdQualityNavigation)
 
+            .Include(a => a.AuctionBidHistory)
 
             .Include(a => a.AuctionBidHistory)
             .ThenInclude(b => b.User)
@@ -63,8 +64,8 @@ namespace D_A.Infraestructure.Repository.Implementation
 
             .Include(a => a.IdobjectNavigation)
             .ThenInclude(o => o.IdImageNavigation)
-                
 
+            .Include(a => a.AuctionBidHistory)
             .Include(a => a.IdobjectNavigation)
 
 
@@ -82,7 +83,7 @@ namespace D_A.Infraestructure.Repository.Implementation
             var detail = await _context.Auctions
             .AsNoTracking()
             .Where(a => a.Idstate == 4)
-
+            .Include(a => a.AuctionBidHistory)
             .Include(a => a.IdobjectNavigation)
             .ThenInclude(o => o.IdImageNavigation)
             .Include(u => u.IdusercreatorNavigation)
@@ -99,7 +100,7 @@ namespace D_A.Infraestructure.Repository.Implementation
             var detail = await _context.Auctions
             .AsNoTracking()
             .Where(a => a.Idstate == 3)
-
+            .Include(a => a.AuctionBidHistory)
             .Include(a => a.IdobjectNavigation)
             .ThenInclude(o => o.IdImageNavigation)
             .Include(u => u.IdusercreatorNavigation)
@@ -116,7 +117,7 @@ namespace D_A.Infraestructure.Repository.Implementation
             var detail = await _context.Auctions
             .AsNoTracking()
             .Where(a => a.Idstate == 2)
-
+            .Include(a => a.AuctionBidHistory)
             .Include(a => a.IdobjectNavigation)
             .ThenInclude(o => o.IdImageNavigation)
             .Include(u => u.IdusercreatorNavigation)
@@ -161,6 +162,7 @@ namespace D_A.Infraestructure.Repository.Implementation
             .Include(a => a.IdobjectNavigation)
             .ThenInclude(o => o.IdImageNavigation)
 
+            .Include(a => a.AuctionBidHistory)
             .Include(u => u.IdusercreatorNavigation)
             .Include(s => s.IdstateNavigation)
             .ToListAsync();

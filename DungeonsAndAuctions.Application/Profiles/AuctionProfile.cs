@@ -8,8 +8,14 @@ namespace D_A.Application.Profiles
     {
         public AuctionProfile()
         {
-            CreateMap<Auctions, AuctionsDTO>();
-         
+            CreateMap<Auctions, AuctionsDTO>()
+           .ForMember(
+               dest => dest.TotalBids,
+               opt => opt.MapFrom(src => src.AuctionBidHistory != null
+                   ? src.AuctionBidHistory.Count
+                   : 0)
+           );
+
             CreateMap<AuctionsDTO, Auctions>();
         }
     }

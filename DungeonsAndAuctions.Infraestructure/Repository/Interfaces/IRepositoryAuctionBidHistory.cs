@@ -14,6 +14,8 @@ namespace D_A.Infraestructure.Repository.Interfaces
      
         Task<int> CountBidsByBuyerAsync(int userId); //cantidad bids del comprador (RoleId=1)
 
+
+        Task<int> CountBidsByAuction(int AuctionId); //cantidad de bids de una subasta
     }
 
 }
