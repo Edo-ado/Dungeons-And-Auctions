@@ -6,7 +6,7 @@
     <title>@ViewData["Title"] - D&A.Web</title>
     <link rel="stylesheet" href="~/css/MainPage.css" asp-append-version="true" />
 
-
+    <link rel="stylesheet" href="~/css/AudioController.css" />
     <link rel="icon" type="image/x-icon" href="~/Images/Logo/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="~/Images/Logo/favicon-32.png" />
     <link rel="apple-touch-icon" sizes="192x192" href="~/Images/Logo/favicon-192.png" />
@@ -18,13 +18,13 @@
 
 </head>
 <body class="min-h-screen flex flex-col antialiased bg-gray-50 text-gray-900">
-    <header class="sticky top-0 z-50">
-
+    <header class="sticky top-0 z-50 ">
+        @await Html.PartialAsync("_AudioController")
         @await Html.PartialAsync("_Header")
     </header>
 
     <main class="flex-grow">
-
+       
         @RenderBody()
 
     </main>
@@ -39,10 +39,11 @@
      
     </footer>
 
-    
+    <script src="/js/audio-controller.js"></script>
+    <script src="/js/page-loader.js"></script>  
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="~/js/site.js"></script>
-
+    @RenderSection("Scripts", required: false)
 </body>
 
 
