@@ -70,13 +70,47 @@
                         <div class="corner tl"></div><div class="corner tr"></div>
                         <div class="corner bl"></div><div class="corner br"></div>
 
-                        @if (Model.IdobjectNavigation?.IdimageNavigation?.ImageData != null && Model.IdobjectNavigation.IdimageNavigation.ImageData.Length > 0)
+                        @if (Model.IdobjectNavigation?.IdImageNavigation != null && Model.IdobjectNavigation.IdImageNavigation.Any())
                         {
-                            <div class="relative aspect-[4/3] overflow-hidden">
-                                <img class="w-full h-full object-cover"
-                                     src="data:image/jpeg;base64,@Convert.ToBase64String(Model.IdobjectNavigation.IdimageNavigation.ImageData)"
-                                     alt="@Model.IdobjectNavigation?.Name" />
-                                <div class="absolute inset-0 bg-gradient-to-t from-[#1a1412] via-transparent to-transparent"></div>
+                            <div class="relative">
+                                <!-- Contenedor principal (imagen grande + miniaturas) -->
+                                <div class="mb-3">
+                                    @{
+                                        // Mostrar la primera como principal (si quieres un carrusel puedes ampliarlo)
+                                        var firstImage = Model.IdobjectNavigation.IdImageNavigation.FirstOrDefault(i => i?.ImageData != null && i.ImageData.Length > 0);
+                                    }
+                                    @if (firstImage != null)
+                                    {
+                                        <div class="relative aspect-[4/3] overflow-hidden">
+                                            <img class="w-full h-full object-cover"
+                                                 src="data:image/jpeg;base64,@Convert.ToBase64String(firstImage.ImageData)"
+                                                 alt="@Model.IdobjectNavigation?.Name" />
+                                            <div class="absolute inset-0 bg-gradient-to-t from-[#1a1412] via-transparent to-transparent"></div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="aspect-[4/3] flex flex-col items-center justify-center bg-[#150f0c]">
+                                            <span class="text-yellow-900 text-5xl mb-2">⚜</span>
+                                            <span class="text-stone-600 text-xs font-serif italic">Sin imagen</span>
+                                        </div>
+                                    }
+                                </div>
+
+                                <!-- Miniaturas: recorremos y mostramos todas las ImageData -->
+                                <div class="flex gap-2 overflow-x-auto">
+                                    @foreach (var img in Model?.IdobjectNavigation?.IdImageNavigation)
+                                    {
+                                        if (img?.ImageData != null && img.ImageData.Length > 0)
+                                        {
+                                            <div class="w-24 h-16 flex-shrink-0 overflow-hidden rounded-sm border border-yellow-900/20">
+                                                <img class="w-full h-full object-cover"
+                                                     src="data:image/jpeg;base64,@Convert.ToBase64String(img.ImageData)"
+                                                     alt="@Model.IdobjectNavigation?.Name" />
+                                            </div>
+                                        }
+                                    }
+                                </div>
                             </div>
                         }
                         else

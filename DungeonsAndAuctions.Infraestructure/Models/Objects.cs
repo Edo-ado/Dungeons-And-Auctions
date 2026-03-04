@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 
 namespace D_A.Infraestructure.Models;
@@ -21,21 +22,16 @@ public partial class Objects
 
     public bool IsActive { get; set; }
 
- 
-
     public int? IdState { get; set; }
-
-    public int? Idimage { get; set; }
 
     public virtual ICollection<Auctions> Auctions { get; set; } = new List<Auctions>();
 
-
-
     public virtual Qualities? IdQualityNavigation { get; set; }
-
-    public virtual Images? IdimageNavigation { get; set; }
 
     public virtual Users User { get; set; } = null!;
 
     public virtual ICollection<Categories> Category { get; set; } = new List<Categories>();
+
+ 
+    public virtual ICollection<Images> IdImageNavigation { get; set; } = new List<Images>();
 }

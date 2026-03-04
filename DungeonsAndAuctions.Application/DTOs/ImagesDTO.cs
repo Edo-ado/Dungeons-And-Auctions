@@ -25,7 +25,7 @@ namespace D_A.Application.DTOs
         public byte[] ImageData { get; set; } = null!;
 
 
-        public virtual ICollection<Objects> Objects { get; set; } = new List<Objects>();
+        public  ICollection<Objects> IdObjectNavigation { get; set; } = new List<Objects>();
 
     }
 }

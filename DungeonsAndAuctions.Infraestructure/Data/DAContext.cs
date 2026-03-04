@@ -14,7 +14,6 @@ public partial class DAContext : DbContext
 
     public virtual DbSet<AuctionBidHistory> AuctionBidHistory { get; set; }
 
-
     public virtual DbSet<AuctionWinner> AuctionWinner { get; set; }
 
     public virtual DbSet<Auctions> Auctions { get; set; }
@@ -22,8 +21,6 @@ public partial class DAContext : DbContext
     public virtual DbSet<AuctionState> AuctionState { get; set; }
 
     public virtual DbSet<Categories> Categories { get; set; }
-
-    
 
     public virtual DbSet<Countries> Countries { get; set; }
 
@@ -144,8 +141,6 @@ public partial class DAContext : DbContext
             entity.Property(e => e.Name).HasMaxLength(100);
         });
 
-       
-
         modelBuilder.Entity<Countries>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Countrie__3214EC07C0F92E6E");
@@ -162,9 +157,18 @@ public partial class DAContext : DbContext
 
         modelBuilder.Entity<Images>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Images__3214EC0790AA63BE");
+            entity.HasKey(e => e.Id);
 
             entity.Property(e => e.Name).HasMaxLength(100);
+            entity.Property(e => e.IdObject).HasColumnName("IdObject");
+
+            // Usar la propiedad de navegación real en la clase Images (Objects)
+            // y la colección real en Objects (IdImageNavigation)
+            entity.HasOne(d => d.Objects)
+                .WithMany(p => p.IdImageNavigation)
+                .HasForeignKey(d => d.IdObject)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Images_Objects");
         });
 
         modelBuilder.Entity<Objects>(entity =>
@@ -172,21 +176,15 @@ public partial class DAContext : DbContext
             entity.HasKey(e => e.Id).HasName("PK__Objects__3214EC077F2EF0BC");
 
             entity.Property(e => e.Description).HasMaxLength(255);
-          
+
             entity.Property(e => e.IdState).HasColumnName("idState");
-            entity.Property(e => e.Idimage).HasColumnName("idimage");
+            // eliminado el mapeo a idimage (ya no existe en la tabla Objects)
             entity.Property(e => e.MarketPrice).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.Name).HasMaxLength(100);
-
-         
 
             entity.HasOne(d => d.IdQualityNavigation).WithMany(p => p.Objects)
                 .HasForeignKey(d => d.IdState)
                 .HasConstraintName("FK_Objects_Qualities1");
-
-            entity.HasOne(d => d.IdimageNavigation).WithMany(p => p.Objects)
-                .HasForeignKey(d => d.Idimage)
-                .HasConstraintName("FK_Objects_Images");
 
             entity.HasOne(d => d.User).WithMany(p => p.Objects)
                 .HasForeignKey(d => d.UserId)

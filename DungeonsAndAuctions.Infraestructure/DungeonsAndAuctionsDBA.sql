@@ -250,7 +250,7 @@ VALUES
 
 
 
-		Insert into Objects(UserId, Name, Year, Description, RegistrationDate, MarketPrice, IsActive, idState) values (2, 'Wooden bow', 1976, 'a wooden bow', GETDATE(),null, 1,  2, null)
+		Insert into Objects(UserId, Name, Year, Description, RegistrationDate, MarketPrice, IsActive, idState) values (2, 'Wooden bow', 1976, 'a wooden bow', GETDATE(),null, 1,  2)
 		Insert into ObjectCategories(ObjectId, CategoryId)values( 1,2)
 		Insert into ObjectCategories(ObjectId, CategoryId)values( 1,4)
 		Insert into ObjectCategories(ObjectId, CategoryId)values( 1,6)
@@ -304,8 +304,9 @@ ALTER TABLE Users ADD FOREIGN KEY (GenderId) REFERENCES Genders(Id);
 ALTER TABLE Users ADD FOREIGN KEY (RoleId) REFERENCES Roles(Id);
 
 ALTER TABLE Objects ADD FOREIGN KEY (UserId) REFERENCES Users(Id);
-ALTER TABLE Objects ADD FOREIGN KEY (idimage) REFERENCES Images(Id);
 ALTER TABLE Objects ADD FOREIGN KEY (idState) REFERENCES Qualities(ID);
+
+ALTER TABLE Images ADD FOREIGN KEY (IdObject) REFERENCES Objects(Id);
 
 ALTER TABLE Auctions ADD FOREIGN KEY (idstate) REFERENCES AuctionState(idstate);
 ALTER TABLE Auctions ADD FOREIGN KEY (idusercreator) REFERENCES Users(Id);
