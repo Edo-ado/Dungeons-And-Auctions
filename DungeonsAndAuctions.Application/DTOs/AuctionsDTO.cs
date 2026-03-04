@@ -56,7 +56,7 @@ namespace D_A.Application.DTOs
 
         public  ICollection<AuctionBidHistory> AuctionBidHistory { get; set; } = new List<AuctionBidHistory>();
 
-
+        public  ICollection<Images> Images { get; set; } = new List<Images>();
 
 
 

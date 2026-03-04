@@ -31,7 +31,8 @@ namespace D_A.Infraestructure.Repository.Implementation
             .ThenInclude(o => o.Category)
 
             .Include(a => a.IdobjectNavigation)
-            .ThenInclude(o => o.IdimageNavigation)
+            .ThenInclude(o => o.IdImageNavigation)
+            
 
             .Include(a => a.IdobjectNavigation)
             .ThenInclude(o => o.IdQualityNavigation)
@@ -44,10 +45,6 @@ namespace D_A.Infraestructure.Repository.Implementation
 
 
             .Include(a => a.IdobjectNavigation)
-            .ThenInclude(o => o.IdimageNavigation)
-
-            .Include(a => a.IdobjectNavigation)
-
 
             .Include(u => u.IdusercreatorNavigation)
             .Include(s => s.IdstateNavigation)
@@ -65,7 +62,8 @@ namespace D_A.Infraestructure.Repository.Implementation
             .Where(a => a.Idstate == 1)
 
             .Include(a => a.IdobjectNavigation)
-            .ThenInclude(o => o.IdimageNavigation)
+            .ThenInclude(o => o.IdImageNavigation)
+                
 
             .Include(a => a.IdobjectNavigation)
 
@@ -86,7 +84,7 @@ namespace D_A.Infraestructure.Repository.Implementation
             .Where(a => a.Idstate == 4)
 
             .Include(a => a.IdobjectNavigation)
-            .ThenInclude(o => o.IdimageNavigation)
+            .ThenInclude(o => o.IdImageNavigation)
             .Include(u => u.IdusercreatorNavigation)
             .Include(s => s.IdstateNavigation)
             .ToListAsync();
@@ -103,7 +101,7 @@ namespace D_A.Infraestructure.Repository.Implementation
             .Where(a => a.Idstate == 3)
 
             .Include(a => a.IdobjectNavigation)
-            .ThenInclude(o => o.IdimageNavigation)
+            .ThenInclude(o => o.IdImageNavigation)
             .Include(u => u.IdusercreatorNavigation)
             .Include(s => s.IdstateNavigation)
             .ToListAsync();
@@ -120,7 +118,7 @@ namespace D_A.Infraestructure.Repository.Implementation
             .Where(a => a.Idstate == 2)
 
             .Include(a => a.IdobjectNavigation)
-            .ThenInclude(o => o.IdimageNavigation)
+            .ThenInclude(o => o.IdImageNavigation)
             .Include(u => u.IdusercreatorNavigation)
             .Include(s => s.IdstateNavigation)
             .ToListAsync();
@@ -149,7 +147,7 @@ namespace D_A.Infraestructure.Repository.Implementation
             return await _context.Auctions
             .AsNoTracking()
             .Include(a => a.IdobjectNavigation)
-            .ThenInclude(o => o.IdimageNavigation)
+            .ThenInclude(o => o.IdImageNavigation)
             .Include(u => u.IdusercreatorNavigation)
             .Include(s => s.IdstateNavigation)
             .ToListAsync();
@@ -161,7 +159,8 @@ namespace D_A.Infraestructure.Repository.Implementation
             var detail = await _context.Auctions
             .AsNoTracking()
             .Include(a => a.IdobjectNavigation)
-            .ThenInclude(o => o.IdimageNavigation)
+            .ThenInclude(o => o.IdImageNavigation)
+
             .Include(u => u.IdusercreatorNavigation)
             .Include(s => s.IdstateNavigation)
             .ToListAsync();

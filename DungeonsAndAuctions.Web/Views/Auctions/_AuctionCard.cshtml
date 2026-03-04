@@ -10,26 +10,23 @@
         "banned" => ("badge-banned",  "Baneada"),
         _        => ("badge-default", Model.IdstateNavigation.Name ?? "—")
     };
-}
 
+    // tomar la primera imagen disponible del objeto (si existe)
+    var firstImage = Model.IdobjectNavigation?.IdImageNavigation?.FirstOrDefault();
+    var hasImage = firstImage != null && firstImage.ImageData?.Length > 0;
+}
 <div class="auction-card group relative border border-yellow-900/40 bg-[#211810] flex flex-col
             transition-all duration-500 hover:border-yellow-700/60
             hover:shadow-[0_0_35px_rgba(100,60,0,0.25)]"
      data-status="@statusKey">
 
-    <!-- Corner ornaments -->
-    <div class="absolute top-2 left-2  w-4 h-4 border-t border-l border-yellow-900/50 group-hover:border-yellow-700 transition-colors duration-500"></div>
-    <div class="absolute top-2 right-2 w-4 h-4 border-t border-r border-yellow-900/50 group-hover:border-yellow-700 transition-colors duration-500"></div>
-    <div class="absolute bottom-2 left-2  w-4 h-4 border-b border-l border-yellow-900/50 group-hover:border-yellow-700 transition-colors duration-500"></div>
-    <div class="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-yellow-900/50 group-hover:border-yellow-700 transition-colors duration-500"></div>
-
-    <!-- IMAGE -->
+        <!-- IMAGE -->
     <div class="relative w-full aspect-[4/3] overflow-hidden">
-        @if (Model.IdobjectNavigation.IdimageNavigation != null && Model.IdobjectNavigation.IdimageNavigation.ImageData.Length > 0)
+        @if (hasImage)
         {
             <img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                 src="data:image/jpeg;base64,@Convert.ToBase64String(Model.IdobjectNavigation.IdimageNavigation.ImageData)"
-                 alt="@Model.IdobjectNavigation.Name"
+                 src="data:image/jpeg;base64,@Convert.ToBase64String(firstImage.ImageData)"
+                 alt="@Model.IdobjectNavigation?.Name"
                  loading="lazy" />
         }
         else
@@ -45,11 +42,11 @@
         </div>
     </div>
 
-    <!-- CONTENT -->
+    <!-- CONTENT (sin cambios relevantes) -->
     <div class="flex flex-col flex-1 p-6">
 
         <h2 class="text-yellow-100 text-base uppercase tracking-[0.12em] mb-1 leading-tight">
-            @Model.IdobjectNavigation.Name
+            @Model.IdobjectNavigation?.Name
         </h2>
         <p class="text-stone-500 text-xs font-serif italic mb-5">
             Ofrecida por <span class="text-yellow-700">@Model.IdusercreatorNavigation.UserName</span>
