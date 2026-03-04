@@ -1,9 +1,17 @@
-
+/**
+ * page-loader.js
+ * Navegación sin recarga + Overlay con logo en llamas
+ * Compatible con ASP.NET Razor Views
+ *
+ * Coloca este archivo en: wwwroot/js/page-loader.js
+ */
 
 (function () {
     'use strict';
 
-
+    // ══════════════════════════════════════════════════════
+    //   ESTILOS DEL OVERLAY
+    // ══════════════════════════════════════════════════════
     function injectStyles() {
         if (document.getElementById('dnd-loader-style')) return;
 
@@ -170,13 +178,39 @@
                 50% { content: '..';  }
                 75% { content: '...'; }
             }
+
+            /* ── Botón retroceder ── */
+            .dnd-back-btn {
+                font-family: 'Cinzel', serif;
+                font-size: 10px;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                color: rgba(232, 213, 163, 0.5);
+                background: transparent;
+                border: 1px solid rgba(139, 26, 26, 0.35);
+                border-radius: 2px;
+                padding: 9px 24px;
+                cursor: pointer;
+                transition: color 0.2s, border-color 0.2s, box-shadow 0.2s, background 0.2s;
+                margin-top: 8px;
+            }
+            .dnd-back-btn:hover {
+                color: #c9a84c;
+                border-color: rgba(201, 168, 76, 0.5);
+                background: rgba(139, 26, 26, 0.15);
+                box-shadow: 0 0 12px rgba(139, 26, 26, 0.3),
+                            inset 0 1px 0 rgba(201, 168, 76, 0.1);
+                text-shadow: 0 0 8px rgba(201, 168, 76, 0.6);
+            }
         `;
         document.head.appendChild(style);
     }
 
-
+    // ══════════════════════════════════════════════════════
+    //   SHOW / HIDE
+    // ══════════════════════════════════════════════════════
     function buildSparks() {
-        
+        // 10 partículas con posición y timing aleatorio
         let html = '';
         const positions = [10, 18, 28, 38, 48, 55, 63, 72, 82, 90];
         positions.forEach((left, i) => {
@@ -214,11 +248,18 @@
             <div class="dnd-loader-text">
                 Viajando al Reino<span class="dnd-dots"></span>
             </div>
+            <button class="dnd-back-btn" id="dnd-back-btn">&#8592; Retroceder</button>
         `;
 
         document.body.appendChild(overlay);
-        overlay.getBoundingClientRect();
+        overlay.getBoundingClientRect(); // forzar reflow
         overlay.classList.add('visible');
+
+        // Click en retroceder
+        document.getElementById('dnd-back-btn').addEventListener('click', function () {
+            hideLoader();
+            history.back();
+        });
     }
 
     function hideLoader() {
@@ -228,7 +269,9 @@
         setTimeout(() => overlay.remove(), 260);
     }
 
-
+    // ══════════════════════════════════════════════════════
+    //   NAVEGACIÓN SIN RECARGA
+    // ══════════════════════════════════════════════════════
     function navigateTo(url, pushState = true) {
         showLoader();
 
@@ -258,7 +301,7 @@
 
                 if (pushState) history.pushState({}, '', url);
 
-              
+                // Re-ejecutar scripts de la vista Razor
                 curMain?.querySelectorAll('script').forEach(oldScript => {
                     const s = document.createElement('script');
                     if (oldScript.src) {
