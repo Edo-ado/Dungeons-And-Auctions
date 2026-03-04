@@ -10,12 +10,16 @@
   <ItemGroup>
     <Compile Remove="Views\Auction\**" />
     <Compile Remove="Views\Bid\**" />
+    <Compile Remove="wwwroot\Images\Objects\**" />
     <Content Remove="Views\Auction\**" />
     <Content Remove="Views\Bid\**" />
+    <Content Remove="wwwroot\Images\Objects\**" />
     <EmbeddedResource Remove="Views\Auction\**" />
     <EmbeddedResource Remove="Views\Bid\**" />
+    <EmbeddedResource Remove="wwwroot\Images\Objects\**" />
     <None Remove="Views\Auction\**" />
     <None Remove="Views\Bid\**" />
+    <None Remove="wwwroot\Images\Objects\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,6 +29,7 @@
 
   <ItemGroup>
     <Folder Include="Logs\" />
+    <Folder Include="wwwroot\Images\obj\" />
   </ItemGroup>
 
   <ItemGroup>

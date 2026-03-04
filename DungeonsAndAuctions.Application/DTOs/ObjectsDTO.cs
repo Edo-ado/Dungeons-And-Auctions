@@ -54,7 +54,7 @@ namespace D_A.Application.DTOs
         public Qualities? IdQualityNavigation { get; set; }
 
         [Display(Name = "Imagen Libro")]
-        public byte[] Imagen { get; set; } = Array.Empty<byte>();
+        public List<byte[]> Imagenes { get; set; } = new List<byte[]>();
 
         [DisplayName("AuctionsObjects")]
         public List<AuctionsDTO> Auctions { get; set; } = new();

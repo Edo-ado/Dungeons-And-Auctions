@@ -27,7 +27,9 @@ namespace D_A.Infraestructure.Repository.Implementation
                    .AsNoTracking()
                    .Include(o => o.Category)
                    .Include(o => o.Auctions)
+                       .ThenInclude(a => a.IdstateNavigation)
                    .Include(o => o.User)
+               .Include(o => o.IdImageNavigation)
                    .FirstOrDefaultAsync(u => u.Id == id);
         }
         public async Task<List<Categories>> GetCategoriesByIdObject(int id)
@@ -45,7 +47,7 @@ namespace D_A.Infraestructure.Repository.Implementation
                .AsNoTracking()
                .Include(o => o.Category)
                .Include(o => o.User)
-
+               .Include(o => o.IdImageNavigation)
                .ToListAsync();
         }
 

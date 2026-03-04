@@ -49,6 +49,7 @@ namespace D_A.Application.DTOs
 
         [DisplayName("State Name")]
         public  AuctionState IdstateNavigation { get; set; } = null!;
+
         [DisplayName("User Creator Name")]
         public  Users IdusercreatorNavigation { get; set; } = null!;
 
