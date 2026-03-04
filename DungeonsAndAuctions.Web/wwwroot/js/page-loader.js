@@ -206,11 +206,8 @@
         document.head.appendChild(style);
     }
 
-    // ══════════════════════════════════════════════════════
-    //   SHOW / HIDE
-    // ══════════════════════════════════════════════════════
     function buildSparks() {
-        // 10 partículas con posición y timing aleatorio
+     
         let html = '';
         const positions = [10, 18, 28, 38, 48, 55, 63, 72, 82, 90];
         positions.forEach((left, i) => {
@@ -269,9 +266,6 @@
         setTimeout(() => overlay.remove(), 260);
     }
 
-    // ══════════════════════════════════════════════════════
-    //   NAVEGACIÓN SIN RECARGA
-    // ══════════════════════════════════════════════════════
     function navigateTo(url, pushState = true) {
         showLoader();
 

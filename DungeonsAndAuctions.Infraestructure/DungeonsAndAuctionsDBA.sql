@@ -295,6 +295,90 @@ VALUES
                   Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,1600,1,1,GETDATE())
 
 
+
+                  INSERT INTO [dbo].[Images]
+    ([IdObject],
+     [Name],
+     [ImageData])
+VALUES (
+    2,
+    'Diamond Sword',
+    CONVERT(varbinary(max), (SELECT * FROM OPENROWSET(BULK 'C:\ImagenesProyecto\diamondsword1.png', SINGLE_BLOB) AS image))
+);
+GO
+
+INSERT INTO [dbo].[Images]
+    ([IdObject],
+     [Name],
+     [ImageData])
+VALUES (
+    1,
+    'Wooden Bow 2',
+    CONVERT(varbinary(max), (SELECT * FROM OPENROWSET(BULK 'C:\ImagenesProyecto\woodenbow1.png', SINGLE_BLOB) AS image))
+);
+GO
+
+
+
+INSERT INTO [dbo].[Images]
+    ([IdObject],
+     [Name],
+     [ImageData])
+VALUES (
+    1,
+    'Wooden Bow 2',
+    CONVERT(varbinary(max), (SELECT * FROM OPENROWSET(BULK 'C:\ImagenesProyecto\woodenbow2.png', SINGLE_BLOB) AS image))
+);
+GO
+
+INSERT INTO [dbo].[Images]
+    ([IdObject],
+     [Name],
+     [ImageData])
+VALUES (
+    3,
+    'Great Hero Soul',
+    CONVERT(varbinary(max), (SELECT * FROM OPENROWSET(BULK 'C:\ImagenesProyecto\SoulOfaGreatChampion.png', SINGLE_BLOB) AS image))
+);
+GO
+
+INSERT INTO [dbo].[Images]
+    ([IdObject],
+     [Name],
+     [ImageData])
+VALUES (
+    4,
+    'Zwei 1',
+    CONVERT(varbinary(max), (SELECT * FROM OPENROWSET(BULK 'C:\ImagenesProyecto\zwi1.png', SINGLE_BLOB) AS image))
+);
+GO
+
+
+
+INSERT INTO [dbo].[Images]
+    ([IdObject],
+     [Name],
+     [ImageData])
+VALUES (
+    4,
+    'Zwei 2',
+    CONVERT(varbinary(max), (SELECT * FROM OPENROWSET(BULK 'C:\ImagenesProyecto\zwi2.png', SINGLE_BLOB) AS image))
+);
+GO
+
+
+
+INSERT INTO [dbo].[Images]
+    ([IdObject],
+     [Name],
+     [ImageData])
+VALUES (
+    4,
+    'Zwei 3',
+    CONVERT(varbinary(max), (SELECT * FROM OPENROWSET(BULK 'C:\ImagenesProyecto\zwei3.png', SINGLE_BLOB) AS image))
+);
+GO
+
 /* =========================
    FOREIGN KEYS
 ========================= */
