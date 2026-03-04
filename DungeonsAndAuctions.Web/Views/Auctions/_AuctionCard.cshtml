@@ -21,10 +21,18 @@
      data-status="@statusKey">
 
         <!-- IMAGE -->
-    <div class="relative w-full aspect-[4/3] overflow-hidden">
+    <!-- IMAGE -->
+    <div class="relative w-full aspect-[4/3] overflow-hidden bg-[#0e0a07]">
         @if (hasImage)
         {
-            <img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            
+            <div class="absolute inset-0 scale-110 blur-2xl opacity-40 saturate-150"
+                 style="background-image: url('data:image/jpeg;base64,@Convert.ToBase64String(firstImage.ImageData)');
+                        background-size: cover; background-position: center;">
+            </div>
+
+           
+            <img class="absolute inset-0 w-full h-full object-contain transition-transform duration-700 group-hover:scale-105 relative z-10 p-4"
                  src="data:image/jpeg;base64,@Convert.ToBase64String(firstImage.ImageData)"
                  alt="@Model.IdobjectNavigation?.Name"
                  loading="lazy" />
@@ -36,8 +44,8 @@
                 <span class="text-stone-600 text-xs font-serif italic">Sin imagen</span>
             </div>
         }
-        <div class="absolute inset-0 bg-gradient-to-t from-[#211810] via-[#211810]/20 to-transparent"></div>
-        <div class="absolute top-3 right-3">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#211810] via-[#211810]/10 to-transparent z-20"></div>
+        <div class="absolute top-3 right-3 z-30">
             <span class="@badgeClass">@badgeLabel</span>
         </div>
     </div>
