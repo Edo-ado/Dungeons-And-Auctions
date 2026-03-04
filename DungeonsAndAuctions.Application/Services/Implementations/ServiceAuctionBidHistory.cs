@@ -29,5 +29,13 @@ namespace D_A.Application.Services.Implementations
         {
             throw new NotImplementedException();
         }
+
+       public Task<int> CountBidsByAuction(int AuctionId)
+        {
+            return _repository.CountBidsByAuction(AuctionId);
+
+        }
+
+
     }
 }

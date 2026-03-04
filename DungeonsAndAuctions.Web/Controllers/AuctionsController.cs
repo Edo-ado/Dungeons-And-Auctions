@@ -36,23 +36,29 @@ namespace DNDA.Web.Controllers
         public async Task<IActionResult> Index()
         {
 
-            var all = await _ServiceAuctions.GetAllAuctions();        
+            var all = await _ServiceAuctions.GetAllAuctions();
             var active = await _ServiceAuctions.GetAllAuctionsActive();
             var closed = await _ServiceAuctions.GetAllAuctionsClosed();
             var banned = await _ServiceAuctions.GetAllAuctionsBanned();
             var Inactive = await _ServiceAuctions.GetAllAuctionsInactive();
+
+      
 
             ViewBag.Open = active;
             ViewBag.Close = closed;
             ViewBag.Banned = banned;
             ViewBag.Inactive = Inactive;
 
+
+
+
+
             return View(all);
 
-           
+
         }
 
- 
+
 
         public async Task<IActionResult> Details(int id)
         {
@@ -62,5 +68,19 @@ namespace DNDA.Web.Controllers
             return View(auction);
 
         }
+
+
+
+        public int CantidadDePujas(int id)
+        {
+            return _serviceBidHistory.CountBidsByAuction(id).Result;
+
+
+
+
+
+        }
+
+
     }
 }

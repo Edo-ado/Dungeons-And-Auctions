@@ -78,5 +78,8 @@ namespace D_A.Application.Services.Implementations
             return _mapper.Map<List<AuctionsDTO>>(auctions);
 
         }
+
+
+
     }
 }

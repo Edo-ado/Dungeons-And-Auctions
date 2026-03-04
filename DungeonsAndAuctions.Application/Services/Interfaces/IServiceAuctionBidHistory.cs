@@ -8,5 +8,8 @@ namespace D_A.Application.Services.Interfaces
     {
         Task<int> CountBidsByBuyerAsync(int userId);
         Task<string?> ListAsync();
+
+
+        Task<int> CountBidsByAuction(int AuctionId);
     }
 }

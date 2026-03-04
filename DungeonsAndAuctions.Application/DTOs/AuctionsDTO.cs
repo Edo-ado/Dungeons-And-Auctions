@@ -43,7 +43,6 @@ namespace D_A.Application.DTOs
         [DisplayName("TotalBids")]
         public int TotalBids { get; set; }
 
-
         [DisplayName("Object Name")]
         public  Objects IdobjectNavigation { get; set; } = null!;
 
