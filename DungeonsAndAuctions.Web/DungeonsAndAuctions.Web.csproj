@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <Folder Include="Logs\" />
+    <Folder Include="Views\UserApi\" />
     <Folder Include="wwwroot\Images\obj\" />
   </ItemGroup>
 

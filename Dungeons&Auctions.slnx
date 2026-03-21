@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="DungeonAndAuctions.Api/DungeonAndAuctions.Api.csproj" Id="500e6f68-d3d4-4664-8920-1ecba621674d" />
   <Project Path="DungeonsAndAuctions.Application/DungeonsAndAuctions.Application.csproj" />
   <Project Path="DungeonsAndAuctions.Infraestructure/DungeonsAndAuctions.Infraestructure.csproj" />
   <Project Path="DungeonsAndAuctions.Web/DungeonsAndAuctions.Web.csproj" />

@@ -34,9 +34,13 @@ namespace D_A.Infraestructure.Repository.Implementation
         public async Task<ICollection<Users>> ListAsync()
         {
             return await _context.Users
-                .Include(u => u.Role)   
-                .AsNoTracking()
-                .ToListAsync();
+                     .Include(u => u.Role)
+        .Include(u => u.Gender)
+        .Include(u => u.Country)
+        .Include(u => u.Auctions)
+.Include(u => u.AuctionBidHistory)
+        .AsNoTracking()
+        .ToListAsync();
         }
 
 
