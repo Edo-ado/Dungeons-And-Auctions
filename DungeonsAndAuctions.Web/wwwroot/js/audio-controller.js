@@ -1,6 +1,6 @@
 
 (function () {
-    
+    'use strict';
 
    
     const audio = document.getElementById('bg-audio');
@@ -21,7 +21,7 @@
     const state = loadState() || {
         volume: 0.6,
         playing: true,
-        panelOpen: false,
+        panelOpen: true,
     };
 
 
