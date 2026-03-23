@@ -39,6 +39,13 @@ namespace D_A.Infraestructure.Repository.Implementation
                 .ToListAsync();
         }
 
+        public async Task UpdateAsync(Users entity)
+        {
+            _context.Users.Update(entity);
+            _context.Entry(entity).Property(u => u.PasswordHash).IsModified = false;
+            await _context.SaveChangesAsync();
+        }
+
 
     }
 }

@@ -64,21 +64,12 @@ var logger = new LoggerConfiguration()
 // Paso obligatorio ANTES de crear builder
 Log.Logger = logger;
 
-
-
 // Integrar Serilog al host
 builder.Host.UseSerilog(Log.Logger);
-
-
-
-
 #endregion 
-
-
 
 //Controllers y Views
 builder.Services.AddControllersWithViews();
-
 
 //Repositories
 builder.Services.AddScoped<IRepositoryUser, RepositoryUser>();
@@ -89,17 +80,14 @@ builder.Services.AddScoped<IRepositoryRole, RepositoryRole>();
 builder.Services.AddScoped<IRepositoryCategory, RepositoryCategory>();
 builder.Services.AddScoped<IRepositoryGender, RepositoryGender>();
 
-
-
-
-
 //Services
 builder.Services.AddScoped<IServiceUser, ServiceUser>();
 builder.Services.AddScoped<IServiceAuctions, ServiceAuctions>();
 builder.Services.AddScoped<IServiceAuctionBidHistory, ServiceAuctionBidHistory>();
 builder.Services.AddScoped<IServiceObject, ServiceObject>();
 
-
+builder.Services.AddScoped<IServiceCountry, ServiceCountry>();
+builder.Services.AddScoped<IServiceGender, ServiceGender>();
 
 //AutoMapper
 builder.Services.AddAutoMapper(config =>
@@ -107,16 +95,16 @@ builder.Services.AddAutoMapper(config =>
     config.AddProfile<UserProfile>();
     config.AddProfile<ObjectProfile>();
     config.AddProfile<AuctionProfile>();
-
+    config.AddProfile<GenderProfile>();
+    config.AddProfile<CountryProfile>();// <-- Añadido: registra el nuevo perfil de Genders
 });
-
 
 //DbContext
 var connectionString = builder.Configuration.GetConnectionString("SqlServerDataBase");
 builder.Services.AddDbContext<DAContext>(options =>
     options.UseSqlServer(connectionString));
 
-var app = builder.Build();
+    var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
@@ -130,15 +118,10 @@ else
 }
 
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
 app.Run();
