@@ -10,6 +10,8 @@ using Serilog;
 using Serilog.Events;
 using System.Text;
 
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 #region Logger
@@ -88,7 +90,7 @@ builder.Services.AddScoped<IRepositoryObject, RepositoryObject>();
 builder.Services.AddScoped<IRepositoryRole, RepositoryRole>();
 builder.Services.AddScoped<IRepositoryCategory, RepositoryCategory>();
 builder.Services.AddScoped<IRepositoryGender, RepositoryGender>();
-
+builder.Services.AddScoped<IRepositoryQuaility, RepositoryQuality>();
 
 
 
@@ -98,7 +100,8 @@ builder.Services.AddScoped<IServiceUser, ServiceUser>();
 builder.Services.AddScoped<IServiceAuctions, ServiceAuctions>();
 builder.Services.AddScoped<IServiceAuctionBidHistory, ServiceAuctionBidHistory>();
 builder.Services.AddScoped<IServiceObject, ServiceObject>();
-
+builder.Services.AddScoped<IServiceCategories, ServiceCategories>();
+builder.Services.AddScoped<IServiceQuality, ServiceQuality>();
 
 
 //AutoMapper
@@ -107,7 +110,7 @@ builder.Services.AddAutoMapper(config =>
     config.AddProfile<UserProfile>();
     config.AddProfile<ObjectProfile>();
     config.AddProfile<AuctionProfile>();
-
+    config.AddProfile<QualityProfile>();
 });
 
 //DbContext
@@ -123,7 +126,13 @@ builder.Services.AddHttpClient("DungeonsAndAuctionsApi", client =>
 });
 //**** API ****
 
-var app = builder.Build(); // <-- siempre al final de los servicios
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession();
+
+
+var app = builder.Build();
+
 
 
 
@@ -138,10 +147,12 @@ else
     app.UseMiddleware<ErrorHandlingMiddleware>();
 }
 
+
+
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
-
+app.UseSession();
 app.UseRouting();
 
 app.UseAuthorization();
@@ -151,3 +162,5 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+

@@ -15,5 +15,15 @@ namespace D_A.Application.Services.Interfaces
 
         Task<Categories?> GetCategoriesByIdObject(int id);
 
+        //mantenimientos
+        Task<int> AddAsync(ObjectsDTO entity, List<int> selectedCategorias, List<byte[]> imagenes);
+        Task UpdateAsync(int id, ObjectsDTO entity, List<int> selectedCategorias, List<byte[]> imagenes);
+        Task DeleteAsync(int id);
+        Task ToggleActiveAsync(int id);
+        Task<bool> HasActiveAuctionAsync(int objectId);
+        Task<bool> HasBeenAuctionedAsync(int objectId);
+
+
+
     }
 }

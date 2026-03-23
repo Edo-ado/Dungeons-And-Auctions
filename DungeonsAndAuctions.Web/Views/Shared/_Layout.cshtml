@@ -10,7 +10,7 @@
     <link rel="icon" type="image/x-icon" href="~/Images/Logo/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="~/Images/Logo/favicon-32.png" />
     <link rel="apple-touch-icon" sizes="192x192" href="~/Images/Logo/favicon-192.png" />
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
@@ -44,6 +44,21 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="~/js/site.js"></script>
     @RenderSection("Scripts", required: false)
+
+    @if (TempData["Notificacion"] != null || ViewBag.Notificacion != null)
+    {
+        var json = TempData["Notificacion"] ?? ViewBag.Notificacion;
+        <script>
+            const notif = @Html.Raw(json);
+                       Swal.fire({
+                title: notif.title,
+                html: notif.text,
+                icon: notif.icon
+            });
+        </script>
+    }
+
+
 </body>
 
 

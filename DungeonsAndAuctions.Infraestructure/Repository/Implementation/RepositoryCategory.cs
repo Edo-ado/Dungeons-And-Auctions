@@ -21,6 +21,13 @@ namespace D_A.Infraestructure.Repository.Implementation
             _context = context;
         }
 
+        public async Task<Categories?> GetCategoriesByID(int id)
+        {
+            return await _context.Categories
+            .AsNoTracking()
+            .FirstOrDefaultAsync(r => r.Id == id);
+        }
+
         public async Task<ICollection<Categories>> ListAsync()
         {
             return await _context.Categories

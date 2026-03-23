@@ -16,9 +16,9 @@
         <div class="p-8 md:p-12">
 
             <div class="border-b-2 border-yellow-800 pb-6 mb-8 flex flex-col md:flex-row justify-between items-end gap-4">
-                <div>
+                <div class="min-w-0">
                     <span class="text-yellow-700 text-xs tracking-[0.3em] uppercase">Identificación de Objeto</span>
-                    <h1 class="text-4xl md:text-5xl font-bold text-red-600 drop-shadow-md">@Model.Name</h1>
+                    <h1 class="text-4xl md:text-5xl font-bold text-red-600 drop-shadow-md break-all">@Model.Name</h1>
                 </div>
                 <div class="text-right">
                     <span class="block text-stone-500 text-[10px] uppercase font-mono tracking-widest">Referencia Real</span>
@@ -65,11 +65,11 @@
                             <p class="text-[10px] text-yellow-800 uppercase tracking-widest font-bold">Estado Actual</p>
                             @if (Model.IsActive)
                             {
-                                <span class="text-green-500 font-bold text-sm tracking-widest uppercase">● En Subasta</span>
+                                <span class="text-green-500 font-bold text-sm tracking-widest uppercase">● Activo</span>
                             }
                             else
                             {
-                                <span class="text-red-700 font-bold text-sm tracking-widest uppercase">● Vendido</span>
+                                <span class="text-red-700 font-bold text-sm tracking-widest uppercase">● Desactivo</span>
                             }
                         </div>
                         <div class="text-right">
@@ -86,15 +86,34 @@
                 <div class="flex flex-col justify-between">
                     <div class="space-y-8">
 
-                 
-                        <div>
-                            <h3 class="text-yellow-700 text-xs font-bold uppercase tracking-widest mb-2">Clasificación</h3>
-                            <p class="text-stone-200 text-lg italic border-l-2 border-yellow-700 pl-4">
-                                @(Model.Categories != null && Model.Categories.Any()
-                                                                ? string.Join(", ", Model.Categories.Select(c => c.Name))
-                                                                : "Sin clasificar")
-                            </p>
+                        <div class="space-y-4">
+
+                            <div>
+                                <h3 class="text-yellow-700 text-xs font-bold uppercase tracking-widest mb-2">Clasificación</h3>
+                                <p class="text-stone-200 text-lg italic border-l-2 border-yellow-700 pl-4 break-words">
+                                    @(Model.Categories != null && Model.Categories.Any()
+                                                                        ? string.Join(", ", Model.Categories.Select(c => c.Name))
+                                                                        : "Sin clasificar")
+                                </p>
+                            </div>
+
+                          
+                            <div class="relative bg-[#1a1412]/60 border border-yellow-900/40 p-4 overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-r from-yellow-900/15 to-transparent pointer-events-none"></div>
+                                <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-yellow-700"></div>
+                                <h3 class="text-yellow-700 text-xs font-bold uppercase tracking-widest mb-2 pl-3">Estado del Objeto</h3>
+                                <div class="flex items-center gap-3 pl-3">
+                                    <span class="w-2 h-2 rounded-full bg-yellow-500 shadow-[0_0_8px_rgba(234,179,8,0.9)] flex-shrink-0"></span>
+                                    <span class="text-yellow-400 font-bold text-base tracking-widest uppercase">
+                                        @(Model.IdQualityNavigation != null ? Model.IdQualityNavigation.Quality : "Sin calidad")
+                                    </span>
+                                </div>
+                            </div>
+
                         </div>
+
+
+                        
 
                         @if (ViewBag.AuctionsObjects != null && ViewBag.AuctionsObjects.Count > 0)
                         {
@@ -134,7 +153,7 @@
 
                         <div>
                             <h3 class="text-yellow-700 text-xs font-bold uppercase tracking-widest mb-2">Crónica de la Reliquia</h3>
-                            <p class="text-stone-400 leading-relaxed text-sm font-serif">
+                            <p class="text-stone-400 leading-relaxed text-sm font-serif break-words">
                                 @(string.IsNullOrEmpty(Model.Description) ? "Esta reliquia no tiene crónica registrada." : Model.Description)
                             </p>
                         </div>
