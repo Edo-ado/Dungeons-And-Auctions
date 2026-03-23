@@ -18,6 +18,7 @@
         <form asp-action="Edit" method="post">
             <div asp-validation-summary="ModelOnly" class="mx-8 mt-6 text-red-400 text-sm bg-red-900/20 border border-red-700/40 rounded p-3"></div>
             <input type="hidden" asp-for="Id" />
+ 
 
             <div class="p-8 grid grid-cols-1 md:grid-cols-3 gap-8">
 
@@ -159,11 +160,7 @@
             </div>
 
          
-            <div class="bg-[#1a1412] p-6 flex justify-between items-center border-t border-yellow-800">
-                <a asp-action="Index"
-                   class="text-stone-500 hover:text-yellow-600 transition-colors uppercase text-sm tracking-widest">
-                    ← Volver al Concilio
-                </a>
+            
                 <div class="flex gap-4">
                     <a asp-action="Details" asp-route-id="@Model.Id"
                        class="border border-yellow-800 hover:border-yellow-600 text-stone-400 hover:text-yellow-500 px-6 py-2 rounded-sm transition-all uppercase text-sm tracking-tighter">
