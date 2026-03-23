@@ -19,7 +19,19 @@ namespace D_A.Application.Profiles
                 .ForMember(dest => dest.Imagenes, opt => opt.MapFrom(src => src.IdImageNavigation.Select(i => i.ImageData).ToList()))
                 .ReverseMap();
 
+
+
+            //mapeo para poder crear pues
+            CreateMap<ObjectsDTO, Objects>()
+                .ForMember(dest => dest.Category, opt => opt.Ignore())
+                .ForMember(dest => dest.Auctions, opt => opt.Ignore())
+                .ForMember(dest => dest.User, opt => opt.Ignore())
+                .ForMember(dest => dest.IdImageNavigation, opt => opt.Ignore());
+
+
             CreateMap<Categories, CategoriesDTO>();
+            CreateMap<CategoriesDTO, Categories>();
+
             CreateMap<Auctions, AuctionsDTO>();
       
 

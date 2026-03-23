@@ -10,5 +10,7 @@ namespace D_A.Infraestructure.Repository.Interfaces
     public interface IRepositoryCategory
     {
         Task<ICollection<Categories>> ListAsync();
+        Task<Categories?> GetCategoriesByID(int id);
+
     }
 }

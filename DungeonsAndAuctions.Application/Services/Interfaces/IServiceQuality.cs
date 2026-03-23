@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace D_A.Application.Services.Interfaces
 {
-    internal interface IServiceQuality
+    public interface IServiceQuality
     {
 
 

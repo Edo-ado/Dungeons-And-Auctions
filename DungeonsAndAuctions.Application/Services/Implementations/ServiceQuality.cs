@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using D_A.Application.DTOs;
 using D_A.Application.Services.Interfaces;
+using D_A.Infraestructure.Repository.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,21 +10,19 @@ using System.Threading.Tasks;
 
 namespace D_A.Application.Services.Implementations
 {
-    internal class ServiceQuality : IServiceQuality
+    public class ServiceQuality : IServiceQuality
     {
 
 
 
-        private readonly IServiceQuality _repository;
+        private readonly IRepositoryQuaility _repository;
         private readonly IMapper _mapper;
 
-        public ServiceQuality(IServiceQuality repository, IMapper mapper)
+        public ServiceQuality(IRepositoryQuaility repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
         }
-
-
 
         public async Task<QualitiesDTO> GetqualityById(int id)
         {

@@ -66,25 +66,39 @@
                                 {
                                     <span class="inline-flex items-center text-green-500 uppercase text-[10px] font-bold tracking-widest">
                                         <span class="h-2 w-2 rounded-full bg-green-500 mr-2 shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
-                                        En Subasta
+                                        Activo
                                     </span>
                                 }
                                 else
                                 {
                                     <span class="inline-flex items-center text-red-700 uppercase text-[10px] font-bold tracking-widest">
                                         <span class="h-2 w-2 rounded-full bg-red-700 mr-2"></span>
-                                        Vendido
+                                        Inactivo
                                     </span>
                                 }
                             </td>
 
                             <td class="px-6 py-4 text-right text-sm font-bold">
                                 <div class="flex justify-end space-x-4">
-                                    <a asp-action="Edit" asp-route-id="@item.Id" class="text-yellow-600 hover:text-yellow-400 transition-all uppercase tracking-widest">Editar</a>
+                                    <a asp-action="Edit" asp-route-id="@item.Id" data-no-ajax
+                                       class="text-yellow-600 hover:text-yellow-400 transition-all uppercase tracking-widest">Editar</a>
                                     <span class="text-yellow-900">|</span>
-                                    <a asp-action="Details" asp-route-id="@item.Id" class="text-blue-500 hover:text-blue-300 transition-all uppercase tracking-widest">Ver</a>
+                                    <a asp-action="Details" asp-route-id="@item.Id"
+                                       class="text-blue-500 hover:text-blue-300 transition-all uppercase tracking-widest">Ver</a>
                                     <span class="text-yellow-900">|</span>
-                                    <a asp-action="Delete" asp-route-id="@item.Id" class="text-red-700 hover:text-red-500 transition-all uppercase tracking-widest">Destruir</a>
+                                    <form asp-action="ToggleActive" asp-route-id="@item.Id" method="post" class="inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="...">
+                                            @(item.IsActive ? "Desactivar" : "Activar")
+                                        </button>
+                                    </form>
+                                    <span class="text-yellow-900">|</span>
+                                    <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="inline" data-no-ajax>
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="text-red-700 hover:text-red-500 transition-all uppercase tracking-widest">
+                                            Destruir
+                                        </button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>
