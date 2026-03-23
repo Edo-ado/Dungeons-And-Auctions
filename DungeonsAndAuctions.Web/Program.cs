@@ -114,6 +114,11 @@ var connectionString = builder.Configuration.GetConnectionString("SqlServerDataB
 builder.Services.AddDbContext<DAContext>(options =>
     options.UseSqlServer(connectionString));
 
+
+
+ 
+
+
 //**** API ****
 var apiBaseUrl = builder.Configuration["ApiSettings:BaseUrl"];
 builder.Services.AddHttpClient("DungeonsAndAuctionsApi", client =>
@@ -122,12 +127,14 @@ builder.Services.AddHttpClient("DungeonsAndAuctionsApi", client =>
 });
 //**** API ****
 
+
 builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession();
 
 
 var app = builder.Build();
+
 
 
 

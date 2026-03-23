@@ -20,7 +20,7 @@ namespace D_A.Application.Services.Implementations
             _repository = repository;
             _mapper = mapper;
         }
-        public async Task<RolesDTO?> GetRolById(int id)
+        public async Task<RolesDTO> GetRolById(int id)
         {
             var role = await _repository.GetRolById(id);
             return _mapper.Map<RolesDTO>(role);

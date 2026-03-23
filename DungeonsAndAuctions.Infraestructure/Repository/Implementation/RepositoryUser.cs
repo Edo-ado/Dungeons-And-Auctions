@@ -24,32 +24,43 @@ namespace D_A.Infraestructure.Repository.Implementation
         public async Task<Users?> FindByIdAsync(int id)
         {
             return await _context.Set<Users>()
-                .AsNoTracking()
-                .Include(u => u.Gender)
-                .Include(u => u.Country)
-                .Include(u => u.Role)//asuñonga hay q añadirlo para q los demas tmb puedan ver el atributo
-                .FirstOrDefaultAsync(u => u.Id == id);
+            .AsNoTracking()
+            .Include(u => u.Gender)
+            .Include(u => u.Country)
+            .Include(u => u.Role)//asuñonga hay q añadirlo para q los demas tmb puedan ver el atributo
+            .FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<ICollection<Users>> ListAsync()
         {
             return await _context.Users
-                     .Include(u => u.Role)
-        .Include(u => u.Gender)
-        .Include(u => u.Country)
-        .Include(u => u.Auctions)
-.Include(u => u.AuctionBidHistory)
-        .AsNoTracking()
-        .ToListAsync();
+            .Include(u => u.Role)
+            .Include(u => u.Gender)
+            .Include(u => u.Country)
+            .Include(u => u.Auctions)
+            .Include(u => u.AuctionBidHistory)
+            .AsNoTracking()
+            .ToListAsync();
         }
 
         public async Task UpdateAsync(Users entity)
         {
-            _context.Users.Update(entity);
+            if (_context.Entry(entity).State == EntityState.Detached)
+                _context.Attach(entity);
+
+            _context.Entry(entity).State = EntityState.Modified;
+
             _context.Entry(entity).Property(u => u.PasswordHash).IsModified = false;
+            _context.Entry(entity).Property(u => u.RoleId).IsModified = false;
+
             await _context.SaveChangesAsync();
         }
-
+        public async Task<Users?> FindByIdForUpdateAsync(int id)
+        {
+            return await _context.Set<Users>()
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Id == id);
+        }
 
     }
 }
