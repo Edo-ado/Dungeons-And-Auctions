@@ -13,5 +13,16 @@ namespace D_A.Infraestructure.Repository.Interfaces
         Task<Objects?> FindByIdAsync(int id);
         Task<List<Categories>> GetCategoriesByIdObject(int id);
 
+        //mantenimientos
+        Task<int> AddAsync(Objects entity, List<int> selectedCategorias, List<byte[]> imagenes);
+        Task UpdateAsync(Objects entity, List<int> selectedCategorias, List<byte[]> imagenes);
+        Task DeleteAsync(int id);
+        Task ToggleActiveAsync(int id);
+        Task<bool> HasActiveAuctionAsync(int objectId);
+        Task<bool> HasBeenAuctionedAsync(int objectId);
+
+
+
+
     }
 }

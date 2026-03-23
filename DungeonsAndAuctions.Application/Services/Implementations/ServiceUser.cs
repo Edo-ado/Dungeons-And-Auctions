@@ -38,16 +38,9 @@ namespace D_A.Application.Services.Implementations
 
         public async Task UpdateAsync(int id, UsersDTO dto)
         {
-            var user = await _repository.FindByIdAsync(id);
-
-            // Limpiar navegaciones antes de mapear
-            user.Gender = null!;
-            user.Country = null!;
-            user.Role = null!;
-
+            var user = await _repository.FindByIdForUpdateAsync(id);
             _mapper.Map(dto, user);
             await _repository.UpdateAsync(user);
         }
-
     }
 }

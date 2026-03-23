@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace D_A.Infraestructure.Repository.Implementation
 {
-    internal class RepositoryQuality : IRepositoryQuaility
+    public class RepositoryQuality : IRepositoryQuaility
     {
 
         private readonly DAContext _context;

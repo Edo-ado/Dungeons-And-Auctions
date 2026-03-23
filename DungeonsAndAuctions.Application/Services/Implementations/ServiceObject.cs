@@ -22,6 +22,19 @@ namespace D_A.Application.Services.Implementations
             _mapper = mapper;
         }
 
+        public async Task<int> AddAsync(ObjectsDTO entity, List<int> selectedCategorias, List<byte[]> imagenes)
+        {
+            var entityy = _mapper.Map<Objects>(entity);
+            return await _repository.AddAsync(entityy, selectedCategorias, imagenes);
+        }
+
+     
+
+        public async Task DeleteAsync(int id)
+        {
+            await _repository.DeleteAsync(id);
+        }
+
         public async Task<Categories?> GetCategoriesByIdObject(int id)
         {
             var categories = await _repository.GetCategoriesByIdObject(id);
@@ -34,10 +47,35 @@ namespace D_A.Application.Services.Implementations
             return _mapper.Map<ObjectsDTO>(objects);
         }
 
+        public async Task<bool> HasActiveAuctionAsync(int objectId)
+        {
+            return await _repository.HasActiveAuctionAsync(objectId);
+        }
+
+        public async Task<bool> HasBeenAuctionedAsync(int objectId)
+        {
+            return await _repository.HasBeenAuctionedAsync(objectId);
+        }
+
         public async Task<ICollection<ObjectsDTO>> ListAsync()
         {
             var objects = await _repository.ListAsync();
             return _mapper.Map<List<ObjectsDTO>>(objects);
         }
+
+        public async Task ToggleActiveAsync(int id)
+        {
+            await _repository.ToggleActiveAsync(id);
+        }
+
+        public async Task UpdateAsync(int id, ObjectsDTO dto, List<int> selectedCategorias, List<byte[]> imagenes)
+        {
+            var entity = await _repository.FindByIdAsync(id);
+            if (entity is null) throw new Exception("Objeto no encontrado");
+            _mapper.Map(dto, entity);
+            await _repository.UpdateAsync(entity, selectedCategorias, imagenes);
+        }
+
+     
     }
 }

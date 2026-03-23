@@ -14,7 +14,7 @@ namespace D_A.Infraestructure.Repository.Interfaces
         Task<ICollection<Users>> ListAsync();
         Task<Users?> FindByIdAsync(int id);
         Task UpdateAsync(Users entity);
-
+        Task<Users?> FindByIdForUpdateAsync(int id);
     }
 
 

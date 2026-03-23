@@ -1,0 +1,273 @@
+﻿@model D_A.Application.DTOs.ObjectsDTO
+
+@{
+    ViewData["Title"] = "Reforjar Reliquia";
+}
+
+<div class="min-h-screen bg-[#1a1412] py-12 px-4 font-['Cinzel'] flex justify-center items-center"
+     style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%224%22 height=%224%22%3E%3Crect width=%224%22 height=%224%22 fill=%22%231a1412%22/%3E%3Ccircle cx=%221%22 cy=%221%22 r=%220.5%22 fill=%22%23ffffff08%22/%3E%3Ccircle cx=%223%22 cy=%223%22 r=%220.5%22 fill=%22%23ffffff05%22/%3E%3C/svg%3E');">
+
+    <div class="grain-overlay"></div>
+
+    <div class="max-w-3xl w-full bg-[#2a1f1a] border-2 border-yellow-900 shadow-[0_0_50px_rgba(0,0,0,0.9)] relative overflow-hidden">
+
+        <!-- Decoración esquina -->
+        <div class="absolute top-0 right-0 w-32 h-32 bg-yellow-900/10 rotate-45 translate-x-16 -translate-y-16 border border-yellow-800"></div>
+        <div class="absolute bottom-0 left-0 w-24 h-24 bg-yellow-900/5 rotate-45 -translate-x-12 translate-y-12 border border-yellow-900/30"></div>
+
+        <div class="p-8 md:p-12">
+
+            <!-- Header -->
+            <div class="border-b-2 border-yellow-800 pb-6 mb-10">
+                <span class="text-yellow-700 text-xs tracking-[0.3em] uppercase">Modificar Artefacto</span>
+                <h1 class="text-4xl font-bold text-red-600 drop-shadow-md mt-1">Reforjar Reliquia</h1>
+            </div>
+
+            <form asp-action="Edit" method="post" enctype="multipart/form-data" class="space-y-7">
+                @Html.AntiForgeryToken()
+                <input asp-for="Id" type="hidden" />
+
+                <!-- Nombre -->
+                <div class="form-field">
+                    <label class="field-label">Nombre de la Reliquia</label>
+                    <input asp-for="Name" class="field-input" placeholder="Nombre del objeto" />
+                    <span asp-validation-for="Name" class="field-error"></span>
+                </div>
+
+                <!-- Crónica -->
+                <div class="form-field">
+                    <label class="field-label">Crónica <span class="text-yellow-900 normal-case tracking-normal font-normal">(mínimo 20 caracteres)</span></label>
+                    <textarea asp-for="Description" rows="4"
+                              class="field-input font-serif resize-none"
+                              placeholder="Describe la historia de esta reliquia..."></textarea>
+                    <span asp-validation-for="Description" class="field-error"></span>
+                </div>
+
+                <!-- Era + Tasación -->
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="form-field">
+                        <label class="field-label">Era de Origen</label>
+                        <input asp-for="Year" type="number" class="field-input font-mono" placeholder="Año" />
+                    </div>
+                    <div class="form-field">
+                        <label class="field-label">
+                            Tasación <span class="text-yellow-600">
+                                (G)
+                                <span class="text-yellow-900 normal-case tracking-normal font-normal">(mayor a 0)</span>
+                            </span>
+                        </label>
+                        <input asp-for="MarketPrice" type="number" step="0.01" class="field-input font-mono" placeholder="0.00" />
+                        <span asp-validation-for="MarketPrice" class="field-error"></span>
+                    </div>
+                </div>
+
+                <!-- Condición -->
+                <div class="form-field">
+                    <label class="field-label">Condición del Objeto</label>
+                    <div class="relative">
+                        <select asp-for="IdState" asp-items="ViewBag.ListQuality" class="field-input appearance-none pr-10">
+                            <option value="">-- Seleccionar condición --</option>
+                        </select>
+                        <span class="absolute right-4 top-1/2 -translate-y-1/2 text-yellow-700 pointer-events-none">▾</span>
+                    </div>
+                </div>
+
+                <!-- Clasificaciones -->
+                <div class="form-field">
+                    <label class="field-label">
+                        Clasificaciones
+                        <span class="text-yellow-900 normal-case tracking-normal font-normal">(mínimo 1)</span>
+                    </label>
+                    <select name="selectedCategorias" multiple
+                            asp-items="@(ViewBag.ListCategorias as MultiSelectList)"
+                            class="field-input h-32">
+                    </select>
+
+                    <span class="text-stone-600 text-[10px] mt-1 block tracking-widest uppercase">Mantené Ctrl para seleccionar varias</span>
+                    <span class="field-error">@Html.ValidationMessage("selectedCategorias")</span>
+                </div>
+
+                <!-- Imágenes actuales -->
+                @if (Model.Imagenes != null && Model.Imagenes.Any())
+                {
+                    <div class="form-field">
+                        <label class="field-label">Imágenes Actuales</label>
+                        <div class="grid grid-cols-3 gap-2">
+                            @foreach (var img in Model.Imagenes)
+                            {
+                                <div class="aspect-square border-2 border-yellow-900/50 overflow-hidden">
+                                    <img class="w-full h-full object-cover sepia-[0.3]"
+                                         src="data:image/jpeg;base64,@Convert.ToBase64String(img)"
+                                         alt="Imagen actual" />
+                                </div>
+                            }
+                        </div>
+                        <p class="text-stone-600 text-[10px] mt-1 tracking-wide uppercase">Si subís nuevas imágenes, estas serán reemplazadas</p>
+                    </div>
+                }
+
+                <!-- Imágenes -->
+                <div class="form-field">
+                    <label class="field-label">
+                        Imágenes
+                        <span class="text-yellow-900 normal-case tracking-normal font-normal">(reemplaza las actuales)</span>
+                    </label>
+                    <div class="border border-yellow-900 bg-[#1a1412] p-4 flex items-center gap-4">
+                        <label class="cursor-pointer flex items-center gap-3 group">
+                            <span class="border border-yellow-800 bg-yellow-900/30 text-yellow-500 text-xs px-4 py-2 uppercase tracking-widest group-hover:bg-yellow-900/50 transition">
+                                ⚔ Elegir archivos
+                            </span>
+                            <input type="file" name="imagenes" multiple accept="image/*" class="hidden" id="fileInput"
+                                   onchange="updateFileLabel(this)" />
+                        </label>
+                        <span id="fileLabel" class="text-stone-500 text-xs tracking-wide">Ningún archivo seleccionado</span>
+                    </div>
+                    <span class="field-error">@Html.ValidationMessage("imagenes")</span>
+                </div>
+
+                <!-- Estado  -->
+                <div class="bg-[#1a1412]/50 border border-yellow-900/30 p-4 flex items-center gap-4">
+                    <div class="w-1 self-stretch @(Model.IsActive ? "bg-green-700" : "bg-red-900")"></div>
+                    <div>
+                        <p class="text-yellow-800 text-[10px] uppercase tracking-widest font-bold">Estado de la Reliquia</p>
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="w-2 h-2 rounded-full @(Model.IsActive ? "bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.8)]" : "bg-red-500 shadow-[0_0_6px_rgba(239,68,68,0.8)]")"></span>
+                            <p class="@(Model.IsActive ? "text-green-500" : "text-red-500") text-sm font-bold tracking-widest uppercase">
+                                @(Model.IsActive ? "Activo" : "Inactivo")
+                            </p>
+                        </div>
+                        <p class="text-stone-600 text-[10px] mt-1 tracking-wide">No editable desde la interfaz</p>
+                    </div>
+                </div>
+
+                <!-- Usuario vendedor, ESTO AUN NO ES FUNCIONAL, ES PARA LA PRUEBA!! -->
+                @if (ViewBag.UserName != null)
+                {
+                    <div class="bg-[#1a1412]/50 border border-yellow-900/30 p-4 flex items-center gap-4">
+                        <div class="w-1 self-stretch bg-yellow-800"></div>
+                        <div>
+                            <p class="text-yellow-800 text-[10px] uppercase tracking-widest font-bold">Vendedor Asignado</p>
+                            <p class="text-stone-300 text-sm font-mono mt-1">@ViewBag.UserName <span class="text-yellow-700">#@ViewBag.UserId</span></p>
+                            <p class="text-stone-600 text-[10px] mt-1 tracking-wide">Asignado automáticamente al usuario activo</p>
+                        </div>
+                    </div>
+                }
+
+                <!-- Botones -->
+                <div class="flex gap-4 pt-4 border-t border-yellow-900/40">
+                    <button type="submit"
+                            class="flex-1 bg-red-900 hover:bg-red-800 text-yellow-100 py-3 uppercase text-xs font-bold tracking-widest transition-all border border-red-700 shadow-lg">
+                        ⚔ Guardar Cambios
+                    </button>
+                    <a asp-action="Index"
+                       class="flex-1 text-center bg-transparent hover:bg-stone-900 text-stone-500 py-3 uppercase text-[10px] font-bold tracking-widest transition-all border border-stone-800">
+                        Volver al Tesoro
+                    </a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-field {
+        display: flex;
+        flex-direction: column;
+        gap: 0.375rem;
+    }
+
+    .field-label {
+        color: rgb(161 98 7);
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+    }
+
+    .field-input {
+        width: 100%;
+        background-color: #1a1412;
+        border: 1px solid rgb(120 53 15);
+        color: rgb(231 229 228);
+        padding: 0.75rem 1rem;
+        font-family: 'Cinzel', serif;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+
+        .field-input:focus {
+            border-color: rgb(202 138 4);
+            box-shadow: 0 0 0 1px rgba(202, 138, 4, 0.2);
+        }
+
+        .field-input option {
+            background-color: #1a1412;
+            color: rgb(231 229 228);
+        }
+
+    .field-error {
+        color: rgb(239 68 68);
+        font-size: 0.7rem;
+        margin-top: 0.125rem;
+        display: block;
+        font-family: 'Cinzel', serif;
+    }
+
+    @@keyframes grain {
+        0%, 100% {
+            transform: translate(0, 0);
+        }
+
+        25% {
+            transform: translate(1px, 1px);
+        }
+
+        50% {
+            transform: translate(-1px, 0);
+        }
+
+        75% {
+            transform: translate(0, -1px);
+        }
+    }
+
+    .grain-overlay {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 100;
+        opacity: 0.035;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        animation: grain 0.5s steps(1) infinite;
+    }
+
+    .field-input option:checked {
+        background-color: rgb(120 53 15);
+        color: rgb(234 179 8);
+    }
+</style>
+
+<script>
+    function updateFileLabel(input) {
+        const label = document.getElementById('fileLabel');
+        if (input.files.length === 0) {
+            label.textContent = 'Ningún archivo seleccionado';
+        } else if (input.files.length === 1) {
+            label.textContent = input.files[0].name;
+        } else {
+            label.textContent = input.files.length + ' archivos seleccionados';
+        }
+    }
+</script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            $.validator.unobtrusive.parse($('form'));
+        });
+    </script>
+}

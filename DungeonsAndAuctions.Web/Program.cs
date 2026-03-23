@@ -10,6 +10,8 @@ using Serilog;
 using Serilog.Events;
 using System.Text;
 
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 #region Logger
@@ -79,12 +81,19 @@ builder.Services.AddScoped<IRepositoryObject, RepositoryObject>();
 builder.Services.AddScoped<IRepositoryRole, RepositoryRole>();
 builder.Services.AddScoped<IRepositoryCategory, RepositoryCategory>();
 builder.Services.AddScoped<IRepositoryGender, RepositoryGender>();
+builder.Services.AddScoped<IRepositoryQuaility, RepositoryQuality>();
+
+
+
 
 //Services
 builder.Services.AddScoped<IServiceUser, ServiceUser>();
 builder.Services.AddScoped<IServiceAuctions, ServiceAuctions>();
 builder.Services.AddScoped<IServiceAuctionBidHistory, ServiceAuctionBidHistory>();
 builder.Services.AddScoped<IServiceObject, ServiceObject>();
+builder.Services.AddScoped<IServiceCategories, ServiceCategories>();
+builder.Services.AddScoped<IServiceQuality, ServiceQuality>();
+
 
 builder.Services.AddScoped<IServiceCountry, ServiceCountry>();
 builder.Services.AddScoped<IServiceGender, ServiceGender>();
@@ -95,6 +104,7 @@ builder.Services.AddAutoMapper(config =>
     config.AddProfile<UserProfile>();
     config.AddProfile<ObjectProfile>();
     config.AddProfile<AuctionProfile>();
+    config.AddProfile<QualityProfile>();
     config.AddProfile<GenderProfile>();
     config.AddProfile<CountryProfile>();// <-- Añadido: registra el nuevo perfil de Genders
 });
@@ -104,9 +114,10 @@ var connectionString = builder.Configuration.GetConnectionString("SqlServerDataB
 builder.Services.AddDbContext<DAContext>(options =>
     options.UseSqlServer(connectionString));
 
-<<<<<<< HEAD
+
 
  
+
 
 //**** API ****
 var apiBaseUrl = builder.Configuration["ApiSettings:BaseUrl"];
@@ -116,13 +127,18 @@ builder.Services.AddHttpClient("DungeonsAndAuctionsApi", client =>
 });
 //**** API ****
 
-var app = builder.Build(); // <-- siempre al final de los servicios
+
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession();
+
+
+var app = builder.Build();
 
 
 
-=======
-    var app = builder.Build();
->>>>>>> 40b236b10eb52dec2c375b9559e98cde99664d77
+
+
 
 if (!app.Environment.IsDevelopment())
 {
@@ -135,11 +151,16 @@ else
     app.UseMiddleware<ErrorHandlingMiddleware>();
 }
 
+
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseSession();
 app.UseRouting();
 app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.Run();
+
+

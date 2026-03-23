@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace D_A.Infraestructure.Repository.Interfaces
 {
-    internal interface IRepositoryQuaility
+    public interface IRepositoryQuaility
     {
 
 

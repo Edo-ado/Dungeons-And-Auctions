@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace D_A.Application.DTOs
 {
-    internal class QualitiesDTO
+    public class QualitiesDTO
     {
 
         [DisplayName("Id")]
