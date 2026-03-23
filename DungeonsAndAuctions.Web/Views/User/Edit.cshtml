@@ -1,0 +1,201 @@
+﻿@model D_A.Application.DTOs.UsersDTO
+
+@{
+    ViewData["Title"] = "Editar Pergamino";
+}
+
+<div class="min-h-screen bg-[#1a1412] py-12 px-4 font-['Cinzel'] text-stone-300">
+
+    <div class="max-w-4xl mx-auto bg-[#2a1f1a] border-2 border-yellow-800 shadow-[0_0_50px_rgba(0,0,0,0.9)] rounded-lg overflow-hidden">
+
+     
+        <div class="bg-[#3d2b24] border-b-2 border-yellow-700 p-8 text-center relative">
+            <h2 class="text-sm tracking-[0.3em] text-yellow-600 uppercase mb-2">Modificar Registro del Ciudadano</h2>
+            <h1 class="text-5xl font-bold text-red-600 drop-shadow-md">Editar Perfil</h1>
+            <p class="text-yellow-500 italic mt-2">ID: #@Model.Id — <span class="text-stone-400">@Model.UserName</span></p>
+        </div>
+
+        <form asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="mx-8 mt-6 text-red-400 text-sm bg-red-900/20 border border-red-700/40 rounded p-3"></div>
+            <input type="hidden" asp-for="Id" />
+
+            <div class="p-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+
+             
+                <div class="md:col-span-2 space-y-8">
+
+               
+                    <section>
+                        <h3 class="text-xl text-yellow-600 border-b border-yellow-900 mb-5 pb-1 uppercase tracking-widest">Nombre e Identidad</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+
+                            <div class="flex flex-col gap-1">
+                                <label asp-for="FirstName" class="text-xs text-stone-500 uppercase tracking-wider">Nombre de Pila</label>
+                                <input asp-for="FirstName"
+                                       class="bg-[#1f1612] border border-yellow-900/60 text-stone-200 rounded px-3 py-2 focus:outline-none focus:border-yellow-600 focus:ring-1 focus:ring-yellow-800 transition-colors" />
+                                <span asp-validation-for="FirstName" class="text-red-400 text-xs"></span>
+                            </div>
+
+                            <div class="flex flex-col gap-1">
+                                <label asp-for="LastName" class="text-xs text-stone-500 uppercase tracking-wider">Apellido del Linaje</label>
+                                <input asp-for="LastName"
+                                       class="bg-[#1f1612] border border-yellow-900/60 text-stone-200 rounded px-3 py-2 focus:outline-none focus:border-yellow-600 focus:ring-1 focus:ring-yellow-800 transition-colors" />
+                                <span asp-validation-for="LastName" class="text-red-400 text-xs"></span>
+                            </div>
+
+                            <div class="flex flex-col gap-1">
+                                <label asp-for="UserName" class="text-xs text-stone-500 uppercase tracking-wider">Alias en el Reino</label>
+                                <input asp-for="UserName"
+                                       class="bg-[#1f1612] border border-yellow-900/60 text-stone-200 rounded px-3 py-2 focus:outline-none focus:border-yellow-600 focus:ring-1 focus:ring-yellow-800 transition-colors" />
+                                <span asp-validation-for="UserName" class="text-red-400 text-xs"></span>
+                            </div>
+
+                           
+
+                        </div>
+                    </section>
+
+                    <section>
+                        <h3 class="text-xl text-yellow-600 border-b border-yellow-900 mb-5 pb-1 uppercase tracking-widest">Biografía y Origen</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+
+                            <div class="flex flex-col gap-1">
+                                <label asp-for="CountryId" class="text-xs text-stone-500 uppercase tracking-wider">Reino / País</label>
+                                <select asp-for="CountryId"
+                                        asp-items="ViewBag.ListPais"
+                                        class="bg-[#1f1612] border border-yellow-900/60 text-stone-200 rounded px-3 py-2 focus:outline-none focus:border-yellow-600 focus:ring-1 focus:ring-yellow-800 transition-colors">
+                                    <option value="">-- Seleccione un país --</option>
+                                </select>
+                                <span asp-validation-for="CountryId" class="text-red-400 text-xs"></span>
+                            </div>
+
+                            <div class="flex flex-col gap-1">
+                                <label asp-for="GenderId" class="text-xs text-stone-500 uppercase tracking-wider">Género</label>
+                                <select asp-for="GenderId"
+                                        asp-items="ViewBag.ListGenero"
+                                        class="bg-[#1f1612] border border-yellow-900/60 text-stone-200 rounded px-3 py-2 focus:outline-none focus:border-yellow-600 focus:ring-1 focus:ring-yellow-800 transition-colors">
+                                    <option value="">-- Seleccione su Género --</option>
+                                </select>
+                                <span asp-validation-for="GenderId" class="text-red-400 text-xs"></span>
+                            </div>
+
+                            <div class="sm:col-span-2 flex flex-col gap-1">
+                                <label asp-for="AboutMe" class="text-xs text-stone-500 uppercase tracking-wider">Historia (Sobre mí)</label>
+                                <textarea asp-for="AboutMe" rows="4"
+                                          class="bg-[#1f1612] border border-yellow-900/60 text-stone-200 italic rounded px-3 py-2 focus:outline-none focus:border-yellow-600 focus:ring-1 focus:ring-yellow-800 transition-colors resize-none"></textarea>
+                                <span asp-validation-for="AboutMe" class="text-red-400 text-xs"></span>
+                            </div>
+
+                        </div>
+                    </section>
+
+         
+                    <section>
+                        <h3 class="text-xl text-yellow-600 border-b border-yellow-900 mb-5 pb-1 uppercase tracking-widest">Contacto de Mensajería</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+
+                            <div class="flex flex-col gap-1">
+                                <label asp-for="Email" class="text-xs text-stone-500 uppercase tracking-wider">Cuervo Electrónico</label>
+                                <input asp-for="Email" type="email"
+                                       class="bg-[#1f1612] border border-yellow-900/60 text-stone-200 rounded px-3 py-2 focus:outline-none focus:border-yellow-600 focus:ring-1 focus:ring-yellow-800 transition-colors" />
+                                <span asp-validation-for="Email" class="text-red-400 text-xs"></span>
+                            </div>
+
+                            <div class="flex flex-col gap-1">
+                                <label asp-for="PhoneNumber" class="text-xs text-stone-500 uppercase tracking-wider">Señal de Humo (Tel)</label>
+                                <input asp-for="PhoneNumber"
+                                       class="bg-[#1f1612] border border-yellow-900/60 text-stone-200 rounded px-3 py-2 focus:outline-none focus:border-yellow-600 focus:ring-1 focus:ring-yellow-800 transition-colors" />
+                                <span asp-validation-for="PhoneNumber" class="text-red-400 text-xs"></span>
+                            </div>
+
+                        </div>
+                    </section>
+
+                </div>
+
+           
+                <div class="bg-[#1f1612] p-6 rounded-lg border border-yellow-900 shadow-inner space-y-6">
+
+                    <div>
+                        <h3 class="text-xs text-yellow-700 uppercase tracking-widest mb-4 border-b border-yellow-900/50 pb-2">Rango en la Corte</h3>
+                        <div class="text-center mb-6">
+                            <span class="block text-xs text-yellow-700 uppercase mb-2">Rango en la Corte</span>
+                            <span class="text-2xl font-bold text-red-500 uppercase tracking-tighter">@Model.RoleName</span>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-yellow-900/50 pt-5 space-y-4">
+                        <h3 class="text-xs text-yellow-700 uppercase tracking-widest mb-3">Condición del Sujeto</h3>
+
+                        <div class="flex items-center justify-between">
+                            <label asp-for="Active" class="text-sm text-stone-400 uppercase tracking-wide">Con Vida (Activo)</label>
+                            <input asp-for="Active" type="checkbox"
+                                   class="w-4 h-4 accent-green-600 rounded border-yellow-900" />
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <label asp-for="IsBlocked" class="text-sm text-stone-400 uppercase tracking-wide">En Mazmorras (Banedo)</label>
+                            <input asp-for="IsBlocked" type="checkbox"
+                                   class="w-4 h-4 accent-red-700 rounded border-yellow-900" />
+                        </div>
+
+
+                        @if (ViewBag.ShowPujas == true)
+                        {
+                            <div class="mt-8 text-center p-3 bg-yellow-900/20 border border-yellow-700/50 rounded">
+                                <span class="text-3xl block font-bold text-yellow-500">@ViewBag.TotalBids</span>
+                                <span class="text-[10px] uppercase text-yellow-700">Pujas Realizadas</span>
+                            </div>
+                        }
+
+                        @if (ViewBag.ShowAuction == true)
+                        {
+                            <div class="mt-4 text-center p-3 bg-red-900/20 border border-red-700/50 rounded">
+                                <span class="text-3xl block font-bold text-red-500">@ViewBag.TotalAuctions</span>
+                                <span class="text-[10px] uppercase text-red-700">Subastas Creadas</span>
+                            </div>
+                        }   
+                    </div>
+            </div>
+
+         
+            <div class="bg-[#1a1412] p-6 flex justify-between items-center border-t border-yellow-800">
+                <a asp-action="Index"
+                   class="text-stone-500 hover:text-yellow-600 transition-colors uppercase text-sm tracking-widest">
+                    ← Volver al Concilio
+                </a>
+                <div class="flex gap-4">
+                    <a asp-action="Details" asp-route-id="@Model.Id"
+                       class="border border-yellow-800 hover:border-yellow-600 text-stone-400 hover:text-yellow-500 px-6 py-2 rounded-sm transition-all uppercase text-sm tracking-tighter">
+                        Cancelar
+                    </a>
+                    <button type="submit"
+                            class="bg-yellow-700 hover:bg-yellow-600 text-white px-8 py-2 rounded-sm border border-yellow-500 transition-all uppercase font-bold tracking-tighter">
+                        Grabar Pergamino
+                    </button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+
+   
+
+}
+
+
+<script>
+
+
+
+
+
+
+</script>

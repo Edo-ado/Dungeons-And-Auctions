@@ -36,5 +36,12 @@ namespace D_A.Application.Services.Implementations
             return _mapper.Map<UsersDTO>(User);
         }
 
+        public async Task UpdateAsync(int id, UsersDTO dto)
+        {
+            var User = await _repository.FindByIdAsync(id); 
+            _mapper.Map(dto, User); 
+            await _repository.UpdateAsync(User);
+        }
+
     }
 }

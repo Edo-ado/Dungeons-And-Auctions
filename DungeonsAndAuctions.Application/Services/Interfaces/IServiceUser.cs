@@ -15,6 +15,7 @@ namespace D_A.Application.Services.Interfaces
 
         Task<UsersDTO> FindByIdAsync(int id);
 
+        Task UpdateAsync(int id, UsersDTO dto);
 
     }
 
