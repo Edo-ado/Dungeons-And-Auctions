@@ -163,7 +163,7 @@
 
                         <div class="detail-row">
                             <dt>Año</dt>
-                            <dd>@Model.IdobjectNavigation?.Year?.ToString()</dd>
+                            <dd>@(Model.IdobjectNavigation?.Year.HasValue == true ? Model.IdobjectNavigation.Year.ToString() : "Desconocido")</dd>
                         </div>
 
                         <div class="detail-row">

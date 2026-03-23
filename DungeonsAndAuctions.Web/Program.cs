@@ -13,9 +13,9 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 #region Logger
-// Configuración Serilog
+// ConfiguraciÃ³n Serilog
 var logger = new LoggerConfiguration()
-    // Nivel mínimo global (recomendado: Information)
+    // Nivel mÃ­nimo global (recomendado: Information)
     .MinimumLevel.Information()
 
     // Reducir ruido de logs internos de Microsoft
@@ -27,7 +27,7 @@ var logger = new LoggerConfiguration()
     // Enriquecer logs con contexto (RequestId, etc.)
     .Enrich.FromLogContext()
 
-    // Consola: útil para depurar en Visual Studio
+    // Consola: Ãºtil para depurar en Visual Studio
     .WriteTo.Console()
 
     // Archivos separados por nivel (rolling diario)
@@ -96,7 +96,7 @@ builder.Services.AddAutoMapper(config =>
     config.AddProfile<ObjectProfile>();
     config.AddProfile<AuctionProfile>();
     config.AddProfile<GenderProfile>();
-    config.AddProfile<CountryProfile>();// <-- Añadido: registra el nuevo perfil de Genders
+    config.AddProfile<CountryProfile>();// <-- AÃ±adido: registra el nuevo perfil de Genders
 });
 
 //DbContext

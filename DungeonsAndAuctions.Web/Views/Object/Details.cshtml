@@ -74,7 +74,9 @@
                         </div>
                         <div class="text-right">
                             <p class="text-[10px] text-yellow-800 uppercase tracking-widest font-bold">Era de Origen</p>
-                            <span class="text-stone-300 font-mono text-lg">@Model.Year</span>
+                            <span class="text-stone-300 font-mono text-lg">
+                                @(Model.Year.HasValue? Model.Year.ToString() : "Desconocido")
+                            </span>
                         </div>
                     </div>
 
@@ -130,11 +132,10 @@
                             </div>
                         }
 
-
                         <div>
                             <h3 class="text-yellow-700 text-xs font-bold uppercase tracking-widest mb-2">Crónica de la Reliquia</h3>
                             <p class="text-stone-400 leading-relaxed text-sm font-serif">
-                                @Model.Description
+                                @(string.IsNullOrEmpty(Model.Description) ? "Esta reliquia no tiene crónica registrada." : Model.Description)
                             </p>
                         </div>
 
