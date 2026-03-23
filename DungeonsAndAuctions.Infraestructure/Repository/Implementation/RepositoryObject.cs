@@ -122,7 +122,8 @@ namespace D_A.Infraestructure.Repository.Implementation
         {
             var obj = await _context.Objects.FindAsync(id);
 
-            if (obj is null) return;
+            if (obj is null)
+                return;
 
             obj.IsActive = !obj.IsActive;
             await _context.SaveChangesAsync();

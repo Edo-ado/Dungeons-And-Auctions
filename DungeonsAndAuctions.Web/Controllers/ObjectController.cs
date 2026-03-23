@@ -17,18 +17,65 @@ namespace DNDA.Web.Controllers
         private readonly IServiceAuctions _serviceActions;
         private readonly IServiceCategories _serviceCategorias;
         private readonly IServiceQuality _serviceQuality;
+        private readonly IServiceUser _ServiceUser;
 
-  
 
-        public ObjectController(IServiceObject serviceObject, IServiceAuctions serviceAuctions, IServiceCategories serviceCategories, IServiceQuality serviceQuality)
+
+
+        public ObjectController(IServiceObject serviceObject, IServiceAuctions serviceAuctions, IServiceCategories serviceCategories, IServiceQuality serviceQuality, IServiceUser serviceUser)
         {
             _serviceObject = serviceObject;
             _serviceActions = serviceAuctions;
             _serviceCategorias = serviceCategories;
             _serviceQuality = serviceQuality;
+            _ServiceUser = serviceUser;
         }
 
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ToggleActive(int id)
+        {
+
+
+            //busco si tiene subastas activas
+            var hasActive = await _serviceObject.HasActiveAuctionAsync(id);
+            if (hasActive)
+            {
+                TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
+                    "No permitido",
+                    "Este objeto pertenece a una subasta activa y no puede ser desactivado.",
+                    SweetAlertMessageType.warning
+                );
+                return RedirectToAction(nameof(Index));
+            }
+
+            //busco si ha participado en alguna subasta anteriormente, sin importan si está activa o no
+            var hasBeenAuctioned = await _serviceObject.HasBeenAuctionedAsync(id);
+            if (hasBeenAuctioned)
+            {
+                TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
+                    "No permitido",
+                    "Este objeto ha sido subastado y no puede ser desactivado.",
+                    SweetAlertMessageType.warning
+                );
+                return RedirectToAction(nameof(Index));
+            }
+
+
+
+
+
+
+
+            await _serviceObject.ToggleActiveAsync(id);
+            TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
+                "Estado actualizado",
+                "El estado del objeto fue modificado correctamente.",
+                SweetAlertMessageType.success
+            );
+            return RedirectToAction(nameof(Index));
+        }
 
 
         [HttpGet]
@@ -85,6 +132,9 @@ namespace DNDA.Web.Controllers
         public async Task<ActionResult> Create()
         {
             await LoadCombosAsync();
+            var userAsigned = await _ServiceUser.FindByIdAsync(1);//usuario simulado
+            ViewBag.UserName = userAsigned?.UserName;
+            ViewBag.UserId = userAsigned?.Id;
             return View(new ObjectsDTO());
         }
 
@@ -188,9 +238,15 @@ namespace DNDA.Web.Controllers
 
             var dto = await _serviceObject.GetObjectById(id);
 
-            var selected = dto.Categories
-                .Select(c => c.Id.ToString())
-                .ToList();
+            var selected = dto.Categories.Select(c => c.Id.ToString()).ToList(); 
+            dto.IsActive = dto.IsActive;
+
+            //obtener info del usuario asignado al objeto
+            var UserAsigned = await _ServiceUser.FindByIdAsync(dto.UserId);
+            ViewBag.UserName = UserAsigned?.UserName;
+            ViewBag.UserID = UserAsigned?.Id;
+
+
 
             await LoadCombosAsync(selected);
             return View(dto);
@@ -235,7 +291,7 @@ namespace DNDA.Web.Controllers
             }
 
             var categoryIds = selectedCategorias.Select(x => int.Parse(x)).ToList();
-            dto.IsActive = true;
+            dto.IsActive = dto.IsActive;
             await _serviceObject.UpdateAsync(id, dto, categoryIds, imagenesBytes);
 
             TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
@@ -247,6 +303,52 @@ namespace DNDA.Web.Controllers
         }
 
 
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Delete(int id)
+        {
+            //busco si tiene subastas activas
+            var hasActive = await _serviceObject.HasActiveAuctionAsync(id);
+            if (hasActive)
+            {
+                TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
+                    "No permitido",
+                    "Este objeto pertenece a una subasta activa y no puede ser eliminado.",
+                    SweetAlertMessageType.warning
+                );
+                return RedirectToAction(nameof(Index));
+            }
+
+            //busco si ha participado en alguna subasta anteriormente, sin importan si está activa o no
+            var hasBeenAuctioned = await _serviceObject.HasBeenAuctionedAsync(id);
+            if (hasBeenAuctioned)
+            {
+                TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
+                    "No permitido",
+                    "Este objeto ha sido subastado y no puede ser eliminado.",
+                    SweetAlertMessageType.warning
+                );
+                return RedirectToAction(nameof(Index));
+            }
+            //Si ninguna de las dos en verdad, paso a borrar el objeto directamente
+            await _serviceObject.DeleteAsync(id);
+
+            TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
+                "Objeto eliminado",
+                "El objeto fue eliminado correctamente.",
+                SweetAlertMessageType.success
+            );
+            return RedirectToAction(nameof(Index));
+        }
+
+
+
     }
+
+
+
+
 }
 

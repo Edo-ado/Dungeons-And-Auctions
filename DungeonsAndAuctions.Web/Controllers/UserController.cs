@@ -30,7 +30,7 @@ namespace DNDA.Web.Controllers
             if(user == null)
                 return NotFound();
 
-            int roleID = user.RoleId;
+            int roleID = user.RoleId;   
 
 
             if (roleID == 1)//si es comprador
