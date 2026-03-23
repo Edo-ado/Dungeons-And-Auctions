@@ -13,9 +13,9 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 #region Logger
-// Configuración Serilog
+// ConfiguraciÃ³n Serilog
 var logger = new LoggerConfiguration()
-    // Nivel mínimo global (recomendado: Information)
+    // Nivel mÃ­nimo global (recomendado: Information)
     .MinimumLevel.Information()
 
     // Reducir ruido de logs internos de Microsoft
@@ -27,7 +27,7 @@ var logger = new LoggerConfiguration()
     // Enriquecer logs con contexto (RequestId, etc.)
     .Enrich.FromLogContext()
 
-    // Consola: útil para depurar en Visual Studio
+    // Consola: Ãºtil para depurar en Visual Studio
     .WriteTo.Console()
 
     // Archivos separados por nivel (rolling diario)
@@ -64,21 +64,12 @@ var logger = new LoggerConfiguration()
 // Paso obligatorio ANTES de crear builder
 Log.Logger = logger;
 
-
-
 // Integrar Serilog al host
 builder.Host.UseSerilog(Log.Logger);
-
-
-
-
 #endregion 
-
-
 
 //Controllers y Views
 builder.Services.AddControllersWithViews();
-
 
 //Repositories
 builder.Services.AddScoped<IRepositoryUser, RepositoryUser>();
@@ -89,17 +80,14 @@ builder.Services.AddScoped<IRepositoryRole, RepositoryRole>();
 builder.Services.AddScoped<IRepositoryCategory, RepositoryCategory>();
 builder.Services.AddScoped<IRepositoryGender, RepositoryGender>();
 
-
-
-
-
 //Services
 builder.Services.AddScoped<IServiceUser, ServiceUser>();
 builder.Services.AddScoped<IServiceAuctions, ServiceAuctions>();
 builder.Services.AddScoped<IServiceAuctionBidHistory, ServiceAuctionBidHistory>();
 builder.Services.AddScoped<IServiceObject, ServiceObject>();
 
-
+builder.Services.AddScoped<IServiceCountry, ServiceCountry>();
+builder.Services.AddScoped<IServiceGender, ServiceGender>();
 
 //AutoMapper
 builder.Services.AddAutoMapper(config =>
@@ -107,7 +95,8 @@ builder.Services.AddAutoMapper(config =>
     config.AddProfile<UserProfile>();
     config.AddProfile<ObjectProfile>();
     config.AddProfile<AuctionProfile>();
-
+    config.AddProfile<GenderProfile>();
+    config.AddProfile<CountryProfile>();// <-- AÃ±adido: registra el nuevo perfil de Genders
 });
 
 //DbContext
@@ -115,17 +104,7 @@ var connectionString = builder.Configuration.GetConnectionString("SqlServerDataB
 builder.Services.AddDbContext<DAContext>(options =>
     options.UseSqlServer(connectionString));
 
-//**** API ****
-var apiBaseUrl = builder.Configuration["ApiSettings:BaseUrl"];
-builder.Services.AddHttpClient("DungeonsAndAuctionsApi", client =>
-{
-    client.BaseAddress = new Uri(apiBaseUrl!);
-});
-//**** API ****
-
-var app = builder.Build(); // <-- siempre al final de los servicios
-
-
+    var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
@@ -139,15 +118,10 @@ else
 }
 
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
 app.Run();
