@@ -240,23 +240,28 @@ namespace DNDA.Web.Controllers
             if (auction.EndDate <= auction.StartDate)
                 ModelState.AddModelError("EndDate", "La fecha de cierre debe ser mayor a la fecha de inicio.");
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                auction.Id = id;
-                await _ServiceAuctions.UpdateAuction(auction);
-                TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
-                    "Subasta actualizada",
-                    "La subasta fue modificada exitosamente.",
-                    SweetAlertMessageType.success
-                );
-                return RedirectToAction(nameof(Index));
+                var auctiontodo = await _ServiceAuctions.GetAuctionById(id);
+
+
+                auction.IdobjectNavigation = auctiontodo?.IdobjectNavigation;
+                auction.IdstateNavigation = auctiontodo?.IdstateNavigation;
+
+                var usuario = await _serviceUser.FindByIdAsync(2);
+                ViewBag.UserName = usuario?.UserName;
+                ViewBag.UserId = usuario?.Id;
+                return View(auction);
             }
 
-            ViewBag.Objects = await _ServiceObject.ListActiveAsync();
-            var user = await _serviceUser.FindByIdAsync(2);
-            ViewBag.UserName = user?.UserName;
-            ViewBag.UserId = user?.Id;
-            return View(auction);
+            auction.Id = id;
+            await _ServiceAuctions.UpdateAuction(auction);
+            TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
+                "Subasta actualizada",
+                "La subasta fue modificada exitosamente.",
+                SweetAlertMessageType.success
+            );
+            return RedirectToAction(nameof(IndexMaintenance));
 
 
         }
