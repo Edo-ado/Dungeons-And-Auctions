@@ -189,6 +189,9 @@ VALUES
 ('Open'),
 ('Close'),
 ('Banned'),
+('Cancelled'),
+('Pending For Aproval (Banned)'),
+('Draft'),
 ('Inactive');
 
 INSERT INTO Qualities(Quality)

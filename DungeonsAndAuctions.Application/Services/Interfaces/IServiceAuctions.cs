@@ -30,5 +30,10 @@ namespace D_A.Application.Services.Interfaces
         Task DeleteAuction(int id);
         Task<List<AuctionsDTO>> GetAuctionsBySellerID(int sellerId);
 
+
+        Task CancellAuction(int id);
+        Task PublishAuction(int id);
+        Task BanAuction(int id);
+
     }
 }

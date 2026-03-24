@@ -204,6 +204,8 @@ namespace DNDA.Web.Controllers
                 return RedirectToAction(nameof(IndexMaintenance));
             }
 
+            ViewBag.Objects = await _ServiceObject.ListAsync();
+            return View();
 
             //cargo lo que necesito
             ViewBag.Objects = await _ServiceObject.ListActiveAsync();
@@ -217,6 +219,9 @@ namespace DNDA.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(int id, AuctionsDTO auction)
+        }
+
+        public async Task<IActionResult> Create(AuctionsDTO auction)
         {
             ModelState.Remove("idusercreator");
             ModelState.Remove("IdusercreatorNavigation");
@@ -266,7 +271,46 @@ namespace DNDA.Web.Controllers
 
         }
 
+        }
+
+        public async Task<IActionResult> Edit(AuctionsDTO auction)
+        {
+            if (ModelState.IsValid)
+            {
+
+                await _ServiceAuctions.EditAuction(auction);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(auction);
+        }
 
 
+        public async Task<IActionResult> Delete(int id)
+        {
+            var auction = await _ServiceAuctions.AllDetails(id);
+            if (auction == null)
+            {
+                return NotFound();
+            }
+
+
+
+            await _ServiceAuctions.DeleteAuction(id);
+            return View(auction);
+        }
+
+
+
+
+        public async Task<IActionResult> PublishAuctions(int id)
+        {
+            var auction = await _ServiceAuctions.AllDetails(id);
+            if (auction == null)
+            {
+                return NotFound();
+            }
+            await _ServiceAuctions.PublishAuction(id);
+            return View(auction);
+        }
     }
 }

@@ -245,4 +245,41 @@ namespace D_A.Infraestructure.Repository.Implementation
                 .FirstOrDefaultAsync(a => a.Id == id);
         }
     }
+
+
+
+
+
+
+
+        public async Task CancellAuction(int id)
+        {
+            var auction = await _context.Auctions.FindAsync(id);
+            if (auction != null)
+            {
+                auction.Idstate = 4; // Assuming 4 represents "Cancelled"
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task PublishAuction(int id)
+        {
+            var auction = await _context.Auctions.FindAsync(id);
+            if (auction != null)
+            {
+                auction.Idstate = 1; // Assuming 1 represents "Active"
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task BanAuction(int id)
+        {
+            var auction = await _context.Auctions.FindAsync(id);
+            if (auction != null)
+            {
+                auction.Idstate = 3; // Assuming 1 represents "Active"
+                await _context.SaveChangesAsync();
+            }
+        }
+        }
 }
