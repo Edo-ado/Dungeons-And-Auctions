@@ -112,6 +112,24 @@ namespace D_A.Application.Services.Implementations
         {
             var auctionEntity = _mapper.Map<Auctions>(auct);
             await _repository.UpdateAuction(auctionEntity);
+
+
+        public Task CancellAuction(int id)
+        {
+            
+            return _repository.CancellAuction(id);
+        }
+
+        public Task PublishAuction(int id)
+        {
+            
+            return _repository.PublishAuction(id);
+        }
+
+        public Task BanAuction(int id)
+        {
+                
+            return _repository.BanAuction(id);
         }
     }
 }
