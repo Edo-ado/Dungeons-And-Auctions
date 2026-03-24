@@ -106,5 +106,25 @@ namespace D_A.Application.Services.Implementations
                 .ContinueWith(task => _mapper.Map<List<AuctionsDTO>>(task.Result));
 
         }
+
+
+
+        public Task CancellAuction(int id)
+        {
+            
+            return _repository.CancellAuction(id);
+        }
+
+        public Task PublishAuction(int id)
+        {
+            
+            return _repository.PublishAuction(id);
+        }
+
+        public Task BanAuction(int id)
+        {
+                
+            return _repository.BanAuction(id);
+        }
     }
 }

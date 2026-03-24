@@ -37,5 +37,12 @@ namespace D_A.Infraestructure.Repository.Interfaces
 
         Task<List<Auctions>> GetAuctionsBySellerID(int sellerId);
 
+
+
+
+        Task CancellAuction(int id);
+        Task PublishAuction(int id);
+        Task BanAuction(int id);
+
     }
 }
