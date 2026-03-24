@@ -8,7 +8,7 @@
 
     <div class="max-w-4xl mx-auto bg-[#2a1f1a] border-2 border-yellow-800 shadow-[0_0_50px_rgba(0,0,0,0.9)] rounded-lg overflow-hidden">
 
-     
+
         <div class="bg-[#3d2b24] border-b-2 border-yellow-700 p-8 text-center relative">
             <h2 class="text-sm tracking-[0.3em] text-yellow-600 uppercase mb-2">Modificar Registro del Ciudadano</h2>
             <h1 class="text-5xl font-bold text-red-600 drop-shadow-md">Editar Perfil</h1>
@@ -25,10 +25,10 @@
 
             <div class="p-8 grid grid-cols-1 md:grid-cols-3 gap-8">
 
-             
+
                 <div class="md:col-span-2 space-y-8">
 
-               
+
                     <section>
                         <h3 class="text-xl text-yellow-600 border-b border-yellow-900 mb-5 pb-1 uppercase tracking-widest">Nombre e Identidad</h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -54,7 +54,7 @@
                                 <span asp-validation-for="UserName" class="text-red-400 text-xs"></span>
                             </div>
 
-                           
+
 
                         </div>
                     </section>
@@ -85,15 +85,15 @@
 
                             <div class="sm:col-span-2 flex flex-col gap-1">
                                 <label asp-for="AboutMe" class="text-xs text-stone-500 uppercase tracking-wider">Historia (Sobre mí)</label>
-                                <textarea asp-for="AboutMe" rows="4"
-                                          class="bg-[#1f1612] border border-yellow-900/60 text-stone-200 italic rounded px-3 py-2 focus:outline-none focus:border-yellow-600 focus:ring-1 focus:ring-yellow-800 transition-colors resize-none"></textarea>
+<textarea asp-for="AboutMe" rows="4"
+          class="bg-[#1f1612] border border-yellow-900/60 text-stone-200 italic rounded px-3 py-2 focus:outline-none focus:border-yellow-600 focus:ring-1 focus:ring-yellow-800 transition-colors resize-none"></textarea>
                                 <span asp-validation-for="AboutMe" class="text-red-400 text-xs"></span>
                             </div>
 
                         </div>
                     </section>
 
-         
+
                     <section>
                         <h3 class="text-xl text-yellow-600 border-b border-yellow-900 mb-5 pb-1 uppercase tracking-widest">Contacto de Mensajería</h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -115,9 +115,52 @@
                         </div>
                     </section>
 
-                </div>
 
-           
+                    @if (Model.RoleId != 3) @* 3 = Admin, ajusta si el id es diferente *@
+                    {
+                        <details class="border border-yellow-900/50 rounded-lg overflow-hidden">
+                            <summary class="bg-[#2a1f1a] px-5 py-3 cursor-pointer text-xs text-yellow-600 uppercase tracking-widest hover:bg-[#3d2b24] transition-colors select-none">
+                                ▶ Pergamino de Registros (Solo lectura)
+                            </summary>
+
+                            <div class="bg-[#1a1412] p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                                <div class="flex flex-col gap-1">
+                                    <span class="text-xs text-stone-500 uppercase tracking-wider">Fecha de Registro</span>
+                                    <span class="text-stone-300">@Model.RegisterDate.ToString("dd/MM/yyyy")</span>
+                                </div>
+
+                                <div class="flex flex-col gap-1">
+                                    <span class="text-xs text-stone-500 uppercase tracking-wider">Último Acceso</span>
+                                    <span class="text-stone-300">
+                                        @(Model.LastLogin.ToString() != "1/1/2000" ? Model.LastLogin.ToString("dd/MM/yyyy") : "Nunca")
+                                    </span>
+                                </div>
+
+                                <div class="flex flex-col gap-1">
+                                    <span class="text-xs text-stone-500 uppercase tracking-wider">Fecha de Nacimiento</span>
+                                    <span class="text-stone-300">@Model.BirthDate.ToString("dd/MM/yyyy")</span>
+                                </div>
+
+                                @if (Model.RoleId == 1) @* Comprador *@
+                                {
+                                    <div class="flex flex-col gap-1">
+                                        <span class="text-xs text-stone-500 uppercase tracking-wider">Pujas Realizadas</span>
+                                        <span class="text-2xl font-bold text-yellow-500">@Model.NumberBidMade</span>
+                                    </div>
+                                }
+                                else if (Model.RoleId == 2)
+                                @* Vendedor *@
+                                {
+                                    <div class="flex flex-col gap-1">
+                                        <span class="text-xs text-stone-500 uppercase tracking-wider">Subastas Creadas</span>
+                                        <span class="text-2xl font-bold text-red-500">@Model.NumberCreatedAuctions</span>
+                                    </div>
+                                }
+                            </div>
+                        </details>
+                    }
+                </div>
                 <div class="bg-[#1f1612] p-6 rounded-lg border border-yellow-900 shadow-inner space-y-6">
 
                     <div>
@@ -144,26 +187,8 @@
                         </div>
 
 
-                        @if (ViewBag.ShowPujas == true)
-                        {
-                            <div class="mt-8 text-center p-3 bg-yellow-900/20 border border-yellow-700/50 rounded">
-                                <span class="text-3xl block font-bold text-yellow-500">@ViewBag.TotalBids</span>
-                                <span class="text-[10px] uppercase text-yellow-700">Pujas Realizadas</span>
-                            </div>
-                        }
-
-                        @if (ViewBag.ShowAuction == true)
-                        {
-                            <div class="mt-4 text-center p-3 bg-red-900/20 border border-red-700/50 rounded">
-                                <span class="text-3xl block font-bold text-red-500">@ViewBag.TotalAuctions</span>
-                                <span class="text-[10px] uppercase text-red-700">Subastas Creadas</span>
-                            </div>
-                        }   
                     </div>
-            </div>
-
-         
-            
+                </div>
                 <div class="flex gap-4">
                     <a asp-action="Details" asp-route-id="@Model.Id"
                        class="border border-yellow-800 hover:border-yellow-600 text-stone-400 hover:text-yellow-500 px-6 py-2 rounded-sm transition-all uppercase text-sm tracking-tighter">
@@ -178,24 +203,27 @@
 
         </form>
     </div>
+
+    <div class="mt-8 text-center">
+        <div class="flex justify-center items-center gap-4 opacity-30">
+            <div class="h-px w-24 bg-yellow-700"></div>
+            <img src="/Images/Logo/ShortLogo.png" class="h-8 grayscale" alt="sepia-logo" />
+            <div class="h-px w-24 bg-yellow-700"></div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
+ 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script>
+        $('input[name="PhoneNumber"]').mask('0000-0000');
+    </script>
     @{
+
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 
 
-   
 
 }
-
-
-<script>
-
-
-
-
-
-
-</script>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,7 +44,9 @@ namespace D_A.Application.DTOs
         [DisplayName("Email")]
         public string Email { get; set; } = string.Empty;
 
-        [DisplayName("PhoneNumber")]
+
+
+       
         public string PhoneNumber { get; set; } = string.Empty;
 
         [DisplayName("RoleID")]
