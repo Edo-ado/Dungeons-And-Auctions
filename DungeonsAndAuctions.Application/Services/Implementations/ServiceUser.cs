@@ -16,7 +16,7 @@ namespace D_A.Application.Services.Implementations
         private readonly IMapper _mapper;
 
         //service es el cerebro, es la capa de logica de negocio y el mapeo mismo del DTO,
-       
+
         public ServiceUser(IRepositoryUser repository, IMapper mapper)
         {
             _repository = repository;
@@ -30,7 +30,7 @@ namespace D_A.Application.Services.Implementations
         }
 
 
-        public async Task<UsersDTO> FindByIdAsync(int id)  
+        public async Task<UsersDTO> FindByIdAsync(int id)
         {
             var User = await _repository.FindByIdAsync(id);
             return _mapper.Map<UsersDTO>(User);
@@ -41,6 +41,16 @@ namespace D_A.Application.Services.Implementations
             var user = await _repository.FindByIdForUpdateAsync(id);
             _mapper.Map(dto, user);
             await _repository.UpdateAsync(user);
+        }
+
+        public async Task ToggleBlockAsync(int id)
+        {
+            await _repository.ToggleBlockAsync(id);
+        }
+
+        public async Task ToggleActiveAsync(int id)
+        {
+            await _repository.ToggleActiveAsync(id);
         }
     }
 }

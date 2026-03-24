@@ -115,82 +115,108 @@
                         </div>
                     </section>
 
-
-                    @if (Model.RoleId != 3) @* 3 = Admin, ajusta si el id es diferente *@
-                    {
-                        <details class="border border-yellow-900/50 rounded-lg overflow-hidden">
-                            <summary class="bg-[#2a1f1a] px-5 py-3 cursor-pointer text-xs text-yellow-600 uppercase tracking-widest hover:bg-[#3d2b24] transition-colors select-none">
-                                ▶ Pergamino de Registros (Solo lectura)
-                            </summary>
-
-                            <div class="bg-[#1a1412] p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
-
-                                <div class="flex flex-col gap-1">
-                                    <span class="text-xs text-stone-500 uppercase tracking-wider">Fecha de Registro</span>
-                                    <span class="text-stone-300">@Model.RegisterDate.ToString("dd/MM/yyyy")</span>
-                                </div>
-
-                                <div class="flex flex-col gap-1">
-                                    <span class="text-xs text-stone-500 uppercase tracking-wider">Último Acceso</span>
-                                    <span class="text-stone-300">
-                                        @(Model.LastLogin.ToString() != "1/1/2000" ? Model.LastLogin.ToString("dd/MM/yyyy") : "Nunca")
-                                    </span>
-                                </div>
-
-                                <div class="flex flex-col gap-1">
-                                    <span class="text-xs text-stone-500 uppercase tracking-wider">Fecha de Nacimiento</span>
-                                    <span class="text-stone-300">@Model.BirthDate.ToString("dd/MM/yyyy")</span>
-                                </div>
-
-                                @if (Model.RoleId == 1) @* Comprador *@
-                                {
-                                    <div class="flex flex-col gap-1">
-                                        <span class="text-xs text-stone-500 uppercase tracking-wider">Pujas Realizadas</span>
-                                        <span class="text-2xl font-bold text-yellow-500">@Model.NumberBidMade</span>
-                                    </div>
-                                }
-                                else if (Model.RoleId == 2)
-                                @* Vendedor *@
-                                {
-                                    <div class="flex flex-col gap-1">
-                                        <span class="text-xs text-stone-500 uppercase tracking-wider">Subastas Creadas</span>
-                                        <span class="text-2xl font-bold text-red-500">@Model.NumberCreatedAuctions</span>
-                                    </div>
-                                }
-                            </div>
-                        </details>
-                    }
+                    <section>
+                      <div class="bg-[#1f1612] p-6 rounded-lg border border-yellow-900 shadow-inner">
+                <div class="text-center mb-6">
+                    <span class="block text-xs text-yellow-700 uppercase mb-2">Rango en la Corte</span>
+                    <span class="text-2xl font-bold text-red-500 uppercase tracking-tighter">@Model.RoleName</span>
                 </div>
-                <div class="bg-[#1f1612] p-6 rounded-lg border border-yellow-900 shadow-inner space-y-6">
 
-                    <div>
-                        <h3 class="text-xs text-yellow-700 uppercase tracking-widest mb-4 border-b border-yellow-900/50 pb-2">Rango en la Corte</h3>
-                        <div class="text-center mb-6">
-                            <span class="block text-xs text-yellow-700 uppercase mb-2">Rango en la Corte</span>
-                            <span class="text-2xl font-bold text-red-500 uppercase tracking-tighter">@Model.RoleName</span>
-                        </div>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center border-b border-yellow-900/50 pb-2">
+                        <span class="text-sm">Estado:</span>
+                        @if (Model.Active)
+                        {
+                            <span class="text-green-500 font-bold uppercase text-xs tracking-widest">Con Vida</span>
+                        }
+                        else
+                        {
+                            <span class="text-red-700 font-bold uppercase text-xs tracking-widest">En el Muro</span>
+                        }
                     </div>
 
-                    <div class="border-t border-yellow-900/50 pt-5 space-y-4">
-                        <h3 class="text-xs text-yellow-700 uppercase tracking-widest mb-3">Condición del Sujeto</h3>
+                    <div class="flex justify-between items-center border-b border-yellow-900/50 pb-2">
+                        <span class="text-sm text-stone-500">Restricciones:</span>
+                        <span class="@(Model.IsBlocked ? "text-red-600" : "text-stone-400") font-bold text-xs uppercase">
+                            @(Model.IsBlocked ? "Mazmorras" : "Ninguna")
+                        </span>
+                    </div>
 
-                        <div class="flex items-center justify-between">
-                            <label asp-for="Active" class="text-sm text-stone-400 uppercase tracking-wide">Con Vida (Activo)</label>
-                            <input asp-for="Active" type="checkbox"
-                                   class="w-4 h-4 accent-green-600 rounded border-yellow-900" />
+                    @if (ViewBag.ShowPujas == true)
+                    {
+                        <div class="mt-8 text-center p-3 bg-yellow-900/20 border border-yellow-700/50 rounded">
+                            <span class="text-3xl block font-bold text-yellow-500">@ViewBag.TotalBids</span>
+                            <span class="text-[10px] uppercase text-yellow-700">Pujas Realizadas</span>
+                        </div>
+                    }
+
+                    @if (ViewBag.ShowAuction == true)
+                    {
+                        <div class="mt-4 text-center p-3 bg-red-900/20 border border-red-700/50 rounded">
+                            <span class="text-3xl block font-bold text-red-500">@ViewBag.TotalAuctions</span>
+                            <span class="text-[10px] uppercase text-red-700">Subastas Creadas</span>
+                        </div>
+                    }
+                </div>
+            </div>
+                        </details>
+                        </section>
+
+
+                </div>
+                <div class="bg-[#1f1612] p-6 rounded-lg border border-yellow-900 shadow-inner">
+                    <div class="text-center mb-6">
+                        <span class="block text-xs text-yellow-700 uppercase mb-2">Rango en la Corte</span>
+                        <span class="text-2xl font-bold text-red-500 uppercase tracking-tighter">@Model.RoleName</span>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center border-b border-yellow-900/50 pb-2">
+                            <span class="text-sm">Estado:</span>
+                            @if (Model.Active)
+                            {
+                                <span class="text-green-500 font-bold uppercase text-xs tracking-widest">Con Vida</span>
+                            }
+                            else
+                            {
+                                <span class="text-red-700 font-bold uppercase text-xs tracking-widest">En el Muro</span>
+                            }
                         </div>
 
-                        <div class="flex items-center justify-between">
-                            <label asp-for="IsBlocked" class="text-sm text-stone-400 uppercase tracking-wide">En Mazmorras (Banedo)</label>
-                            <input asp-for="IsBlocked" type="checkbox"
-                                   class="w-4 h-4 accent-red-700 rounded border-yellow-900" />
+                        <div class="flex justify-between items-center border-b border-yellow-900/50 pb-2">
+                            <span class="text-sm text-stone-500">Restricciones:</span>
+                            <span class="@(Model.IsBlocked ? "text-red-600" : "text-stone-400") font-bold text-xs uppercase">
+                                @(Model.IsBlocked ? "Mazmorras" : "Ninguna")
+                            </span>
                         </div>
 
+                        @if (Model.RoleId != 2){ 
+                       
+                            <div class="mt-8 text-center p-3 bg-yellow-900/20 border border-yellow-700/50 rounded">
+                                <span class="text-3xl block font-bold text-yellow-500"> @Model.NumberCreatedAuctions</span>
+                                <span class="text-[10px] uppercase text-yellow-700">Pujas Realizadas</span>
+                            </div>
+                            }
+                            else
+                            {
+                            if (Model.RoleId != 1)
+                                {
+                                <div class="mt-4 text-center p-3 bg-red-900/20 border border-red-700/50 rounded">
+                                    <span class="text-3xl block font-bold text-red-500">@Model.NumberBidMade</span>
+                                    <span class="text-[10px] uppercase text-red-700">Subastas Creadas</span>
+                                </div>
+
+                                }
+                            }
+                      
+                           
+
+                            @if (Model.RoleId == 4) { }
 
                     </div>
                 </div>
                 <div class="flex gap-4">
-                    <a asp-action="Details" asp-route-id="@Model.Id"
+                    <a asp-action="Index" asp-route-id="@Model.Id"
                        class="border border-yellow-800 hover:border-yellow-600 text-stone-400 hover:text-yellow-500 px-6 py-2 rounded-sm transition-all uppercase text-sm tracking-tighter">
                         Cancelar
                     </a>

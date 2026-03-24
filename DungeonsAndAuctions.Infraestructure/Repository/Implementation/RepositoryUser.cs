@@ -62,5 +62,21 @@ namespace D_A.Infraestructure.Repository.Implementation
                 .FirstOrDefaultAsync(u => u.Id == id);
         }
 
+        public async Task ToggleBlockAsync(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null) return;
+            user.IsBlocked = !user.IsBlocked;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task ToggleActiveAsync(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null) return;
+            user.Active = !user.Active;
+            await _context.SaveChangesAsync();
+        }
+
     }
 }
