@@ -92,8 +92,8 @@ namespace DNDA.Web.Controllers
         public async Task<IActionResult> Create()
         {
 
+
             ViewBag.Objects = await _ServiceObject.ListAsync();
-            ViewBag.Users = await _serviceUser.ListAsync();
             return View();
 
         }
@@ -111,9 +111,6 @@ namespace DNDA.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(auction);
-
-
-
 
 
         }
@@ -142,6 +139,35 @@ namespace DNDA.Web.Controllers
                 await _ServiceAuctions.EditAuction(auction);
                 return RedirectToAction(nameof(Index));
             }
+            return View(auction);
+        }
+
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var auction = await _ServiceAuctions.AllDetails(id);
+            if (auction == null)
+            {
+                return NotFound();
+            }
+
+
+
+            await _ServiceAuctions.DeleteAuction(id);
+            return View(auction);
+        }
+
+
+
+
+        public async Task<IActionResult> PublishAuctions(int id)
+        {
+            var auction = await _ServiceAuctions.AllDetails(id);
+            if (auction == null)
+            {
+                return NotFound();
+            }
+            await _ServiceAuctions.PublishAuction(id);
             return View(auction);
         }
     }
