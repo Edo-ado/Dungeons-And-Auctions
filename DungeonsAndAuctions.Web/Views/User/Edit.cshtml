@@ -17,11 +17,14 @@
 
         <form asp-action="Edit" method="post">
             <div asp-validation-summary="ModelOnly" class="mx-8 mt-6 text-red-400 text-sm bg-red-900/20 border border-red-700/40 rounded p-3"></div>
+
+           @*  Varas que no se tienen que cambiar *@
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="RoleId" />
             <input type="hidden" asp-for="BirthDate" />
             <input type="hidden" asp-for="RegisterDate" />
             <input type="hidden" asp-for="LastLogin" />
+            <input type="hidden" asp-for="Active"/>
 
             <div class="p-8 grid grid-cols-1 md:grid-cols-3 gap-8">
 
@@ -93,7 +96,6 @@
                         </div>
                     </section>
 
-
                     <section>
                         <h3 class="text-xl text-yellow-600 border-b border-yellow-900 mb-5 pb-1 uppercase tracking-widest">Contacto de Mensajería</h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -116,50 +118,51 @@
                     </section>
 
                     <section>
-                      <div class="bg-[#1f1612] p-6 rounded-lg border border-yellow-900 shadow-inner">
-                <div class="text-center mb-6">
-                    <span class="block text-xs text-yellow-700 uppercase mb-2">Rango en la Corte</span>
-                    <span class="text-2xl font-bold text-red-500 uppercase tracking-tighter">@Model.RoleName</span>
-                </div>
 
-                <div class="space-y-4">
-                    <div class="flex justify-between items-center border-b border-yellow-900/50 pb-2">
-                        <span class="text-sm">Estado:</span>
-                        @if (Model.Active)
-                        {
-                            <span class="text-green-500 font-bold uppercase text-xs tracking-widest">Con Vida</span>
-                        }
-                        else
-                        {
-                            <span class="text-red-700 font-bold uppercase text-xs tracking-widest">En el Muro</span>
-                        }
-                    </div>
+                            <details class="border border-yellow-900/50 rounded-lg overflow-hidden">
+                                <summary class="bg-[#2a1f1a] px-5 py-3 cursor-pointer text-xs text-yellow-600 uppercase tracking-widest hover:bg-[#3d2b24] transition-colors select-none">
+                                    ▶ Pergamino de Registros (Solo lectura)
+                                </summary>
 
-                    <div class="flex justify-between items-center border-b border-yellow-900/50 pb-2">
-                        <span class="text-sm text-stone-500">Restricciones:</span>
-                        <span class="@(Model.IsBlocked ? "text-red-600" : "text-stone-400") font-bold text-xs uppercase">
-                            @(Model.IsBlocked ? "Mazmorras" : "Ninguna")
-                        </span>
-                    </div>
+                                <div class="bg-[#1a1412] p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
 
-                    @if (ViewBag.ShowPujas == true)
-                    {
-                        <div class="mt-8 text-center p-3 bg-yellow-900/20 border border-yellow-700/50 rounded">
-                            <span class="text-3xl block font-bold text-yellow-500">@ViewBag.TotalBids</span>
-                            <span class="text-[10px] uppercase text-yellow-700">Pujas Realizadas</span>
-                        </div>
-                    }
+                                    <div class="flex flex-col gap-1">
+                                        <span class="text-xs text-stone-500 uppercase tracking-wider">Fecha de Registro</span>
+                                        <span class="text-stone-300">@Model.RegisterDate.ToString("dd/MM/yyyy")</span>
+                                    </div>
 
-                    @if (ViewBag.ShowAuction == true)
-                    {
-                        <div class="mt-4 text-center p-3 bg-red-900/20 border border-red-700/50 rounded">
-                            <span class="text-3xl block font-bold text-red-500">@ViewBag.TotalAuctions</span>
-                            <span class="text-[10px] uppercase text-red-700">Subastas Creadas</span>
-                        </div>
-                    }
-                </div>
-            </div>
-                        </details>
+                                    <div class="flex flex-col gap-1">
+                                        <span class="text-xs text-stone-500 uppercase tracking-wider">Último Acceso</span>
+                                        <span class="text-stone-300">
+                                            @(Model.LastLogin.ToString() != "1/1/2000" ? Model.LastLogin.ToString("dd/MM/yyyy") : "Nunca")
+                                        </span>
+                                    </div>
+
+                                    <div class="flex flex-col gap-1">
+                                        <span class="text-xs text-stone-500 uppercase tracking-wider">Fecha de Nacimiento</span>
+                                        <span class="text-stone-300">@Model.BirthDate.ToString("dd/MM/yyyy")</span>
+                                    </div>
+
+                                    @if (Model.RoleId == 1 && Model.RoleId != 3) @* Comprador *@
+                                    {
+                                        <div class="flex flex-col gap-1">
+                                            <span class="text-xs text-stone-500 uppercase tracking-wider">Pujas Realizadas</span>
+                                            <span class="text-2xl font-bold text-yellow-500">@Model.NumberBidMade</span>
+                                        </div>
+                                    }
+                                else if (Model.RoleId == 2 && Model.RoleId != 3)
+     @* Vendedor *@
+                                    {
+                                        <div class="flex flex-col gap-1">
+                                            <span class="text-xs text-stone-500 uppercase tracking-wider">Subastas Creadas</span>
+                                            <span class="text-2xl font-bold text-red-500">@Model.NumberCreatedAuctions</span>
+                                        </div>
+                                    }
+
+                                </div>
+                            </details>
+                        
+
                         </section>
 
 
@@ -190,28 +193,25 @@
                             </span>
                         </div>
 
-                        @if (Model.RoleId != 2){ 
-                       
-                            <div class="mt-8 text-center p-3 bg-yellow-900/20 border border-yellow-700/50 rounded">
-                                <span class="text-3xl block font-bold text-yellow-500"> @Model.NumberCreatedAuctions</span>
-                                <span class="text-[10px] uppercase text-yellow-700">Pujas Realizadas</span>
-                            </div>
-                            }
-                            else
+                        @if (Model.RoleId == 1 || Model.RoleId == 2)
+                        {
+                            @if (ViewBag.ShowPujas == true)
                             {
-                            if (Model.RoleId != 1)
-                                {
+                                <div class="mt-8 text-center p-3 bg-yellow-900/20 border border-yellow-700/50 rounded">
+                                    <span class="text-3xl block font-bold text-yellow-500">@ViewBag.TotalBids</span>
+                                    <span class="text-[10px] uppercase text-yellow-700">Pujas Realizadas</span>
+                                </div>
+                            }
+
+                            @if (ViewBag.ShowAuction == true)
+                            {
                                 <div class="mt-4 text-center p-3 bg-red-900/20 border border-red-700/50 rounded">
-                                    <span class="text-3xl block font-bold text-red-500">@Model.NumberBidMade</span>
+                                    <span class="text-3xl block font-bold text-red-500">@ViewBag.TotalAuctions</span>
                                     <span class="text-[10px] uppercase text-red-700">Subastas Creadas</span>
                                 </div>
-
-                                }
                             }
-                      
-                           
+                        }
 
-                            @if (Model.RoleId == 4) { }
 
                     </div>
                 </div>

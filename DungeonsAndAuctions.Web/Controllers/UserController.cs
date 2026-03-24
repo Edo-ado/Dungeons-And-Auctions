@@ -1,8 +1,10 @@
 ﻿using D_A.Application.DTOs;
 using D_A.Application.Services.Interfaces;
+using D_A.Infraestructure.Models;
 using DNDA.Web.Util;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 
 namespace DNDA.Web.Controllers
 {
@@ -60,7 +62,6 @@ namespace DNDA.Web.Controllers
             );
             return RedirectToAction(nameof(Index));
         }
-
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -106,8 +107,27 @@ namespace DNDA.Web.Controllers
 
             int roleID = user.RoleId;
 
+            if (user == null)
+                return NotFound();
 
-            Console.WriteLine();
+
+            return View(user);
+        }
+        public async Task<IActionResult> Edit(int id)
+        {
+            var user = await _serviceUser.FindByIdAsync(id);
+            if (user == null)
+
+                return NotFound();
+
+            await LoadCombosAsync(
+                SelectedGenre: new[] { user.GenderId.ToString() },
+                SelectedCountry: new[] { user.CountryId.ToString() }
+            );
+
+            int roleID = user.RoleId;
+
+
             if (roleID == 1) //si es comprador
             {
                 int totalBids = await _serviceBid.CountBidsByBuyerAsync(id);
@@ -123,33 +143,18 @@ namespace DNDA.Web.Controllers
 
             }
 
+
             if (user == null)
                 return NotFound();
 
-
             return View(user);
         }
-        public async Task<IActionResult> Edit(int id)
-        {
-            var user = await _serviceUser.FindByIdAsync(id);
-            if (user == null)
-                return NotFound();
-
-            await LoadCombosAsync(
-                SelectedGenre: new[] { user.GenderId.ToString() },
-                SelectedCountry: new[] { user.CountryId.ToString() }
-            );
-
-            return View(user);
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, UsersDTO dto)
         {
 
-            Console.WriteLine($"Genero: {dto.GenderId}");
-            Console.WriteLine($"Pais: {dto.CountryId}");
+     
 
             if (!ModelState.IsValid)
             {
@@ -164,8 +169,18 @@ namespace DNDA.Web.Controllers
                     SelectedCountry: new[] { dto.CountryId.ToString() }
                 );
 
+               
+               
+           
+
                 return View(dto);
             }
+
+            TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
+                   "Estado actualizado",
+                   $"El usuario se actualizo correctamente",
+                   SweetAlertMessageType.success
+               );
 
             await _serviceUser.UpdateAsync(id, dto);
 

@@ -79,21 +79,26 @@
                         </span>
                     </div>
 
-                    @if (ViewBag.ShowPujas == true)
+                    @if (Model.RoleId == 1 || Model.RoleId == 2)
                     {
-                        <div class="mt-8 text-center p-3 bg-yellow-900/20 border border-yellow-700/50 rounded">
-                            <span class="text-3xl block font-bold text-yellow-500">@ViewBag.TotalBids</span>
-                            <span class="text-[10px] uppercase text-yellow-700">Pujas Realizadas</span>
-                        </div>
-                    }
+                        @if(ViewBag.ShowPujas == true)
+                                        {
+                            <div class="mt-8 text-center p-3 bg-yellow-900/20 border border-yellow-700/50 rounded">
+                                <span class="text-3xl block font-bold text-yellow-500">@ViewBag.TotalBids</span>
+                                <span class="text-[10px] uppercase text-yellow-700">Pujas Realizadas</span>
+                            </div>
+                        }
 
-                    @if (ViewBag.ShowAuction == true)
-                    {
-                        <div class="mt-4 text-center p-3 bg-red-900/20 border border-red-700/50 rounded">
-                            <span class="text-3xl block font-bold text-red-500">@ViewBag.TotalAuctions</span>
-                            <span class="text-[10px] uppercase text-red-700">Subastas Creadas</span>
-                        </div>
-                    }
+                        @if (ViewBag.ShowAuction == true)
+                        {
+                            <div class="mt-4 text-center p-3 bg-red-900/20 border border-red-700/50 rounded">
+                                <span class="text-3xl block font-bold text-red-500">@ViewBag.TotalAuctions</span>
+                                <span class="text-[10px] uppercase text-red-700">Subastas Creadas</span>
+                            </div>
+                        }
+}
+
+                   
                 </div>
             </div>
         </div>
