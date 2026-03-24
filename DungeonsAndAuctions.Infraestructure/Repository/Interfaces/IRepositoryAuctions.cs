@@ -25,5 +25,17 @@ namespace D_A.Infraestructure.Repository.Interfaces
         Task<List<Auctions>> GetSpecificViewList();
         Task<List<Auctions>> GetAuctionsByObjectID(int id);
 
+
+
+
+
+        Task CreateAuction(Auctions auction);
+
+        Task EditAuction(Auctions auction);
+
+        Task DeleteAuction(int id);
+
+        Task<List<Auctions>> GetAuctionsBySellerID(int sellerId);
+
     }
 }
