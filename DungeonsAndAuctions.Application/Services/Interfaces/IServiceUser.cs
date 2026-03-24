@@ -17,6 +17,10 @@ namespace D_A.Application.Services.Interfaces
 
         Task UpdateAsync(int id, UsersDTO dto);
 
+        Task ToggleBlockAsync(int id);
+
+        Task ToggleActiveAsync(int id);
+
     }
 
 }

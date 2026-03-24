@@ -3,71 +3,127 @@
 @{
     ViewData["Title"] = "Registro de Ciudadanos";
 }
-<div class="min-h-screen bg-[#1a1412] py-12 px-4 sm:px-6 lg:px-8 font-['Cinzel']" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%224%22 height=%224%22%3E%3Crect width=%224%22 height=%224%22 fill=%22%231a1412%22/%3E%3Ccircle cx=%221%22 cy=%221%22 r=%220.5%22 fill=%22%23ffffff08%22/%3E%3Ccircle cx=%223%22 cy=%223%22 r=%220.5%22 fill=%22%23ffffff05%22/%3E%3C/svg%3E');">
 
+<div class="min-h-screen bg-[#1a1412] py-12 px-4 sm:px-8 font-['Cinzel']">
 
-    <div class="grain-overlay"></div>
-    <div class="max-w-7xl mx-auto mb-10 flex justify-between items-end border-b-2 border-yellow-700 pb-4">
+    <div class="max-w-7xl mx-auto mb-10 flex flex-col md:flex-row justify-between items-center border-b-2 border-yellow-700 pb-6 gap-6">
         <div>
-            <h1 class="text-4xl font-bold text-red-600 tracking-widest uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+            <h1 class="text-4xl md:text-5xl font-bold text-red-600 tracking-widest uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
                 Registro de Usuarios
             </h1>
-            <p class="text-yellow-700 italic mt-2 text-lg">"Gobernando los reinos con mano de hierro y datos precisos"</p>
+            <p class="text-yellow-700 italic mt-2 text-lg">"Gobernando los reinos con mano de hierro y datos precisos."</p>
         </div>
-
     </div>
 
-    <div class="max-w-7xl mx-auto overflow-hidden rounded-lg border border-yellow-900 shadow-[0_20px_50px_rgba(0,0,0,0.9)] bg-[#2a1f1a]">
+    <div class="max-w-7xl mx-auto overflow-hidden rounded-sm border border-yellow-900 shadow-[0_20px_50px_rgba(0,0,0,0.9)] bg-[#2a1f1a]">
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="bg-[#3d2b24] text-yellow-500 uppercase text-sm tracking-[0.15em] border-b border-yellow-800">
-                        <th class="px-6 py-5 font-bold">@Html.DisplayNameFor(model => model.Id)</th>
-                        <th class="px-6 py-5 font-bold">Nombre Completo</th>
-                        <th class="px-6 py-5 font-bold">@Html.DisplayNameFor(model => model.RoleName)</th>
-                        <th class="px-6 py-5 font-bold text-center">Estado</th>
-                        <th class="px-6 py-5 font-bold text-right">Acciones</th>
+                    <tr class="bg-[#3d2b24] text-yellow-500 uppercase text-xs  border-b border-yellow-800">
+                        <th class="px-4 py-4 font-bold">Nombre Completo</th>
+   
+                        <th class="px-4 py-4 font-bold">País</th>
+                        <th class="px-4 py-4 font-bold">Rol</th>
+                        <th class="px-4 py-4 font-bold text-center">Estado</th>
+                        <th class="px-4 py-4 font-bold text-center">Bloqueado</th>
+                        <th class="px-4 py-4 font-bold text-center">Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="text-stone-300 divide-y divide-yellow-900/30">
                     @foreach (var item in Model)
                     {
                         <tr class="hover:bg-[#362822] transition-colors duration-200 group">
-                            <td class="px-6 py-4 font-mono text-yellow-700">
-                                #@Html.DisplayFor(modelItem => item.Id)
-                            </td>
-                            <td class="px-6 py-4">
-                                <div class="text-lg font-semibold text-stone-200 group-hover:text-yellow-400 transition-colors">
+
+                          
+                            <td class="px-4 py-3">
+                                <div class="text-sm font-bold text-stone-200 group-hover:text-yellow-400 transition-colors uppercase tracking-tight">
                                     @item.FirstName @item.LastName
                                 </div>
+                                <div class="text-[10px] text-yellow-800 font-mono mt-1 uppercase">Ref: #@item.Id</div>
+                                @if (item.RegisterDate != new DateOnly(2000, 1, 1))
+                                {
+                                    <div class="text-[9px] text-stone-600 mt-0.5 font-serif italic">
+                                        Registrado: @item.RegisterDate.ToString("dd/MM/yyyy")
+                                    </div>
+                                }
                             </td>
-                            <td class="px-6 py-4">
-                                <span class="px-3 py-1 rounded-full bg-red-900/30 border border-red-800 text-red-400 text-xs uppercase">
-                                    @Html.DisplayFor(modelItem => item.RoleName)
+
+
+                            <td class="px-4 py-3">
+                                <span class="text-stone-400 italic text-xs">
+                                    @(string.IsNullOrEmpty(item.CountryName) ? "—" : item.CountryName)
                                 </span>
                             </td>
-                            <td class="px-6 py-4 text-center">
+
+                 
+                            <td class="px-4 py-3">
+                                <span class="px-2 py-0.5 rounded-full bg-red-900/30 border border-red-800 text-red-400 text-[10px] uppercase tracking-wide">
+                                    @item.RoleName
+                                </span>
+                            </td>
+
+                
+                            <td class="px-4 py-3 text-center">
                                 @if (item.Active)
                                 {
-                                    <span class="inline-flex items-center text-green-500">
-                                        <span class="h-2 w-2 rounded-full bg-green-500 mr-2 shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
+                                    <span class="inline-flex items-center text-green-500 uppercase text-[10px] font-bold tracking-widest">
+                                        <span class="h-2 w-2 rounded-full bg-green-500 mr-1.5 shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
                                         Activo
                                     </span>
                                 }
                                 else
                                 {
-                                    <span class="inline-flex items-center text-red-700">
-                                        <span class="h-2 w-2 rounded-full bg-red-700 mr-2"></span>
-                                        Caído
+                                    <span class="inline-flex items-center text-red-700 uppercase text-[10px] font-bold tracking-widest">
+                                        <span class="h-2 w-2 rounded-full bg-red-700 mr-1.5"></span>
+                                        Inactivo
                                     </span>
                                 }
                             </td>
-                            <td class="px-6 py-4 text-right text-sm font-bold">
-                                <div class="flex justify-end space-x-4">
-                                    <a asp-action="Details" asp-route-id="@item.Id" class="text-blue-500 hover:text-blue-300 transition-all uppercase tracking-widest">Inspeccionar Manuscrito </a>
-                                   
-                                     </div>
+
+                 
+                            <td class="px-4 py-3 text-center">
+                                @if (item.IsBlocked)
+                                {
+                                    <span class="inline-flex items-center text-orange-500 uppercase text-[10px] font-bold tracking-widest">
+                                        <span class="h-2 w-2 rounded-full bg-orange-500 mr-1.5 shadow-[0_0_8px_rgba(249,115,22,0.8)]"></span>
+                                        Sí
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="inline-flex items-center text-stone-600 uppercase text-[10px] tracking-widest">
+                                        <span class="h-2 w-2 rounded-full bg-stone-700 mr-1.5"></span>
+                                        No
+                                    </span>
+                                }
                             </td>
+
+                            <td class="px-4 py-3 text-center text-[10px] font-bold">
+                                <div class="flex items-center justify-center gap-2 flex-wrap">
+                                    <a asp-action="Details" asp-route-id="@item.Id"
+                                       class="text-blue-500 hover:text-blue-300 transition-all uppercase tracking-wider">Ver</a>
+                                    <span class="text-yellow-900">|</span>
+                                    <a asp-action="Edit" asp-route-id="@item.Id"
+                                       class="text-yellow-600 hover:text-yellow-400 transition-all uppercase tracking-wider">Editar</a>
+                                    <span class="text-yellow-900">|</span>
+                                    <form asp-action="ToggleBlock" asp-route-id="@item.Id" method="post" class="inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit"
+                                                class="@(item.IsBlocked ? "text-green-600 hover:text-green-400" : "text-orange-600 hover:text-orange-400") transition-all uppercase tracking-wider">
+                                            @(item.IsBlocked ? "Desbloquear" : "Bloquear")
+                                        </button>
+                                    </form>
+                                    <span class="text-yellow-900">|</span>
+                                    <form asp-action="ToggleActive" asp-route-id="@item.Id" method="post" class="inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit"
+                                                class="@(item.Active ? "text-red-700 hover:text-red-500" : "text-green-700 hover:text-green-500") transition-all uppercase tracking-wider">
+                                            @(item.Active ? "Desactivar" : "Activar")
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+
                         </tr>
                     }
                 </tbody>
@@ -83,8 +139,6 @@
         </div>
     </div>
 </div>
-
-
 
 <style>
     @@keyframes grain {

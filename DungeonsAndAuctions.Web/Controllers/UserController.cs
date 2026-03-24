@@ -1,5 +1,6 @@
 ﻿using D_A.Application.DTOs;
 using D_A.Application.Services.Interfaces;
+using DNDA.Web.Util;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -14,7 +15,7 @@ namespace DNDA.Web.Controllers
         private readonly IServiceGender _serviceGenero;
 
 
-        public UserController(IServiceUser serviceUser, IServiceAuctionBidHistory serviceBid, IServiceAuctions serviceAuctions, IServiceCountry serviceCountry, IServiceGender serviceGender )
+        public UserController(IServiceUser serviceUser, IServiceAuctionBidHistory serviceBid, IServiceAuctions serviceAuctions, IServiceCountry serviceCountry, IServiceGender serviceGender)
         {
             _serviceUser = serviceUser;
             _serviceBid = serviceBid;
@@ -24,12 +25,47 @@ namespace DNDA.Web.Controllers
 
 
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ToggleBlock(int id)
+        {
+            var user = await _serviceUser.FindByIdAsync(id);
+            if (user == null) return NotFound();
+
+            await _serviceUser.ToggleBlockAsync(id);
+
+            var accion = user.IsBlocked ? "desbloqueado" : "bloqueado";
+            TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
+                "Estado actualizado",
+                $"El usuario {user.UserName} fue {accion} correctamente.",
+                SweetAlertMessageType.success
+            );
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ToggleActive(int id)
+        {
+            var user = await _serviceUser.FindByIdAsync(id);
+            if (user == null) return NotFound();
+
+            await _serviceUser.ToggleActiveAsync(id);
+
+            var accion = user.Active ? "desactivado" : "activado";
+            TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
+                "Estado actualizado",
+                $"El usuario {user.UserName} fue {accion} correctamente.",
+                SweetAlertMessageType.success
+            );
+            return RedirectToAction(nameof(Index));
+        }
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            //llama service
-            var collection = await _serviceUser.ListAsync(); //recibe usersDTO
-            return View(collection); //pasa DTOs a la vista
+            var collection = await _serviceUser.ListAsync();
+            return View(collection);
         }
         public async Task<IActionResult> Details(int id)
         {
@@ -38,7 +74,7 @@ namespace DNDA.Web.Controllers
             if (user == null)
                 return NotFound();
 
-            int roleID = user.RoleId;   
+            int roleID = user.RoleId;
 
 
             if (roleID == 1) //si es comprador
@@ -67,6 +103,30 @@ namespace DNDA.Web.Controllers
             var user = await _serviceUser.FindByIdAsync(id);
             if (user == null)
                 return NotFound();
+
+            int roleID = user.RoleId;
+
+
+            Console.WriteLine();
+            if (roleID == 1) //si es comprador
+            {
+                int totalBids = await _serviceBid.CountBidsByBuyerAsync(id);
+
+                ViewBag.TotalBids = totalBids;
+                ViewBag.ShowPujas = true;
+            }
+            else if (roleID == 2)
+            {
+                int totalAuctions = await _serviceAuction.CountAuctionsBySellerAsync(id);
+                ViewBag.TotalAuctions = totalAuctions;
+                ViewBag.ShowAuction = true;
+
+            }
+
+            if (user == null)
+                return NotFound();
+
+
             return View(user);
         }
         public async Task<IActionResult> Edit(int id)
@@ -114,7 +174,7 @@ namespace DNDA.Web.Controllers
         private async Task LoadCombosAsync(IEnumerable<string>? SelectedGenre = null, IEnumerable<string>? SelectedCountry = null)
         {
             // Genero (one-to-many)
-            var  ListGenero = await _serviceGenero.ListAsync();
+            var ListGenero = await _serviceGenero.ListAsync();
 
             // Pais (one-to-many)
             var Pais = await _serviceCountry.ListAsync();
