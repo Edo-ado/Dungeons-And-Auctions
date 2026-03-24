@@ -59,6 +59,12 @@ namespace DNDA.Web.Controllers
 
         }
 
+        public async Task<IActionResult> IndexMaintenance()
+        {
+            var all = await _ServiceAuctions.GetAllAuctions();
+
+            return View(all);
+        }
 
 
         public async Task<IActionResult> Details(int id)
