@@ -10,6 +10,8 @@ namespace D_A.Infraestructure.Repository.Interfaces
     public interface IRepositoryObject
     {
         Task<ICollection<Objects>> ListAsync();
+        Task<ICollection<Objects>> ListActiveAsync();
+
         Task<Objects?> FindByIdAsync(int id);
         Task<List<Categories>> GetCategoriesByIdObject(int id);
 
@@ -19,6 +21,8 @@ namespace D_A.Infraestructure.Repository.Interfaces
         Task DeleteAsync(int id);
         Task ToggleActiveAsync(int id);
         Task<bool> HasActiveAuctionAsync(int objectId);
+        Task<bool> HasAuctionPárticipationAsync(int objectId);
+
         Task<bool> HasBeenAuctionedAsync(int objectId);
 
 

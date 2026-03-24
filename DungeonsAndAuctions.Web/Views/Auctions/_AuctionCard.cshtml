@@ -65,11 +65,11 @@
         <div class="grid grid-cols-2 gap-3 mb-5">
             <div class="stat-block">
                 <span class="stat-label">Precio Base</span>
-                <span class="stat-value">@Model.BasePrice.ToString("N2") <span class="text-yellow-800 text-xs">Oz</span></span>
+                <span class="stat-value">@Model.BasePrice?.ToString("N2") <span class="text-yellow-800 text-xs">Oz</span></span>
             </div>
             <div class="stat-block">
                 <span class="stat-label">Inc. Mínimo</span>
-                <span class="stat-value">@Model.IncrementoMinimo.ToString("N2") <span class="text-yellow-800 text-xs">Oz</span></span>
+                <span class="stat-value">@Model.IncrementoMinimo?.ToString("N2") <span class="text-yellow-800 text-xs">Oz</span></span>
             </div>
             <div class="stat-block col-span-2">
                 <span class="stat-label">Pujas Totales</span>

@@ -162,5 +162,25 @@ namespace D_A.Infraestructure.Repository.Implementation
         {
             return await _context.Auctions.AnyAsync(a => a.Idobject == objectId);
         }
+
+        public async Task<ICollection<Objects>> ListActiveAsync()
+        {
+            return await _context.Objects
+              .AsNoTracking()
+              .Include(o => o.Category)
+              .Include(o => o.User)
+              .Include(o => o.IdQualityNavigation)
+              .Include(o => o.IdImageNavigation)
+              .Where(o => o.IsActive == true)
+              .ToListAsync();
+        }
+
+        public async Task<bool> HasAuctionPárticipationAsync(int objectId)
+        {
+            return await _context.Auctions
+                .Include(a => a.IdstateNavigation)
+                .AnyAsync(a => a.Idobject == objectId
+                    && a.IdstateNavigation.Name == "Open");
+        }
     }
 }

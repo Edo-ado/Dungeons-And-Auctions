@@ -18,7 +18,7 @@
             <p class="text-yellow-700 italic mt-2 text-lg">"Que el mejor postor se alce con la victoria"</p>
         </div>
 
-        <a asp-action="Create"
+        <a asp-controller="Auctions" asp-action="Create" data-no-ajax
            class="bg-yellow-800 hover:bg-yellow-600 text-yellow-100 px-6 py-2 rounded-sm border border-yellow-500 transition-all duration-300 shadow-[0_0_15px_rgba(180,83,9,0.3)] uppercase tracking-tighter font-bold">
             + Convocar Subasta
         </a>
@@ -60,18 +60,20 @@
 
 
                             <td class="px-6 py-4">
-                                <span class="text-yellow-300 font-bold font-mono">
-                                    ₡ @item.BasePrice.ToString("N2")
-                                </span>
-                            </td>
 
+                                <span class="text-yellow-300 font-bold font-mono">
+                                    ₡ @((item.BasePrice ?? 0).ToString("N2", System.Globalization.CultureInfo.InvariantCulture))
+                                </span>
+
+                            </td>
 
                             <td class="px-6 py-4">
-                                <span class="text-stone-400 font-mono">
-                                    + ₡ @item.IncrementoMinimo.ToString("N2")
-                                </span>
-                            </td>
 
+                                <span class="text-stone-400 font-mono">
+                                    + ₡ @((item.IncrementoMinimo ?? 0).ToString("N2"))
+                                </span>
+
+                            </td>
 
                             <td class="px-6 py-4 text-center">
                                 <span class="inline-block px-3 py-1 rounded-full bg-red-900/30 border border-red-800 text-red-400 text-xs font-bold font-mono">
@@ -106,7 +108,7 @@
 
                             <td class="px-6 py-4 text-right text-sm font-bold align-middle">
                                 <div class="flex justify-end items-center gap-2 min-w-max">
-                                    <a asp-action="Edit" asp-route-id="@item.Id"
+                                    <a asp-action="Edit" asp-route-id="@item.Id" data-no-ajax
                                        class="text-yellow-600 hover:text-yellow-400 transition-all uppercase tracking-widest text-xs whitespace-nowrap">
                                         Editar
                                     </a>
@@ -123,6 +125,17 @@
                                             @(item.IsActive ? "Cerrar" : "Abrir")
                                         </button>
                                     </form>
+
+                                    <span class="text-yellow-900">|</span>
+                                    <form asp-action="Publish" asp-route-id="@item.Id" method="post" class="inline flex items-center">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit"
+                                                class="text-yellow-400 hover:text-yellow-200 transition-all uppercase tracking-widest text-xs whitespace-nowrap">
+                                             Publicar
+                                        </button>
+                                    </form>
+
+
                                 </div>
                             </td>
 

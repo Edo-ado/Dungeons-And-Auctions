@@ -21,13 +21,12 @@ namespace D_A.Application.Services.Interfaces
         Task<int> CountAuctionsBySellerAsync(int userId);
         Task<List<AuctionsDTO>> GetSpecificViewList();
         Task<List<AuctionsDTO>> GetAuctionsByObjectID(int id);
+        Task<AuctionsDTO?> GetAuctionById(int id);
 
-
-
-
+      
 
         Task CreateAuction(AuctionsDTO auction);
-        Task EditAuction(AuctionsDTO auction);
+        Task UpdateAuction(AuctionsDTO auction);
         Task DeleteAuction(int id);
         Task<List<AuctionsDTO>> GetAuctionsBySellerID(int sellerId);
 

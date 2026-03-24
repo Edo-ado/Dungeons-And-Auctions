@@ -190,7 +190,7 @@ namespace D_A.Infraestructure.Repository.Implementation
 
         }
 
-        public async Task EditAuction(Auctions auction)
+        public async Task UpdateAuction(Auctions auction)
         {
 
             if( auction.Idstate != 1) {
@@ -235,6 +235,16 @@ namespace D_A.Infraestructure.Repository.Implementation
             .ToListAsync();
         }
 
+        public async Task<Auctions?> GetAuctionById(int id)
+        {
+            return await _context.Auctions
+                .AsNoTracking()
+                .Include(a => a.IdstateNavigation)
+                .Include(a => a.IdobjectNavigation)
+                    .ThenInclude(o => o.IdImageNavigation)
+                .FirstOrDefaultAsync(a => a.Id == id);
+        }
+    }
 
 
 
