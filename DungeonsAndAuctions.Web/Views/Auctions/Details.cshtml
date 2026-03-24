@@ -211,11 +211,11 @@
                         <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-2">
                             <div class="stat-block">
                                 <span class="stat-label">Precio Base</span>
-                                <span class="stat-value">@Model.BasePrice.ToString("N2") <span class="text-yellow-800 text-xs">Oz</span></span>
+                                <span class="stat-value">@((Model.BasePrice ?? 0).ToString("N2")) <span class="text-yellow-800 text-xs">Oz</span></span>
                             </div>
                             <div class="stat-block">
                                 <span class="stat-label">Inc. Mínimo</span>
-                                <span class="stat-value">@Model.IncrementoMinimo.ToString("N2") <span class="text-yellow-800 text-xs">Oz</span></span>
+                                <span class="stat-value">@((Model.IncrementoMinimo ?? 0).ToString("N2")) <span class="text-yellow-800 text-xs">Oz</span></span>
                             </div>
                             <div class="stat-block">
                                 <span class="stat-label">Total Pujas</span>
@@ -282,9 +282,9 @@
                             Última actualización: @DateTime.Now.ToString("yyyy-MM-dd HH:mm")
                         </p>
                         <div class="flex gap-3">
-                            <a asp-action="Index"
+                            <a onclick="history.back()"
                                class="px-6 py-2 border border-stone-700/60 text-stone-400 text-xs uppercase tracking-[0.15em]
-                                      hover:border-stone-500 hover:text-stone-200 transition-all duration-300">
+              hover:border-stone-500 hover:text-stone-200 transition-all duration-300 cursor-pointer">
                                 ← Volver
                             </a>
                             <a asp-action="Edit" asp-route-id="@Model.Id"

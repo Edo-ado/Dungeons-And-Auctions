@@ -11,6 +11,8 @@ namespace D_A.Application.Services.Interfaces
     public interface IServiceObject
     {
         Task<ICollection<ObjectsDTO>> ListAsync();
+        Task<ICollection<ObjectsDTO>> ListActiveAsync();
+
         Task<ObjectsDTO> GetObjectById(int id);
 
         Task<Categories?> GetCategoriesByIdObject(int id);

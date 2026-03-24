@@ -16,20 +16,33 @@ namespace D_A.Application.DTOs
         [DisplayName("Id")]
         public int Id { get; set; }
 
+
+
+        [Required(ErrorMessage = "La fecha de inicio es requerida")]
         [DisplayName("Start Date")]
         public DateOnly StartDate { get; set; } = new DateOnly();
 
+
+        [Required(ErrorMessage = "La fecha de cierre es requerida")]
         [DisplayName("End Date")]
         public DateOnly EndDate { get; set; } = new DateOnly();
 
         [DisplayName("Active?")]
         public bool IsActive { get; set; }
 
-        [DisplayName("Base price")]
-        public decimal BasePrice { get; set; } = 0;
 
+        [Required(ErrorMessage = "El precio base es requerido")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "El precio base debe ser mayor a 0")]
+        [DisplayName("Base price")]
+        public decimal? BasePrice { get; set; } = 0;
+
+
+
+
+        [Required(ErrorMessage = "El incremento mínimo es requerido")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "El incremento mínimo debe ser mayor a 0")]
         [DisplayName("Minimum bid")]
-        public decimal IncrementoMinimo { get; set; } = 0;
+        public decimal? IncrementoMinimo { get; set; } = 0;
 
         [DisplayName("IdState")]
         public int idstate { get; set; }
@@ -38,7 +51,7 @@ namespace D_A.Application.DTOs
         public int idusercreator { get; set; }
 
         [DisplayName("IdObject")]
-        public int idobject { get; set; }
+        public int? idobject { get; set; }
 
         [DisplayName("TotalBids")]
         public int TotalBids { get; set; }

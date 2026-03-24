@@ -57,6 +57,12 @@ namespace D_A.Application.Services.Implementations
             return await _repository.HasBeenAuctionedAsync(objectId);
         }
 
+        public async Task<ICollection<ObjectsDTO>> ListActiveAsync()
+        {
+            var objects = await _repository.ListActiveAsync();
+            return _mapper.Map<List<ObjectsDTO>>(objects);
+        }
+
         public async Task<ICollection<ObjectsDTO>> ListAsync()
         {
             var objects = await _repository.ListAsync();

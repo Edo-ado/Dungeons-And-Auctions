@@ -26,12 +26,11 @@ namespace D_A.Infraestructure.Repository.Interfaces
         Task<List<Auctions>> GetAuctionsByObjectID(int id);
 
 
-
-
+        Task<Auctions?> GetAuctionById(int id);
 
         Task CreateAuction(Auctions auction);
 
-        Task EditAuction(Auctions auction);
+        Task UpdateAuction(Auctions auction);
 
         Task DeleteAuction(int id);
 

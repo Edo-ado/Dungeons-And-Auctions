@@ -140,8 +140,8 @@ namespace DNDA.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(ObjectsDTO dto, List<IFormFile> imagenes, string[] selectedCategorias)
         {
-           
 
+      
 
             selectedCategorias ??= Array.Empty<string>();
             //Validación de categorías 
@@ -252,6 +252,19 @@ namespace DNDA.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(int id, ObjectsDTO dto, List<IFormFile>? imagenes, string[] selectedCategorias)
         {
+
+            var hasActive = await _serviceObject.HasActiveAuctionAsync(id);
+            if (hasActive)
+            {
+                TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
+                    "No permitido",
+                    "Este objeto está asociado a una subasta y no puede ser editado.",
+                    SweetAlertMessageType.warning
+                );
+                return RedirectToAction(nameof(Index));
+            }
+
+
             selectedCategorias ??= Array.Empty<string>();
 
             if (selectedCategorias.Length == 0)
