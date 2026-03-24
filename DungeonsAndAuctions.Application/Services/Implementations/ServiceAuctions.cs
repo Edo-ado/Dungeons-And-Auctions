@@ -79,7 +79,32 @@ namespace D_A.Application.Services.Implementations
 
         }
 
+        public Task CreateAuction(AuctionsDTO auction)
+        {
+          
+            var auctionEntity = _mapper.Map<Auctions>(auction);
+            return _repository.CreateAuction(auctionEntity);
+        }
 
+        public Task EditAuction(AuctionsDTO auction)
+        {
+          
+            var auctionEntity = _mapper.Map<Auctions>(auction);
+            return _repository.EditAuction(auctionEntity);
+        }
 
+        public Task DeleteAuction(int id)
+        {
+           
+            return _repository.DeleteAuction(id);
+        }
+
+        public Task<List<AuctionsDTO>> GetAuctionsBySellerID(int sellerId)
+        {
+         
+            return _repository.GetAuctionsBySellerID(sellerId)
+                .ContinueWith(task => _mapper.Map<List<AuctionsDTO>>(task.Result));
+
+        }
     }
 }

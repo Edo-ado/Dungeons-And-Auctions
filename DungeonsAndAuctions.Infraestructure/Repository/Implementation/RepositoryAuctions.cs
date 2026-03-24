@@ -32,7 +32,7 @@ namespace D_A.Infraestructure.Repository.Implementation
 
             .Include(a => a.IdobjectNavigation)
             .ThenInclude(o => o.IdImageNavigation)
-            
+
 
             .Include(a => a.IdobjectNavigation)
             .ThenInclude(o => o.IdQualityNavigation)
@@ -169,6 +169,70 @@ namespace D_A.Infraestructure.Repository.Implementation
             .ToListAsync();
 
             return detail;
+        }
+
+
+
+
+        public async Task CreateAuction(Auctions auction)
+        {
+
+            if (auction != null)
+            {
+
+                _context.Auctions.Add(auction);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new ArgumentNullException(nameof(auction), "The auction cannot be null.");
+            }
+
+        }
+
+        public async Task EditAuction(Auctions auction)
+        {
+
+            if( auction.Idstate != 1) {
+
+
+                _context.Auctions.Update(auction);
+
+                _context.Entry(auction).Property(u => u.Idusercreator).IsModified = false;
+                await _context.SaveChangesAsync();
+
+            }
+            else
+            {
+                throw new InvalidOperationException("Cannot edit an active auction.");
+
+            }
+    
+        }
+
+        public async Task DeleteAuction(int id)
+        {
+            var auction = await _context.Auctions.FindAsync(id);
+            if (auction != null)
+            {
+                auction.IsActive = !auction.IsActive;
+            }
+           
+         
+          
+
+        }
+
+        public async Task<List<Auctions>> GetAuctionsBySellerID(int sellerId)
+        {
+            return await _context.Auctions
+            .AsNoTracking()
+            .Where(a => a.Idusercreator == sellerId)
+            .Include(a => a.IdobjectNavigation)
+            .ThenInclude(o => o.IdImageNavigation)
+            .Include(u => u.IdusercreatorNavigation)
+            .Include(s => s.IdstateNavigation)
+            .ToListAsync();
         }
     }
 }

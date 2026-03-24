@@ -82,5 +82,27 @@ namespace DNDA.Web.Controllers
         }
 
 
-    }
+        public async Task<IActionResult> Create()
+        {
+
+
+
+
+        
+        }
+
+        public async Task<IActionResult> Create(Auctions auction)
+        {
+            if (ModelState.IsValid)
+            {
+                await _ServiceAuctions.CreateAuction(auction);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(auction);
+
+
+
+
+
+        }
 }
