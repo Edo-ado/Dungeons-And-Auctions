@@ -64,10 +64,6 @@ namespace DNDA.Web.Controllers
 
 
 
-
-
-
-
             await _serviceObject.ToggleActiveAsync(id);
             TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
                 "Estado actualizado",
@@ -263,6 +259,8 @@ namespace DNDA.Web.Controllers
 
             //Convertir imágenes nuevas si se suben
             var imagenesBytes = new List<byte[]>();
+
+
             if (imagenes != null && imagenes.Count > 0)
             {
                 foreach (var file in imagenes)
@@ -274,21 +272,7 @@ namespace DNDA.Web.Controllers
                 ModelState.Remove("imagenes");
             }
 
-            if (!ModelState.IsValid)
-            {
-                var errores = string.Join("<br>",
-                    ModelState.Values
-                        .SelectMany(v => v.Errors)
-                        .Select(e => e.ErrorMessage)
-                );
-                ViewBag.Notificacion = SweetAlertHelper.CrearNotificacion(
-                    "Errores de validación",
-                    $"El formulario contiene errores:<br>{errores}",
-                    SweetAlertMessageType.warning
-                );
-                await LoadCombosAsync(selectedCategorias);
-                return View(dto);
-            }
+           
 
             var categoryIds = selectedCategorias.Select(x => int.Parse(x)).ToList();
             dto.IsActive = dto.IsActive;
@@ -302,46 +286,6 @@ namespace DNDA.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
-
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(int id)
-        {
-            //busco si tiene subastas activas
-            var hasActive = await _serviceObject.HasActiveAuctionAsync(id);
-            if (hasActive)
-            {
-                TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
-                    "No permitido",
-                    "Este objeto pertenece a una subasta activa y no puede ser eliminado.",
-                    SweetAlertMessageType.warning
-                );
-                return RedirectToAction(nameof(Index));
-            }
-
-            //busco si ha participado en alguna subasta anteriormente, sin importan si está activa o no
-            var hasBeenAuctioned = await _serviceObject.HasBeenAuctionedAsync(id);
-            if (hasBeenAuctioned)
-            {
-                TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
-                    "No permitido",
-                    "Este objeto ha sido subastado y no puede ser eliminado.",
-                    SweetAlertMessageType.warning
-                );
-                return RedirectToAction(nameof(Index));
-            }
-            //Si ninguna de las dos en verdad, paso a borrar el objeto directamente
-            await _serviceObject.DeleteAsync(id);
-
-            TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
-                "Objeto eliminado",
-                "El objeto fue eliminado correctamente.",
-                SweetAlertMessageType.success
-            );
-            return RedirectToAction(nameof(Index));
-        }
 
 
 

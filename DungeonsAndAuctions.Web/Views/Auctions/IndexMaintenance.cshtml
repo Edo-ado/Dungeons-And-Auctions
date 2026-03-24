@@ -1,0 +1,174 @@
+﻿@model IEnumerable<D_A.Application.DTOs.AuctionsDTO>
+
+@{
+    ViewData["Title"] = "Mantenimiento de Subastas";
+}
+
+<div class="min-h-screen bg-[#1a1412] py-12 px-4 sm:px-6 lg:px-8 font-['Cinzel']"
+     style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%224%22 height=%224%22%3E%3Crect width=%224%22 height=%224%22 fill=%22%231a1412%22/%3E%3Ccircle cx=%221%22 cy=%221%22 r=%220.5%22 fill=%22%23ffffff08%22/%3E%3Ccircle cx=%223%22 cy=%223%22 r=%220.5%22 fill=%22%23ffffff05%22/%3E%3C/svg%3E');">
+
+    <div class="grain-overlay"></div>
+
+    ¿
+    <div class="max-w-7xl mx-auto mb-10 flex justify-between items-end border-b-2 border-yellow-700 pb-4">
+        <div>
+            <h1 class="text-4xl font-bold text-red-600 tracking-widest uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                Registro de Subastas
+            </h1>
+            <p class="text-yellow-700 italic mt-2 text-lg">"Que el mejor postor se alce con la victoria"</p>
+        </div>
+
+        <a asp-action="Create"
+           class="bg-yellow-800 hover:bg-yellow-600 text-yellow-100 px-6 py-2 rounded-sm border border-yellow-500 transition-all duration-300 shadow-[0_0_15px_rgba(180,83,9,0.3)] uppercase tracking-tighter font-bold">
+            + Convocar Subasta
+        </a>
+    </div>
+
+
+    <div class="max-w-7xl mx-auto overflow-hidden rounded-lg border border-yellow-900 shadow-[0_20px_50px_rgba(0,0,0,0.9)] bg-[#2a1f1a]">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-[#3d2b24] text-yellow-500 uppercase text-sm tracking-[0.15em] border-b border-yellow-800">
+                        <th class="px-6 py-5 font-bold w-16">@Html.DisplayNameFor(model => model.Id)</th>
+                        <th class="px-6 py-5 font-bold">Objeto</th>
+                        <th class="px-6 py-5 font-bold">Precio Base</th>
+                        <th class="px-6 py-5 font-bold">Incremento Mín.</th>
+                        <th class="px-6 py-5 font-bold">Pujas</th>
+                        <th class="px-6 py-5 font-bold">Estado</th>
+                        <th class="px-6 py-5 font-bold w-28 text-center">Activo</th>
+                        <th class="px-6 py-5 font-bold text-right">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="text-stone-300 divide-y divide-yellow-900/30">
+                    @foreach (var item in Model)
+                    {
+                        <tr class="hover:bg-[#362822] transition-colors duration-200 group">
+
+
+                            <td class="px-6 py-4 font-mono text-yellow-700">
+                                #@item.Id
+                            </td>
+
+
+                            <td class="px-6 py-4">
+                                <div class="text-base font-bold text-stone-200 group-hover:text-yellow-400 transition-colors uppercase tracking-tight">
+                                    @item.IdobjectNavigation.Name
+                                </div>
+                                <div class="text-[10px] text-yellow-800 font-mono mt-1 uppercase">Creador: #@item.IdusercreatorNavigation.UserName #@item.IdusercreatorNavigation.Id</div>
+                            </td>
+
+
+                            <td class="px-6 py-4">
+                                <span class="text-yellow-300 font-bold font-mono">
+                                    ₡ @item.BasePrice.ToString("N2")
+                                </span>
+                            </td>
+
+
+                            <td class="px-6 py-4">
+                                <span class="text-stone-400 font-mono">
+                                    + ₡ @item.IncrementoMinimo.ToString("N2")
+                                </span>
+                            </td>
+
+
+                            <td class="px-6 py-4 text-center">
+                                <span class="inline-block px-3 py-1 rounded-full bg-red-900/30 border border-red-800 text-red-400 text-xs font-bold font-mono">
+                                    @item.TotalBids pujas
+                                </span>
+                            </td>
+
+
+                            <td class="px-6 py-4">
+                                <span class="px-3 py-1 rounded-full bg-yellow-900/20 border border-yellow-800/50 text-yellow-600 text-xs uppercase tracking-wide">
+                                    @item.IdstateNavigation.Name
+                                </span>
+                            </td>
+
+                            <td class="px-6 py-4 text-center w-28">
+                                @if (item.IsActive)
+                                {
+                                    <span class="inline-flex items-center justify-center w-24 text-green-500 uppercase text-[10px] font-bold tracking-widest">
+                                        <span class="h-2 w-2 rounded-full bg-green-500 mr-2 shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
+                                        Activa
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="inline-flex items-center justify-center w-24 text-red-700 uppercase text-[10px] font-bold tracking-widest">
+                                        <span class="h-2 w-2 rounded-full bg-red-700 mr-2"></span>
+                                        Inactiva
+                                    </span>
+                                }
+                            </td>
+
+
+                            <td class="px-6 py-4 text-right text-sm font-bold align-middle">
+                                <div class="flex justify-end items-center gap-2 min-w-max">
+                                    <a asp-action="Edit" asp-route-id="@item.Id"
+                                       class="text-yellow-600 hover:text-yellow-400 transition-all uppercase tracking-widest text-xs whitespace-nowrap">
+                                        Editar
+                                    </a>
+                                    <span class="text-yellow-900">|</span>
+                                    <a asp-action="Details" asp-route-id="@item.Id"
+                                       class="text-blue-500 hover:text-blue-300 transition-all uppercase tracking-widest text-xs whitespace-nowrap">
+                                        Ver
+                                    </a>
+                                    <span class="text-yellow-900">|</span>
+                                    <form asp-action="ToggleActive" asp-route-id="@item.Id" method="post" class="inline flex items-center">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit"
+                                                class="@(item.IsActive ? "text-orange-500 hover:text-orange-300" : "text-green-600 hover:text-green-400") transition-all uppercase tracking-widest text-xs whitespace-nowrap">
+                                            @(item.IsActive ? "Cerrar" : "Abrir")
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="mt-8 text-center">
+        <div class="flex justify-center items-center gap-4 opacity-30">
+            <div class="h-px w-24 bg-yellow-700"></div>
+            <img src="/Images/Logo/ShortLogo.png" class="h-8 grayscale" alt="sepia-logo" />
+            <div class="h-px w-24 bg-yellow-700"></div>
+        </div>
+    </div>
+
+</div>
+
+<style>
+    @@keyframes grain {
+        0%, 100% {
+            transform: translate(0, 0);
+        }
+
+        25% {
+            transform: translate(1px, 1px);
+        }
+
+        50% {
+            transform: translate(-1px, 0);
+        }
+
+        75% {
+            transform: translate(0, -1px);
+        }
+    }
+
+    .grain-overlay {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 100;
+        opacity: 0.035;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        animation: grain 0.5s steps(1) infinite;
+    }
+</style>
