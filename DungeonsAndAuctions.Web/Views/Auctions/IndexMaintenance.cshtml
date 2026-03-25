@@ -73,19 +73,16 @@
 
                           
                             <td class="px-6 py-4">
-                                <span class="text-yellow-300 font-bold font-mono">
-                                    ₡ @((item.BasePrice ?? 0).ToString("N2", System.Globalization.CultureInfo.InvariantCulture))
-                                </span>
-
+                               
                                 <span class="text-yellow-300 font-bold font-mono whitespace-nowrap">
-                                    ₡@((item.BasePrice ?? 0).ToString("F2", System.Globalization.CultureInfo.InvariantCulture))
+                                    @((item.BasePrice ?? 0).ToString("F2"))Oz
                                 </span>
                             </td>
 
                       
                             <td class="px-6 py-4">
                                 <span class="text-stone-400 font-mono">
-                                    + ₡ @((item.IncrementoMinimo ?? 0).ToString("N2"))
+                                    +  @((item.IncrementoMinimo ?? 0).ToString("N2"))Oz
                                 </span>
                             </td>
 

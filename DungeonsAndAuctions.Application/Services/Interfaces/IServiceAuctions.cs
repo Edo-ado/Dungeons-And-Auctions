@@ -35,5 +35,7 @@ namespace D_A.Application.Services.Interfaces
         Task PublishAuction(int id);
         Task BanAuction(int id);
 
+        Task<List<AuctionsDTO?>> GetAllAuctionsValid();
+
     }
 }

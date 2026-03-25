@@ -43,5 +43,7 @@ namespace D_A.Infraestructure.Repository.Interfaces
         Task PublishAuction(int id);
         Task BanAuction(int id);
 
+        Task<List<Auctions?>> GetAllAuctionsValid();
+
     }
 }

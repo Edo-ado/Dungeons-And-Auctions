@@ -86,7 +86,7 @@ namespace D_A.Application.Services.Implementations
             return _repository.CreateAuction(auctionEntity);
         }
 
-  
+
 
         public Task DeleteAuction(int id)
         {
@@ -114,25 +114,32 @@ namespace D_A.Application.Services.Implementations
             await _repository.UpdateAuction(auctionEntity);
         }
 
-        
+
 
 
         public Task CancellAuction(int id)
         {
-            
+
             return _repository.CancellAuction(id);
         }
 
         public Task PublishAuction(int id)
         {
-            
+
             return _repository.PublishAuction(id);
         }
 
         public Task BanAuction(int id)
         {
-                
+
             return _repository.BanAuction(id);
+        }
+
+
+        public async Task<List<AuctionsDTO?>> GetAllAuctionsValid()
+        {
+            var auctions = await _repository.GetAllAuctionsValid();
+            return _mapper.Map<List<AuctionsDTO?>>(auctions);
         }
     }
 }
