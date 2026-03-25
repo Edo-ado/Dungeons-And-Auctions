@@ -263,7 +263,9 @@ namespace D_A.Infraestructure.Repository.Implementation
                 .AsNoTracking()
                 .Include(a => a.IdstateNavigation)
                 .Include(a => a.IdobjectNavigation)
+              
                     .ThenInclude(o => o.IdImageNavigation)
+                      .Include(a => a.AuctionBidHistory)
                 .FirstOrDefaultAsync(a => a.Id == id);
         }
     
