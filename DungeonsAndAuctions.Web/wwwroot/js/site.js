@@ -13,7 +13,6 @@
     });
 });
 
-
 document.querySelectorAll('a, button').forEach(el => {
     el.addEventListener('mouseenter', () => {
         const sound = document.getElementById('hover-sound');
@@ -22,3 +21,4 @@ document.querySelectorAll('a, button').forEach(el => {
         sound.play().catch(() => { });
     });
 });
+

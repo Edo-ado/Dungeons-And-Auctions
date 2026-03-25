@@ -244,7 +244,7 @@ namespace D_A.Infraestructure.Repository.Implementation
                     .ThenInclude(o => o.IdImageNavigation)
                 .FirstOrDefaultAsync(a => a.Id == id);
         }
-    }
+    
 
 
 

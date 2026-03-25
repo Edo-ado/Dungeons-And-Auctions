@@ -9,7 +9,6 @@
 
     <div class="grain-overlay"></div>
 
-    ¿
     <div class="max-w-7xl mx-auto mb-10 flex justify-between items-end border-b-2 border-yellow-700 pb-4">
         <div>
             <h1 class="text-4xl font-bold text-red-600 tracking-widest uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
@@ -24,121 +23,184 @@
         </a>
     </div>
 
-
     <div class="max-w-7xl mx-auto overflow-hidden rounded-lg border border-yellow-900 shadow-[0_20px_50px_rgba(0,0,0,0.9)] bg-[#2a1f1a]">
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-[#3d2b24] text-yellow-500 uppercase text-sm tracking-[0.15em] border-b border-yellow-800">
-                        <th class="px-6 py-5 font-bold w-16">@Html.DisplayNameFor(model => model.Id)</th>
+                        <th class="px-6 py-5 font-bold w-16">ID</th>
                         <th class="px-6 py-5 font-bold">Objeto</th>
                         <th class="px-6 py-5 font-bold">Precio Base</th>
                         <th class="px-6 py-5 font-bold">Incremento Mín.</th>
-                        <th class="px-6 py-5 font-bold">Pujas</th>
+                        <th class="px-6 py-5 font-bold text-center">Pujas</th>
                         <th class="px-6 py-5 font-bold">Estado</th>
-                        <th class="px-6 py-5 font-bold w-28 text-center">Activo</th>
                         <th class="px-6 py-5 font-bold text-right">Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="text-stone-300 divide-y divide-yellow-900/30">
                     @foreach (var item in Model)
                     {
-                        <tr class="hover:bg-[#362822] transition-colors duration-200 group">
+                        @* Determinar el estado para lógica de botones *@
+                        var isActive = item.idstate == 1; @* Publicada/Abierta *@
+                        var isClosed = item.idstate == 2; @* Cerrada *@
+                        var isBanned = item.idstate == 3; @* Baneada *@
+                        var isCancelled = item.idstate == 4; @* Cancelada *@
 
+                        <tr class="@(isBanned ? "bg-red-950/40" : "hover:bg-[#362822]") transition-colors duration-200 group">
 
+                            {{-- ID --}}
                             <td class="px-6 py-4 font-mono text-yellow-700">
                                 #@item.Id
                             </td>
 
-
+                            {{-- Objeto + creador --}}
                             <td class="px-6 py-4">
                                 <div class="text-base font-bold text-stone-200 group-hover:text-yellow-400 transition-colors uppercase tracking-tight">
                                     @item.IdobjectNavigation.Name
                                 </div>
-                                <div class="text-[10px] text-yellow-800 font-mono mt-1 uppercase">Creador: #@item.IdusercreatorNavigation.UserName #@item.IdusercreatorNavigation.Id</div>
+                                <div class="text-[10px] text-yellow-800 font-mono mt-1 uppercase">
+                                    Creador: @item.IdusercreatorNavigation.UserName (#@item.IdusercreatorNavigation.Id)
+                                </div>
+
+                                @* Badge de baneada visible dentro de la celda del objeto *@
+                                @if (isBanned)
+                                {
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest bg-red-900 border border-red-500 text-red-300">
+                                         Subasta Baneada
+                                    </span>
+                                }
                             </td>
 
-
+                            {{-- Precio base --}}
                             <td class="px-6 py-4">
-
                                 <span class="text-yellow-300 font-bold font-mono">
                                     ₡ @((item.BasePrice ?? 0).ToString("N2", System.Globalization.CultureInfo.InvariantCulture))
                                 </span>
-
                             </td>
 
+                            {{-- Incremento mínimo --}}
                             <td class="px-6 py-4">
-
                                 <span class="text-stone-400 font-mono">
                                     + ₡ @((item.IncrementoMinimo ?? 0).ToString("N2"))
                                 </span>
-
                             </td>
 
+                            {{-- Total pujas --}}
                             <td class="px-6 py-4 text-center">
                                 <span class="inline-block px-3 py-1 rounded-full bg-red-900/30 border border-red-800 text-red-400 text-xs font-bold font-mono">
                                     @item.TotalBids pujas
                                 </span>
                             </td>
 
-
+                            {{-- Estado --}}
                             <td class="px-6 py-4">
-                                <span class="px-3 py-1 rounded-full bg-yellow-900/20 border border-yellow-800/50 text-yellow-600 text-xs uppercase tracking-wide">
-                                    @item.IdstateNavigation.Name
-                                </span>
-                            </td>
-
-                            <td class="px-6 py-4 text-center w-28">
-                                @if (item.IsActive)
+                                @if (isBanned)
                                 {
-                                    <span class="inline-flex items-center justify-center w-24 text-green-500 uppercase text-[10px] font-bold tracking-widest">
-                                        <span class="h-2 w-2 rounded-full bg-green-500 mr-2 shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
-                                        Activa
+                                    <span class="px-3 py-1 rounded-full bg-red-900/50 border border-red-500 text-red-300 text-xs uppercase tracking-wide font-bold">
+                                        @item.IdstateNavigation.Name
+                                    </span>
+                                }
+                                else if (isActive)
+                                {
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-900/30 border border-green-700 text-green-400 text-xs uppercase tracking-wide">
+                                        <span class="h-1.5 w-1.5 rounded-full bg-green-400"></span>
+                                        @item.IdstateNavigation.Name
+                                    </span>
+                                }
+                                else if (isCancelled)
+                                {
+                                    <span class="px-3 py-1 rounded-full bg-stone-800 border border-stone-600 text-stone-500 text-xs uppercase tracking-wide">
+                                        @item.IdstateNavigation.Name
                                     </span>
                                 }
                                 else
                                 {
-                                    <span class="inline-flex items-center justify-center w-24 text-red-700 uppercase text-[10px] font-bold tracking-widest">
-                                        <span class="h-2 w-2 rounded-full bg-red-700 mr-2"></span>
-                                        Inactiva
+                                    <span class="px-3 py-1 rounded-full bg-yellow-900/20 border border-yellow-800/50 text-yellow-600 text-xs uppercase tracking-wide">
+                                        @item.IdstateNavigation.Name
                                     </span>
                                 }
                             </td>
 
-
+                            {{-- Acciones --}}
                             <td class="px-6 py-4 text-right text-sm font-bold align-middle">
                                 <div class="flex justify-end items-center gap-2 min-w-max">
-                                    <a asp-action="Edit" asp-route-id="@item.Id" data-no-ajax
-                                       class="text-yellow-600 hover:text-yellow-400 transition-all uppercase tracking-widest text-xs whitespace-nowrap">
-                                        Editar
-                                    </a>
-                                    <span class="text-yellow-900">|</span>
+
+                                  
                                     <a asp-action="Details" asp-route-id="@item.Id"
                                        class="text-blue-500 hover:text-blue-300 transition-all uppercase tracking-widest text-xs whitespace-nowrap">
                                         Ver
                                     </a>
-                                    <span class="text-yellow-900">|</span>
-                                    <form asp-action="ToggleActive" asp-route-id="@item.Id" method="post" class="inline flex items-center">
-                                        @Html.AntiForgeryToken()
-                                        <button type="submit"
-                                                class="@(item.IsActive ? "text-orange-500 hover:text-orange-300" : "text-green-600 hover:text-green-400") transition-all uppercase tracking-widest text-xs whitespace-nowrap">
-                                            @(item.IsActive ? "Cerrar" : "Abrir")
-                                        </button>
-                                    </form>
 
-                                    <span class="text-yellow-900">|</span>
-                                    <form asp-action="Publish" asp-route-id="@item.Id" method="post" class="inline flex items-center">
-                                        @Html.AntiForgeryToken()
-                                        <button type="submit"
-                                                class="text-yellow-400 hover:text-yellow-200 transition-all uppercase tracking-widest text-xs whitespace-nowrap">
-                                             Publicar
-                                        </button>
-                                    </form>
+                                   
 
+                                    @if (isCancelled)
+                                    {
+                                       
+                                        <span class="text-yellow-900">|</span>
+                                        <span class="text-stone-600 uppercase text-xs tracking-widest">Sin acciones</span>
+                                    }
+                                    else if (isBanned)
+                                    {
+                                       
+                                        <span class="text-yellow-900">|</span>
+                                        <span class="text-red-800 uppercase text-xs tracking-widest font-bold">Baneada</span>
+                                    }
+                                    else if (isActive)
+                                    {
+                                        
+                                        <span class="text-yellow-900">|</span>
+
+                                        <form asp-action="CancellAuction" asp-route-id="@item.Id" method="post" class="inline" data-confirm-action="CancellAuction">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit"
+                                                    class="text-orange-500 hover:text-orange-300 transition-all uppercase tracking-widest text-xs whitespace-nowrap">
+                                                Cancelar
+                                            </button>
+                                        </form>
+
+                                        <span class="text-yellow-900">|</span>
+
+                                        <form asp-action="BanAuction" asp-route-id="@item.Id" method="post" class="inline" data-confirm-action="BanAuction">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit"
+                                                    class="text-red-500 hover:text-red-300 transition-all uppercase tracking-widest text-xs whitespace-nowrap">
+                                                Banear
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                       
+                                        <span class="text-yellow-900">|</span>
+
+                                        <a asp-action="Edit" asp-route-id="@item.Id" data-no-ajax
+                                           class="text-yellow-600 hover:text-yellow-400 transition-all uppercase tracking-widest text-xs whitespace-nowrap">
+                                            Editar
+                                        </a>
+
+                                        <span class="text-yellow-900">|</span>
+
+                                        <form asp-action="PublishAuction" asp-route-id="@item.Id" method="post" class="inline" data-confirm-action="PublishAuction">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit"
+                                                    class="text-yellow-400 hover:text-yellow-200 transition-all uppercase tracking-widest text-xs whitespace-nowrap">
+                                                Publicar
+                                            </button>
+                                        </form>
+
+                                        <span class="text-yellow-900">|</span>
+
+                                        <form asp-action="CancellAuction" asp-route-id="@item.Id" method="post" class="inline" data-confirm-action="CancellAuction">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit"
+                                                    class="text-orange-500 hover:text-orange-300 transition-all uppercase tracking-widest text-xs whitespace-nowrap">
+                                                Cancelar
+                                            </button>
+                                        </form>
+                                    }
 
                                 </div>
                             </td>
-
                         </tr>
                     }
                 </tbody>
@@ -185,3 +247,68 @@
         animation: grain 0.5s steps(1) infinite;
     }
 </style>
+
+
+
+@* vaina pa que esta cosa muestre bonito las confirmaciones *@
+@section Scripts {
+    <script>
+      
+        const confirmaciones = {
+            PublishAuction: {
+                title: '¿Publicar subasta?',
+                text: 'La subasta quedará activa y visible para los compradores.',
+                icon: 'question',
+                confirmButtonText: 'Sí, publicar',
+                confirmButtonColor: '#b45309'
+            },
+            CancellAuction: {
+                title: '¿Cancelar subasta?',
+                text: 'Esta acción cancelará la subasta. No podrá reactivarse.',
+                icon: 'warning',
+                confirmButtonText: 'Sí, cancelar',
+                confirmButtonColor: '#ea580c'
+            },
+            BanAuction: {
+                title: '¿Banear subasta?',
+                text: 'La subasta será removida de la plataforma por incumplimiento.',
+                icon: 'warning',
+                confirmButtonText: 'Sí, banear',
+                confirmButtonColor: '#dc2626'
+            }
+        };
+
+        document.querySelectorAll('form[data-confirm-action]').forEach(form => {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const accion = this.dataset.confirmAction;
+                const cfg = confirmaciones[accion] ?? {
+                    title: '¿Confirmar acción?',
+                    text: '',
+                    icon: 'question',
+                    confirmButtonText: 'Confirmar',
+                    confirmButtonColor: '#b45309'
+                };
+
+                Swal.fire({
+                    title: cfg.title,
+                    text: cfg.text,
+                    icon: cfg.icon,
+                    showCancelButton: true,
+                    confirmButtonText: cfg.confirmButtonText,
+                    cancelButtonText: 'No, volver',
+                    confirmButtonColor: cfg.confirmButtonColor,
+                    cancelButtonColor: '#44403c',
+                    background: '#2a1f1a',
+                    color: '#d6d3d1',
+                    iconColor: cfg.icon === 'warning' ? '#f59e0b' : '#60a5fa'
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    </script>
+}
