@@ -247,6 +247,11 @@ namespace D_A.Infraestructure.Repository.Implementation
     
 
 
+
+
+
+
+
         public async Task CancellAuction(int id)
         {
             var auction = await _context.Auctions.FindAsync(id);

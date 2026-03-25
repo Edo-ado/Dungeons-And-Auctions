@@ -114,6 +114,8 @@ namespace D_A.Application.Services.Implementations
             await _repository.UpdateAuction(auctionEntity);
         }
 
+        
+
 
         public Task CancellAuction(int id)
         {

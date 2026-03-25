@@ -1,6 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using D_A.Application.DTOs;
+using D_A.Application.Services.Implementations;
 using D_A.Application.Services.Interfaces;
+using D_A.Infraestructure.Models;
+using D_A.Web.Models;
 using DNDA.Web.Util;
 using Microsoft.AspNetCore.Mvc;
 
@@ -105,7 +109,14 @@ namespace DNDA.Web.Controllers
 
                 auction.idusercreator = 2;
                 await _ServiceAuctions.CreateAuction(auction);
-                return RedirectToAction(nameof(Index));
+
+                TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
+                    "Subasta creada",
+                    "La subasta fue registrada exitosamente.",
+                    SweetAlertMessageType.success
+                );
+
+                return RedirectToAction(nameof(IndexMaintenance));
             }
 
             ViewBag.Objects = await _ServiceObject.ListActiveAsync();
@@ -141,6 +152,8 @@ namespace DNDA.Web.Controllers
                 return RedirectToAction(nameof(IndexMaintenance));
             }
 
+            // Tomado de origin/master: cargar el dropdown de objetos
+            ViewBag.Objects = await _ServiceObject.ListActiveAsync();
             var user = await _serviceUser.FindByIdAsync(2);
             ViewBag.UserName = user?.UserName;
             ViewBag.UserId = user?.Id;
@@ -185,30 +198,135 @@ namespace DNDA.Web.Controllers
                 return View(auction);
             }
 
+            // Tomado de rama ash: asignar el ID antes de actualizar
             auction.Id = id;
             await _ServiceAuctions.UpdateAuction(auction);
+
             TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
                 "Subasta actualizada",
-                "La subasta fue modificada exitosamente.",
+                "Los cambios fueron guardados correctamente.",
                 SweetAlertMessageType.success
             );
+
             return RedirectToAction(nameof(IndexMaintenance));
         }
 
-        public async Task<IActionResult> Delete(int id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PublishAuction(int id)
         {
-            var auction = await _ServiceAuctions.AllDetails(id);
-            if (auction == null) return NotFound();
-            await _ServiceAuctions.DeleteAuction(id);
-            return View(auction);
+            var auction = await _ServiceAuctions.GetAuctionById(id);
+            if (auction == null)
+            {
+                TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
+                    "Error",
+                    "No se encontró la subasta indicada.",
+                    SweetAlertMessageType.error
+                );
+                return RedirectToAction(nameof(IndexMaintenance));
+            }
+
+            if (auction.idstate == 1)
+            {
+                TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
+                    "No permitido",
+                    "La subasta ya se encuentra publicada.",
+                    SweetAlertMessageType.warning
+                );
+                return RedirectToAction(nameof(IndexMaintenance));
+            }
+
+            await _ServiceAuctions.PublishAuction(id);
+
+            TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
+                "Subasta publicada",
+                "La subasta fue publicada y ya está activa.",
+                SweetAlertMessageType.success
+            );
+
+            return RedirectToAction(nameof(IndexMaintenance));
         }
 
-        public async Task<IActionResult> PublishAuctions(int id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CancellAuction(int id)
         {
-            var auction = await _ServiceAuctions.AllDetails(id);
-            if (auction == null) return NotFound();
-            await _ServiceAuctions.PublishAuction(id);
-            return View(auction);
+            var auction = await _ServiceAuctions.GetAuctionById(id);
+            if (auction == null)
+            {
+                TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
+                    "Error",
+                    "No se encontró la subasta indicada.",
+                    SweetAlertMessageType.error
+                );
+                return RedirectToAction(nameof(IndexMaintenance));
+            }
+
+            if (auction.idstate == 4)
+            {
+                TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
+                    "No permitido",
+                    "La subasta ya está cancelada.",
+                    SweetAlertMessageType.warning
+                );
+                return RedirectToAction(nameof(IndexMaintenance));
+            }
+
+            if (auction.TotalBids > 0)
+            {
+                TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
+                    "No permitido",
+                    "No se puede cancelar una subasta que ya tiene pujas registradas.",
+                    SweetAlertMessageType.warning
+                );
+                return RedirectToAction(nameof(IndexMaintenance));
+            }
+
+            await _ServiceAuctions.CancellAuction(id);
+
+            TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
+                "Subasta cancelada",
+                "La subasta fue cancelada correctamente.",
+                SweetAlertMessageType.success
+            );
+
+            return RedirectToAction(nameof(IndexMaintenance));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> BanAuction(int id)
+        {
+            var auction = await _ServiceAuctions.GetAuctionById(id);
+            if (auction == null)
+            {
+                TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
+                    "Error",
+                    "No se encontró la subasta indicada.",
+                    SweetAlertMessageType.error
+                );
+                return RedirectToAction(nameof(IndexMaintenance));
+            }
+
+            if (auction.idstate == 3)
+            {
+                TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
+                    "No permitido",
+                    "La subasta ya se encuentra baneada.",
+                    SweetAlertMessageType.warning
+                );
+                return RedirectToAction(nameof(IndexMaintenance));
+            }
+
+            await _ServiceAuctions.BanAuction(id);
+
+            TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
+                "Subasta baneada",
+                "La subasta fue baneada y removida de la plataforma.",
+                SweetAlertMessageType.success
+            );
+
+            return RedirectToAction(nameof(IndexMaintenance));
         }
     }
 }
