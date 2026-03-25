@@ -8,7 +8,6 @@ using D_A.Web.Models;
 using DNDA.Web.Util;
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace DNDA.Web.Controllers
 {
     public class AuctionsController : Controller
@@ -25,7 +24,6 @@ namespace DNDA.Web.Controllers
             _ServiceObject = ServiceObject;
             _serviceBidHistory = serviceBidHistory;
         }
-
 
         public async Task<IActionResult> Index()
         {
@@ -60,16 +58,17 @@ namespace DNDA.Web.Controllers
             return _serviceBidHistory.CountBidsByAuction(id).Result;
         }
 
+        // GET: Create
         public async Task<IActionResult> Create()
         {
             ViewBag.Objects = await _ServiceObject.ListActiveAsync();
-            var userAsigned = await _serviceUser.FindByIdAsync(2); // usuario simulado
+            var userAsigned = await _serviceUser.FindByIdAsync(2);
             ViewBag.UserName = userAsigned?.UserName;
             ViewBag.UserId = userAsigned?.Id;
-
             return View();
         }
 
+        // POST: Create
         [HttpPost]
         public async Task<IActionResult> Create(AuctionsDTO auction)
         {
@@ -101,12 +100,10 @@ namespace DNDA.Web.Controllers
                 if (HasActiveAuctions)
                 {
                     ModelState.AddModelError("idobject", "El objeto ya tiene una subasta activa.");
-
                     ViewBag.Objects = await _ServiceObject.ListActiveAsync();
                     var userAsigned2 = await _serviceUser.FindByIdAsync(2);
                     ViewBag.UserName = userAsigned2?.UserName;
                     ViewBag.UserId = userAsigned2?.Id;
-
                     return View(auction);
                 }
 
@@ -126,10 +123,10 @@ namespace DNDA.Web.Controllers
             var userAsigned = await _serviceUser.FindByIdAsync(2);
             ViewBag.UserName = userAsigned?.UserName;
             ViewBag.UserId = userAsigned?.Id;
-
             return View(auction);
         }
 
+        // GET: Edit
         public async Task<ActionResult> Edit(int id)
         {
             var auction = await _ServiceAuctions.GetAuctionById(id);
@@ -155,14 +152,15 @@ namespace DNDA.Web.Controllers
                 return RedirectToAction(nameof(IndexMaintenance));
             }
 
+            // Tomado de origin/master: cargar el dropdown de objetos
             ViewBag.Objects = await _ServiceObject.ListActiveAsync();
             var user = await _serviceUser.FindByIdAsync(2);
             ViewBag.UserName = user?.UserName;
             ViewBag.UserId = user?.Id;
-
             return View(auction);
         }
 
+        // POST: Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(int id, AuctionsDTO auction)
@@ -194,13 +192,14 @@ namespace DNDA.Web.Controllers
                 var auctionFull = await _ServiceAuctions.GetAuctionById(id);
                 auction.IdobjectNavigation = auctionFull?.IdobjectNavigation;
                 auction.IdstateNavigation = auctionFull?.IdstateNavigation;
-
-                var usario = await _serviceUser.FindByIdAsync(2);
-                ViewBag.UserName = usario?.UserName;
-                ViewBag.UserId = usario?.Id;
+                var usuario = await _serviceUser.FindByIdAsync(2);
+                ViewBag.UserName = usuario?.UserName;
+                ViewBag.UserId = usuario?.Id;
                 return View(auction);
             }
 
+            // Tomado de rama ash: asignar el ID antes de actualizar
+            auction.Id = id;
             await _ServiceAuctions.UpdateAuction(auction);
 
             TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
@@ -211,9 +210,6 @@ namespace DNDA.Web.Controllers
 
             return RedirectToAction(nameof(IndexMaintenance));
         }
-
-
-       
 
         [HttpPost]
         [ValidateAntiForgeryToken]

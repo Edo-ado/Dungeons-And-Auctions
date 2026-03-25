@@ -48,12 +48,12 @@
 
                         <tr class="@(isBanned ? "bg-red-950/40" : "hover:bg-[#362822]") transition-colors duration-200 group">
 
-                            {{-- ID --}}
+                         
                             <td class="px-6 py-4 font-mono text-yellow-700">
                                 #@item.Id
                             </td>
 
-                            {{-- Objeto + creador --}}
+                         
                             <td class="px-6 py-4">
                                 <div class="text-base font-bold text-stone-200 group-hover:text-yellow-400 transition-colors uppercase tracking-tight">
                                     @item.IdobjectNavigation.Name
@@ -71,28 +71,31 @@
                                 }
                             </td>
 
-                            {{-- Precio base --}}
+                          
                             <td class="px-6 py-4">
                                 <span class="text-yellow-300 font-bold font-mono">
                                     ₡ @((item.BasePrice ?? 0).ToString("N2", System.Globalization.CultureInfo.InvariantCulture))
                                 </span>
+
+                                <span class="text-yellow-300 font-bold font-mono whitespace-nowrap">
+                                    ₡@((item.BasePrice ?? 0).ToString("F2", System.Globalization.CultureInfo.InvariantCulture))
+                                </span>
                             </td>
 
-                            {{-- Incremento mínimo --}}
+                      
                             <td class="px-6 py-4">
                                 <span class="text-stone-400 font-mono">
                                     + ₡ @((item.IncrementoMinimo ?? 0).ToString("N2"))
                                 </span>
                             </td>
 
-                            {{-- Total pujas --}}
+                           
                             <td class="px-6 py-4 text-center">
                                 <span class="inline-block px-3 py-1 rounded-full bg-red-900/30 border border-red-800 text-red-400 text-xs font-bold font-mono">
                                     @item.TotalBids pujas
                                 </span>
                             </td>
 
-                            {{-- Estado --}}
                             <td class="px-6 py-4">
                                 @if (isBanned)
                                 {
@@ -121,7 +124,6 @@
                                 }
                             </td>
 
-                            {{-- Acciones --}}
                             <td class="px-6 py-4 text-right text-sm font-bold align-middle">
                                 <div class="flex justify-end items-center gap-2 min-w-max">
 
