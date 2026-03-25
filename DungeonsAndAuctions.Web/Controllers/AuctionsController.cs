@@ -27,7 +27,8 @@ namespace DNDA.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var all = await _ServiceAuctions.GetAllAuctions();
+            var all = await _ServiceAuctions.GetAllAuctionsValid();
+
             var active = await _ServiceAuctions.GetAllAuctionsActive();
             var closed = await _ServiceAuctions.GetAllAuctionsClosed();
             var banned = await _ServiceAuctions.GetAllAuctionsBanned();

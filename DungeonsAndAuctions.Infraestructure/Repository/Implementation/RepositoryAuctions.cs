@@ -77,6 +77,27 @@ namespace D_A.Infraestructure.Repository.Implementation
 
 
         }
+        public async Task<List<Auctions?>> GetAllAuctionsValid()
+        {
+            var detail = await _context.Auctions
+            .AsNoTracking()
+            .Where(a => a.Idstate != 6)
+
+            .Include(a => a.IdobjectNavigation)
+            .ThenInclude(o => o.IdImageNavigation)
+
+            .Include(a => a.AuctionBidHistory)
+            .Include(a => a.IdobjectNavigation)
+
+
+            .Include(u => u.IdusercreatorNavigation)
+            .Include(s => s.IdstateNavigation)
+            .ToListAsync();
+
+            return detail;
+
+
+        }
 
         public async Task<List<Auctions?>> GetAllAuctionsInactive()
         {
