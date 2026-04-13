@@ -19,6 +19,7 @@ namespace D_A.Application.Services.Interfaces
 
         Task ToggleBlockAsync(int id);
 
+        Task<UsersDTO> GetWinnerUserByPaymentAsync(int winnerUserId);
         Task ToggleActiveAsync(int id);
 
     }

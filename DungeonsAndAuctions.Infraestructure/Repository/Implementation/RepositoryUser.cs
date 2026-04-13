@@ -78,5 +78,16 @@ namespace D_A.Infraestructure.Repository.Implementation
             await _context.SaveChangesAsync();
         }
 
+        public async Task<Users?> GetWinnerUserByPaymentAsync(int winnerUserId)
+        {
+            var winner = await _context.AuctionWinner
+                .FirstOrDefaultAsync(w => w.Idauctionwinner == winnerUserId);
+
+            if (winner == null) return null;
+
+            return await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == winner.Winnerid);
+        }
+
     }
 }

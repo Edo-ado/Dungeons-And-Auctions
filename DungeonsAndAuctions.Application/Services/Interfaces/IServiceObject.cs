@@ -25,6 +25,8 @@ namespace D_A.Application.Services.Interfaces
         Task<bool> HasActiveAuctionAsync(int objectId);
         Task<bool> HasBeenAuctionedAsync(int objectId);
 
+        Task<Objects?> FindByIdAsync(int id);
+
 
 
     }

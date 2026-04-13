@@ -53,7 +53,11 @@ namespace D_A.Application.Services.Implementations
             await _repository.ToggleActiveAsync(id);
         }
 
-
-
+        public async Task<UsersDTO> GetWinnerUserByPaymentAsync(int winnerUserId)
+        {
+            var user = await _repository.GetWinnerUserByPaymentAsync(winnerUserId);
+            if (user == null) return null;
+            return _mapper.Map<UsersDTO>(user);
+        }
     }
 }

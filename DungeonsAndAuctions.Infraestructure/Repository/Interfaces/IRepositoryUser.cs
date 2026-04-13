@@ -17,6 +17,8 @@ namespace D_A.Infraestructure.Repository.Interfaces
         Task<Users?> FindByIdForUpdateAsync(int id);
         Task ToggleBlockAsync(int id);
         Task ToggleActiveAsync(int id);
+
+        Task<Users?> GetWinnerUserByPaymentAsync(int winnerUserId);
     }
 
 

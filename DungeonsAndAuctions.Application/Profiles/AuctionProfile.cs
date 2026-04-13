@@ -15,7 +15,7 @@ namespace D_A.Application.Profiles
                    ? src.AuctionBidHistory.Count
                    : 0)
            );
-
+            CreateMap<Payment, PaymentDTO>();
             CreateMap<AuctionsDTO, Auctions>();
         }
     }
