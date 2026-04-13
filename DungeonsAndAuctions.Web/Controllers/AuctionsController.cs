@@ -98,6 +98,7 @@ namespace DNDA.Web.Controllers
             if (ModelState.IsValid)
             {
                 var HasActiveAuctions = await _ServiceObject.HasActiveAuctionAsync(auction.idobject!.Value);
+
                 if (HasActiveAuctions)
                 {
                     ModelState.AddModelError("idobject", "El objeto ya tiene una subasta activa.");
@@ -199,7 +200,7 @@ namespace DNDA.Web.Controllers
                 return View(auction);
             }
 
-            // Tomado de rama ash: asignar el ID antes de actualizar
+            //rama ash: asignar el ID antes de actualizar
             auction.Id = id;
             await _ServiceAuctions.UpdateAuction(auction);
 

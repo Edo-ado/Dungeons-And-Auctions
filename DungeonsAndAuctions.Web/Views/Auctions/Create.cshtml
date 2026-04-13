@@ -313,6 +313,7 @@
         document.getElementById('selectedObjectId').value = id;
         document.getElementById('objectNamePreview').textContent = name;
         const preview = document.getElementById('objectImagePreview');
+
         if (img) {
             preview.innerHTML = `<img src="data:image/jpeg;base64,${img}" class="w-full h-full object-cover" alt="${name}" />`;
         } else {
