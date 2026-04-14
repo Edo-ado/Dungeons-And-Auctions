@@ -1,21 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using D_A.Infraestructure.Models;
+﻿using D_A.Infraestructure.Models;
 
 namespace D_A.Infraestructure.Repository.Interfaces
 {
     public interface IRepositoryAuctionBidHistory
     {
-        Task<ICollection<AuctionBidHistory>> ListAsync(); 
+        Task<ICollection<AuctionBidHistory>> ListAsync();
+        Task<int> CountBidsByBuyerAsync(int userId);
+        Task<int> CountBidsByAuction(int AuctionId);
 
-     
-        Task<int> CountBidsByBuyerAsync(int userId); //cantidad bids del comprador (RoleId=1)
+       
 
 
-        Task<int> CountBidsByAuction(int AuctionId); //cantidad de bids de una subasta
+        Task<List<AuctionBidHistory>> GetBidsByAuctionAsync(int auctionId);
+        Task<AuctionBidHistory?> GetHighestBidAsync(int auctionId);
+        Task AddBidAsync(AuctionBidHistory bid);
+        Task MarkAllBidsAsNotLastAsync(int auctionId);
     }
-
 }
