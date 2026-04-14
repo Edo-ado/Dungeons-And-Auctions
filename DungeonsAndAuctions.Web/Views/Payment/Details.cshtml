@@ -1,0 +1,368 @@
+﻿@model D_A.Application.DTOs.PaymentDTO
+
+@{
+    ViewData["Title"] = "Registro de Pago";
+}
+
+<link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --ink: #1a0f00;
+        --parchment: #f2e8c9;
+        --parchment-dark: #d9c89a;
+        --parchment-edge: #b8a06a;
+        --gold: #c9a84c;
+        --gold-light: #e8c96a;
+        --blood: #8b1a1a;
+        --seal: #7a1515;
+    }
+
+    .payment-page {
+        min-height: 100vh;
+        background: radial-gradient(ellipse at center, #1a1005 0%, #0d0800 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        font-family: 'IM Fell English', serif;
+    }
+
+    .scroll-wrapper {
+        position: relative;
+        max-width: 640px;
+        width: 100%;
+    }
+
+    /* Top rod */
+    .scroll-rod {
+        height: 28px;
+        background: linear-gradient(180deg, #8a6a2a 0%, #c9a84c 40%, #8a6a2a 100%);
+        border-radius: 14px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.6), inset 0 1px 2px rgba(255,255,255,0.15);
+        position: relative;
+        z-index: 2;
+    }
+
+        .scroll-rod::before,
+        .scroll-rod::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            background: radial-gradient(circle, #e8c96a 0%, #a07830 60%, #6a4e1a 100%);
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        }
+
+        .scroll-rod::before {
+            left: -10px;
+        }
+
+        .scroll-rod::after {
+            right: -10px;
+        }
+
+    /* Parchment body */
+    .parchment {
+        background: radial-gradient(ellipse at 10% 10%, rgba(180,140,80,0.25) 0%, transparent 50%), radial-gradient(ellipse at 90% 90%, rgba(150,110,60,0.2) 0%, transparent 50%), linear-gradient(160deg, #f5ecd0 0%, #ede0b8 30%, #e8d8a8 60%, #ddc898 100%);
+        border-left: 4px solid var(--parchment-edge);
+        border-right: 4px solid var(--parchment-edge);
+        padding: 2.5rem 3rem;
+        position: relative;
+        box-shadow: inset 0 0 40px rgba(100,70,20,0.2), 0 8px 32px rgba(0,0,0,0.5);
+    }
+
+        /* Torn/aged edges top and bottom */
+        .parchment::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: repeating-linear-gradient( 90deg, transparent, transparent 8px, rgba(100,70,20,0.12) 8px, rgba(100,70,20,0.12) 10px );
+        }
+
+        .parchment::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: repeating-linear-gradient( 90deg, transparent, transparent 8px, rgba(100,70,20,0.12) 8px, rgba(100,70,20,0.12) 10px );
+        }
+
+    /* Title */
+    .scroll-title {
+        font-family: 'Cinzel', serif;
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: var(--ink);
+        text-align: center;
+        letter-spacing: 0.08em;
+        margin-bottom: 0.25rem;
+        text-shadow: 1px 1px 0 rgba(255,255,255,0.3);
+    }
+
+    .scroll-subtitle {
+        font-family: 'IM Fell English', serif;
+        font-style: italic;
+        color: #6b4e1a;
+        text-align: center;
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Divider */
+    .divider {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin: 1.25rem 0;
+        color: var(--gold);
+    }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--parchment-edge), transparent);
+        }
+
+    .divider-icon {
+        font-size: 1rem;
+    }
+
+    /* Fields */
+    .field-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        padding: 0.5rem 0;
+        border-bottom: 1px dashed rgba(100,70,20,0.25);
+        color: var(--ink);
+        font-size: 0.95rem;
+    }
+
+        .field-row:last-of-type {
+            border-bottom: none;
+        }
+
+    .field-label {
+        font-family: 'Cinzel', serif;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        color: #7a5520;
+        text-transform: uppercase;
+    }
+
+    .field-value {
+        font-family: 'IM Fell English', serif;
+        font-size: 1rem;
+        color: #1a0f00;
+    }
+
+    .amount-value {
+        font-family: 'Cinzel', serif;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #5a2a00;
+    }
+
+    /* Status badge */
+    .status-badge {
+        display: inline-block;
+        padding: 0.2rem 0.8rem;
+        border-radius: 2px;
+        font-family: 'Cinzel', serif;
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+
+    .status-pending {
+        background: rgba(180,120,20,0.15);
+        border: 1px solid #b87800;
+        color: #7a4e00;
+    }
+
+    .status-paid {
+        background: rgba(30,90,30,0.12);
+        border: 1px solid #2d7a2d;
+        color: #1a4f1a;
+    }
+
+    .status-debt {
+        background: rgba(139,26,26,0.12);
+        border: 1px solid var(--blood);
+        color: var(--blood);
+    }
+
+    /* Seal */
+    .seal-area {
+        display: flex;
+        justify-content: center;
+        margin: 1.75rem 0 0.5rem;
+    }
+
+    .wax-seal {
+        width: 72px;
+        height: 72px;
+        background: radial-gradient(circle at 35% 35%, #c0302a, #7a1515 70%, #4a0a0a 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 16px rgba(122,21,21,0.5), inset 0 1px 2px rgba(255,255,255,0.1);
+        font-size: 1.8rem;
+        color: rgba(255,220,180,0.85);
+        border: 3px solid #9a2020;
+    }
+
+    /* Confirm button */
+    .confirm-btn {
+        display: block;
+        width: 100%;
+        margin-top: 1.5rem;
+        padding: 0.85rem;
+        background: linear-gradient(160deg, #8b1a1a 0%, #5a0f0f 100%);
+        color: #f5ddb0;
+        font-family: 'Cinzel', serif;
+        font-size: 0.9rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        text-align: center;
+        border: 1px solid #b03030;
+        border-radius: 2px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        text-decoration: none;
+    }
+
+        .confirm-btn:hover {
+            background: linear-gradient(160deg, #a82020 0%, #701515 100%);
+            color: #ffe8c0;
+            box-shadow: 0 6px 20px rgba(139,26,26,0.4);
+            transform: translateY(-1px);
+        }
+
+    .confirmed-notice {
+        text-align: center;
+        font-family: 'IM Fell English', serif;
+        font-style: italic;
+        color: #2d6e2d;
+        font-size: 0.95rem;
+        margin-top: 1.5rem;
+        padding: 0.6rem;
+        border: 1px dashed #4a9a4a;
+        background: rgba(30,90,30,0.06);
+    }
+</style>
+
+<div class="payment-page">
+    <div class="scroll-wrapper">
+
+        <!-- Top rod -->
+        <div class="scroll-rod"></div>
+
+        <!-- Parchment -->
+        <div class="parchment">
+
+            <h1 class="scroll-title">Registro de Pago</h1>
+            <p class="scroll-subtitle">Documento oficial de la subasta</p>
+
+            <div class="divider"><span class="divider-icon">⚔</span></div>
+
+            <!-- Fields -->
+            <div class="field-row">
+                <span class="field-label">Subasta</span>
+                <span class="field-value">#@Model.AuctionId</span>
+            </div>
+
+            <div class="field-row">
+                <span class="field-label">Objeto</span>
+                <span class="field-value">@ViewBag.NameObject</span>
+            </div>
+
+            <div class="field-row">
+                <span class="field-label">Comprador</span>
+                <span class="field-value">@ViewBag.UsuarioNombre (@ViewBag.UserTag)</span>
+            </div>
+
+            <div class="field-row">
+                <span class="field-label">Monto Final</span>
+                <span class="amount-value"> @Model.Amount?.ToString("N2") Oz</span>
+            </div>
+
+            <div class="field-row">
+                <span class="field-label">Fecha de creación</span>
+                <span class="field-value">@Model.DateCreated?.ToString("dd/MM/yyyy HH:mm")</span>
+            </div>
+
+            @if (Model.Dateconfirmed.HasValue)
+            {
+                <div class="field-row">
+                    <span class="field-label">Fecha confirmado</span>
+                    <span class="field-value">@Model.Dateconfirmed?.ToString("dd/MM/yyyy HH:mm")</span>
+                </div>
+            }
+
+            <div class="field-row">
+                <span class="field-label">Estado</span>
+                <span class="field-value">
+                    @{
+                        var statusClass = Model.PaymentStatusId switch
+                        {
+                            1 => "status-paid",
+                            2 => "status-pending",
+                            3 => "status-debt",
+                            _ => "status-pending"
+                        };
+                        var statusText = Model.PaymentStatusId switch
+                        {
+                            1 => "Paid",
+                            2 => "In Payment Process",
+                            3 => "Debt",
+                            _ => "Desconocido"
+                        };
+                    }
+                    <span class="status-badge @statusClass">@statusText</span>
+                </span>
+            </div>
+
+            <div class="divider"><span class="divider-icon">🜲</span></div>
+
+            <!-- Wax seal -->
+            <div class="seal-area">
+                <div class="wax-seal">⚜</div>
+            </div>
+
+            <!-- Confirm button or confirmed notice -->
+            @if (Model.PaymentStatusId != 1)
+            {
+                <form asp-action="Confirm" asp-controller="Payment" method="post">
+                    <input type="hidden" name="paymentId" value="@Model.PaymentId" />
+                    <button type="submit" class="confirm-btn">⚔ Confirmar Pago ⚔</button>
+                </form>
+            }
+            else
+            {
+                <p class="confirmed-notice">✦ Este pago ha sido confirmado y sellado ✦</p>
+            }
+
+        </div>
+
+        <!-- Bottom rod -->
+        <div class="scroll-rod"></div>
+
+    </div>
+</div>

@@ -12,9 +12,6 @@ namespace D_A.Application.Services.Implementations
 {
     public class ServiceQuality : IServiceQuality
     {
-
-
-
         private readonly IRepositoryQuaility _repository;
         private readonly IMapper _mapper;
 

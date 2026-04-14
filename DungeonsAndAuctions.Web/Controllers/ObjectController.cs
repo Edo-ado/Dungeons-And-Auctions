@@ -296,6 +296,7 @@ namespace DNDA.Web.Controllers
                 $"El objeto {dto.Name} fue modificado exitosamente.",
                 SweetAlertMessageType.success
             );
+
             return RedirectToAction(nameof(Index));
         }
 

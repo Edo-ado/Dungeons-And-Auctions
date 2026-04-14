@@ -35,6 +35,12 @@ namespace D_A.Application.Services.Implementations
             await _repository.DeleteAsync(id);
         }
 
+        public async Task<Objects?> FindByIdAsync(int id)
+        {
+            var ojb = await _repository.FindByIdAsync(id);
+            return _mapper.Map<Objects>(ojb);
+        }
+
         public async Task<Categories?> GetCategoriesByIdObject(int id)
         {
             var categories = await _repository.GetCategoriesByIdObject(id);

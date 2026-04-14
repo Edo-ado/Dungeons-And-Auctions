@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using D_A.Infraestructure.Models;
+
+namespace D_A.Infraestructure.Repository.Interfaces
+{
+    public interface IRepositoryPayment
+    {
+        Task GeneratePayment(int auctionId);
+        Task<Payment> ConfirmPaymentAsync(int paymentId);
+
+        Task<Payment> GetPaymentByAuctionAsync(int paymentId);
+
+       
+
+    }
+}

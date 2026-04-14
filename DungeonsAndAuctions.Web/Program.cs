@@ -87,7 +87,7 @@ builder.Services.AddScoped<IRepositoryGender, RepositoryGender>();
 builder.Services.AddScoped<IRepositoryQuaility, RepositoryQuality>();
 
 
-
+builder.Services.AddScoped<IRepositoryPayment, RepositoryPayment>();
 
 //Services
 builder.Services.AddScoped<IServiceUser, ServiceUser>();
@@ -96,6 +96,7 @@ builder.Services.AddScoped<IServiceAuctionBidHistory, ServiceAuctionBidHistory>(
 builder.Services.AddScoped<IServiceObject, ServiceObject>();
 builder.Services.AddScoped<IServiceCategories, ServiceCategories>();
 builder.Services.AddScoped<IServiceQuality, ServiceQuality>();
+builder.Services.AddScoped<IServicePayment, ServicePayment>();
 
 
 builder.Services.AddScoped<IServiceCountry, ServiceCountry>();
