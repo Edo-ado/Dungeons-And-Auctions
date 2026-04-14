@@ -263,14 +263,23 @@ namespace D_A.Infraestructure.Repository.Implementation
                 .AsNoTracking()
                 .Include(a => a.IdstateNavigation)
                 .Include(a => a.IdobjectNavigation)
+              
                     .ThenInclude(o => o.IdImageNavigation)
+                      .Include(a => a.AuctionBidHistory)
                 .FirstOrDefaultAsync(a => a.Id == id);
         }
     
 
 
-
-
+        public async Task CloseAuction(int id)
+        {
+            var auction = await _context.Auctions.FindAsync(id);
+            if (auction != null)
+            {
+                auction.Idstate = 2; // Assuming 2 represents "Closed"
+                await _context.SaveChangesAsync();
+            }
+        }
 
 
 
