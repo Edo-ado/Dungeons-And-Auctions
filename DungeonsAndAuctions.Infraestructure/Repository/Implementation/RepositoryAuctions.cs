@@ -237,6 +237,7 @@ namespace D_A.Infraestructure.Repository.Implementation
             if (auction != null)
             {
                 auction.IsActive = !auction.IsActive;
+                await _context.SaveChangesAsync();
             }
            
          
