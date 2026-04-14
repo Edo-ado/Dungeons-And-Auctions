@@ -1,214 +1,226 @@
 ﻿@model D_A.Application.DTOs.AuctionsDTO
 
 @{
-    ViewData["Title"] = "Detalle de Subasta";
+    ViewData["Title"] = "Subasta — " + (Model?.IdobjectNavigation?.Name ?? "Reliquia");
+
+
+    int currentUserId   = ViewBag.CurrentUserId  ?? 0;
+    string currentUserName = ViewBag.CurrentUserName ?? "—";
+    bool isOwner        = ViewBag.IsOwner         ?? false;
+
+   
+    var highestBid = Model?.AuctionBidHistory?.OrderByDescending(b => b.Amount).FirstOrDefault();
+    decimal currentHighest = highestBid?.Amount ?? Model?.BasePrice ?? 0;
+    string  currentLeader  = highestBid?.User?.UserName ?? "Sin pujas";
+    int     currentLeaderId = highestBid?.UserId ?? 0;
+
+
+    bool isActive = Model?.idstate == 1;
+
+
+    string endDateIso = Model != null
+        ? new DateTime(Model.EndDate.Year, Model.EndDate.Month, Model.EndDate.Day, 23, 59, 59).ToString("o")
+        : "";
 }
 
 <div class="relative min-h-screen overflow-hidden font-['Cinzel']" style="background-color: #1a1412;">
 
-    <!-- Grain overlay -->
+  
     <div class="grain-overlay"></div>
 
-    <!-- Embers -->
+ 
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
-        <div class="ember ember-1"></div>
-        <div class="ember ember-2"></div>
-        <div class="ember ember-3"></div>
-        <div class="ember ember-4"></div>
-        <div class="ember ember-5"></div>
-        <div class="ash ash-1"></div>
-        <div class="ash ash-2"></div>
-        <div class="ash ash-3"></div>
+        <div class="ember ember-1"></div><div class="ember ember-2"></div>
+        <div class="ember ember-3"></div><div class="ember ember-4"></div>
+        <div class="ember ember-5"></div><div class="ash ash-1"></div>
+        <div class="ash ash-2"></div><div class="ash ash-3"></div>
     </div>
 
-    <!-- Top line -->
+ 
     <div class="relative z-10 h-1 bg-gradient-to-r from-transparent via-yellow-600 to-transparent"></div>
 
-    <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
-         style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%224%22 height=%224%22%3E%3Crect width=%224%22 height=%224%22 fill=%22%231a1412%22/%3E%3Ccircle cx=%221%22 cy=%221%22 r=%220.5%22 fill=%22%23ffffff08%22/%3E%3Ccircle cx=%223%22 cy=%223%22 r=%220.5%22 fill=%22%23ffffff05%22/%3E%3C/svg%3E');">
-
-        @if (Model == null)
-        {
-            <div class="flex flex-col items-center justify-center py-40 text-center">
-                <span class="text-red-800 text-6xl mb-6">⚔</span>
-                <p class="text-stone-400 font-serif italic text-lg">Esta reliquia no ha sido encontrada en los archivos del reino.</p>
+    @if (Model == null)
+    {
+        <div class="flex flex-col items-center justify-center py-40 text-center">
+            <span class="text-red-800 text-6xl mb-6"></span>
+            <p class="text-stone-400 font-serif italic text-lg">Esta reliquia no ha sido encontrada.</p>
+        </div>
+    }
+    else
+    {
+    
+        <div id="toast-notification"
+             class="fixed top-6 right-6 z-50 hidden max-w-sm px-5 py-4 border text-sm font-['Cinzel']
+                    shadow-lg transition-all duration-500"
+             style="background:#1e1208; border-color:#78350f;">
+            <div class="flex items-start gap-3">
+                <span id="toast-icon" class="text-xl mt-0.5"></span>
+                <div>
+                    <p id="toast-title" class="text-yellow-300 text-xs uppercase tracking-widest mb-1"></p>
+                    <p id="toast-body"  class="text-stone-300 text-xs leading-relaxed"></p>
+                </div>
+                <button onclick="hideToast()" class="ml-auto text-stone-600 hover:text-stone-300 text-lg leading-none">×</button>
             </div>
-        }
-        else
-        {
-            <!-- PAGE HEADER -->
-            <div class="flex flex-col items-center text-center mb-14 animate-rise">
-                <div class="flex items-center gap-4 mb-5">
+        </div>
+
+   
+        <div id="winner-banner" class="hidden relative z-20 py-4 text-center"
+             style="background:linear-gradient(90deg,transparent,rgba(180,130,0,0.15),transparent);
+                    border-top:1px solid #78350f; border-bottom:1px solid #78350f;">
+            <p class="text-yellow-300 text-sm tracking-[0.3em] uppercase font-['Cinzel']">
+                 <span id="winner-banner-text">La subasta ha finalizado</span> ♛
+            </p>
+        </div>
+
+        <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+            <!-- HEADER -->
+            <div class="flex flex-col items-center text-center mb-10 animate-rise">
+                <div class="flex items-center gap-4 mb-4">
                     <div class="h-px w-20 bg-gradient-to-r from-transparent to-yellow-700"></div>
                     <svg class="w-5 h-5 text-yellow-700" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" />
+                        <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
                     </svg>
                     <div class="h-px w-20 bg-gradient-to-l from-transparent to-yellow-700"></div>
                 </div>
                 <p class="text-yellow-700 text-xs tracking-[0.5em] uppercase mb-2">Pergamino de la Reliquia</p>
-                <h1 class="text-3xl md:text-4xl text-yellow-100 tracking-[0.12em] uppercase mb-1"
+                <h1 class="text-3xl md:text-4xl text-yellow-100 tracking-[0.12em] uppercase"
                     style="text-shadow: 0 0 40px rgba(180,130,0,0.3);">
                     @Model.IdobjectNavigation?.Name
                 </h1>
-                <p class="text-stone-500 text-xs font-serif italic mt-2">Registro #@Model.Id</p>
+                <p class="text-stone-500 text-xs font-serif italic mt-1">Subasta #@Model.Id</p>
 
-                <div class="flex items-center gap-6 mt-5">
+                <!-- Estado badge -->
+                <div class="mt-3" id="auction-state-badge">
+                    @if (isActive)
+                    {
+                        <span class="badge-open" id="state-label"> Activa</span>
+                    }
+                    else if (Model.idstate == 2)
+                    {
+                        <span class="badge-closed" id="state-label"> Finalizada</span>
+                    }
+                    else
+                    {
+                        <span class="badge-closed" id="state-label">@(Model.IdstateNavigation?.Name ?? "Inactiva")</span>
+                    }
+                </div>
+
+                <div class="flex items-center gap-6 mt-4">
                     <div class="h-px w-24 md:w-36 bg-gradient-to-r from-transparent via-yellow-800 to-yellow-600"></div>
-                    <div class="text-red-700 text-2xl drop-shadow-[0_0_12px_rgba(180,0,0,0.6)]">⚔</div>
+                    <div class="text-red-700 text-2xl drop-shadow-[0_0_12px_rgba(180,0,0,0.6)]"></div>
                     <div class="h-px w-24 md:w-36 bg-gradient-to-l from-transparent via-yellow-800 to-yellow-600"></div>
                 </div>
             </div>
 
-            <!-- MAIN GRID -->
+     
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 animate-fade-in-delay">
 
-                <!-- LEFT: OBJECT INFO -->
+               
                 <div class="md:col-span-1 flex flex-col gap-6">
 
-                    <!-- Image panel -->
+                   
                     <div class="medieval-panel relative overflow-hidden">
                         <div class="corner tl"></div><div class="corner tr"></div>
                         <div class="corner bl"></div><div class="corner br"></div>
 
-                        @if (Model.IdobjectNavigation?.IdImageNavigation != null && Model.IdobjectNavigation.IdImageNavigation.Any())
-                        {
-                            <div class="relative">
-                                <!-- Contenedor principal (imagen grande + miniaturas) -->
-                                <div class="mb-3">
-                                    @{
-                                        // Mostrar la primera como principal (si quieres un carrusel puedes ampliarlo)
-                                        var firstImage = Model.IdobjectNavigation.IdImageNavigation.FirstOrDefault(i => i?.ImageData != null && i.ImageData.Length > 0);
-                                    }
-                                    @if (firstImage != null)
-                                    {
-                                        <div class="relative aspect-[4/3] overflow-hidden">
-                                            <img class="w-full h-full object-cover"
-                                                 src="data:image/jpeg;base64,@Convert.ToBase64String(firstImage.ImageData)"
-                                                 alt="@Model.IdobjectNavigation?.Name" />
-                                            <div class="absolute inset-0 bg-gradient-to-t from-[#1a1412] via-transparent to-transparent"></div>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="aspect-[4/3] flex flex-col items-center justify-center bg-[#150f0c]">
-                                            <span class="text-yellow-900 text-5xl mb-2">⚜</span>
-                                            <span class="text-stone-600 text-xs font-serif italic">Sin imagen</span>
-                                        </div>
-                                    }
-                                </div>
+                        @{
+                            var images = Model.IdobjectNavigation?.IdImageNavigation?.Where(i => i?.ImageData != null && i.ImageData.Length > 0).ToList();
+                            var first  = images?.FirstOrDefault();
+                        }
 
-                                <!-- Miniaturas: recorremos y mostramos todas las ImageData -->
-                                <div class="flex gap-2 overflow-x-auto">
-                                    @foreach (var img in Model?.IdobjectNavigation?.IdImageNavigation)
+                        @if (first != null)
+                        {
+                            <div class="relative aspect-[4/3] overflow-hidden">
+                                <img class="w-full h-full object-cover"
+                                     src="data:image/jpeg;base64,@Convert.ToBase64String(first.ImageData)"
+                                     alt="@Model.IdobjectNavigation?.Name" />
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#1a1412] via-transparent to-transparent"></div>
+                            </div>
+                            @if (images!.Count > 1)
+                            {
+                                <div class="flex gap-2 overflow-x-auto p-2">
+                                    @foreach (var img in images)
                                     {
-                                        if (img?.ImageData != null && img.ImageData.Length > 0)
-                                        {
-                                            <div class="w-24 h-16 flex-shrink-0 overflow-hidden rounded-sm border border-yellow-900/20">
-                                                <img class="w-full h-full object-cover"
-                                                     src="data:image/jpeg;base64,@Convert.ToBase64String(img.ImageData)"
-                                                     alt="@Model.IdobjectNavigation?.Name" />
-                                            </div>
-                                        }
+                                        <div class="w-20 h-14 flex-shrink-0 overflow-hidden border border-yellow-900/20">
+                                            <img class="w-full h-full object-cover"
+                                                 src="data:image/jpeg;base64,@Convert.ToBase64String(img.ImageData)"
+                                                 alt="miniatura" />
+                                        </div>
                                     }
                                 </div>
-                            </div>
+                            }
                         }
                         else
                         {
                             <div class="aspect-[4/3] flex flex-col items-center justify-center bg-[#150f0c]">
-                                <span class="text-yellow-900 text-5xl mb-2">⚜</span>
+                                <span class="text-yellow-900 text-5xl mb-2"></span>
                                 <span class="text-stone-600 text-xs font-serif italic">Sin imagen</span>
                             </div>
                         }
 
-                        <div class="p-5">
+                        <div class="p-4">
                             <p class="text-stone-500 text-xs font-serif italic">
                                 Ofrecida por <span class="text-yellow-700">@Model.IdusercreatorNavigation?.UserName</span>
                             </p>
                         </div>
                     </div>
 
-                    <!-- Object details panel -->
+                 
                     <div class="medieval-panel p-6">
                         <div class="corner tl"></div><div class="corner tr"></div>
                         <div class="corner bl"></div><div class="corner br"></div>
 
-                        <h2 class="section-title mb-5">⚜ Sobre la Reliquia</h2>
-
-                        <dl class="space-y-4">
+                        <h2 class="section-title mb-4"> Sobre la Reliquia</h2>
+                        <dl class="space-y-3">
                             <div class="detail-row">
-                                <dt>Categoría</dt>
-                                <dd>
-                                    @if (Model.IdobjectNavigation?.Category != null && Model.IdobjectNavigation.Category.Any())
-                                    {
-                                        <div class="flex flex-wrap gap-2">
-                                            @foreach (var c in Model.IdobjectNavigation.Category)
-                                            {
-                                                <span class="category-tag">@c.Name</span>
-                                            }
-                                        </div>
-                                    }
-                                    else
-                                    {
-
-                                        <span class="text-stone-600 font-serif italic text-xs">Sin categorías</span>
-                                    }
-                            </dd>
-                        </div>
-
-                        <div class="detail-row">
-                            <dt>Condición</dt>
-                            <dd>@Model.IdobjectNavigation?.IdQualityNavigation?.Quality</dd>
-                        </div>
-
-                        <div class="detail-row">
-                            <dt>Año</dt>
-                            <dd>@(Model.IdobjectNavigation?.Year.HasValue == true ? Model.IdobjectNavigation.Year.ToString() : "Desconocido")</dd>
-                        </div>
-
-                        <div class="detail-row">
-                            <dt>Precio de mercado</dt>
-                            <dd>
-                                @((Model.IdobjectNavigation?.MarketPrice.HasValue ?? false)
-                                                                ? Model.IdobjectNavigation.MarketPrice.Value.ToString("N2") + " Oz"
-                                                                : "Sin registros")
-                                </dd>
+                                <dt>Nombre</dt>
+                                <dd>@Model.IdobjectNavigation?.Name</dd>
                             </div>
-
                             @if (!string.IsNullOrWhiteSpace(Model.IdobjectNavigation?.Description))
                             {
-                                <div class="pt-2 border-t border-yellow-900/30">
-                                    <p class="text-stone-500 text-xs font-serif italic leading-relaxed">
+                                <div class="detail-row">
+                                    <dt>Descripción</dt>
+                                    <dd class="text-stone-400 font-serif italic text-xs leading-relaxed">
                                         "@Model.IdobjectNavigation.Description"
-                                    </p>
+                                    </dd>
                                 </div>
                             }
+                            <div class="detail-row">
+                                <dt>Condición</dt>
+                                <dd>@Model.IdobjectNavigation?.IdQualityNavigation?.Quality</dd>
+                            </div>
+                            <div class="detail-row">
+                                <dt>Vendedor</dt>
+                            
+                                <dd class="text-yellow-500">@Model.IdusercreatorNavigation?.UserName</dd>
+                            </div>
                         </dl>
+                    </div>
+
+                  
+                    <div class="medieval-panel p-5">
+                        <div class="corner tl"></div><div class="corner tr"></div>
+                        <div class="corner bl"></div><div class="corner br"></div>
+                        <h2 class="section-title mb-3"> Participante</h2>
+                        <p class="text-yellow-400 text-sm">@currentUserName</p>
+                        @if (isOwner)
+                        {
+                            <p class="text-red-700 text-xs mt-1 font-serif italic">Eres el vendedor de esta subasta.</p>
+                        }
                     </div>
 
                 </div>
 
-                <!-- RIGHT: AUCTION DATA -->
                 <div class="md:col-span-2 flex flex-col gap-6">
 
-                    <!-- Auction stats panel -->
                     <div class="medieval-panel p-6">
                         <div class="corner tl"></div><div class="corner tr"></div>
                         <div class="corner bl"></div><div class="corner br"></div>
 
-                        <div class="flex items-center justify-between mb-6">
-                            <h2 class="section-title">♛ Datos de la Subasta</h2>
-                            @if (Model.IsActive)
-                            {
-                                <span class="badge-open">Activa</span>
-                            }
-                            else
-                            {
-                                <span class="badge-closed">Inactiva</span>
-                            }
-                        </div>
+                        <h2 class="section-title mb-5"> Datos de la Subasta</h2>
 
-                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-2">
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4">
                             <div class="stat-block">
                                 <span class="stat-label">Precio Base</span>
                                 <span class="stat-value">@((Model.BasePrice ?? 0).ToString("N2")) <span class="text-yellow-800 text-xs">Oz</span></span>
@@ -219,86 +231,155 @@
                             </div>
                             <div class="stat-block">
                                 <span class="stat-label">Total Pujas</span>
-                                <span class="stat-value text-yellow-400">@Model.TotalBids</span>
+                                <span class="stat-value text-yellow-400" id="total-bids">@Model.TotalBids</span>
+                            </div>
+                            <div class="stat-block sm:col-span-2">
+                                <span class="stat-label">Puja más alta</span>
+                                <span class="stat-value text-green-400 text-lg" id="highest-amount">
+                                    @currentHighest.ToString("N2") <span class="text-green-700 text-xs">Oz</span>
+                                </span>
                             </div>
                             <div class="stat-block">
-                                <span class="stat-label">Inicio</span>
-                                <span class="stat-value text-sm">@Model.StartDate.ToString("yyyy-MM-dd")</span>
+                                <span class="stat-label">Líder actual</span>
+                                <span class="stat-value text-sm truncate" id="highest-user">@currentLeader</span>
                             </div>
-                            <div class="stat-block">
-                                <span class="stat-label">Cierre</span>
-                                <span class="stat-value text-sm">@Model.EndDate.ToString("yyyy-MM-dd")</span>
+                        </div>
+
+                   
+                        <div class="flex items-center gap-3 p-3 border border-yellow-900/30 bg-black/20">
+                           
+                            <div>
+                                <p class="text-stone-600 text-xs uppercase tracking-widest">Tiempo restante</p>
+                                <p class="text-yellow-300 text-sm font-semibold" id="countdown-timer">Calculando...</p>
                             </div>
-                            <div class="stat-block">
-                                <span class="stat-label">Creador</span>
-                                <span class="stat-value text-sm truncate">@Model.IdusercreatorNavigation?.FirstName @Model.IdusercreatorNavigation?.LastName</span>
-                            </div>
+                        </div>
+
+                        <div class="mt-3 text-xs text-stone-600 font-serif">
+                            Cierre: @Model.EndDate.ToString("yyyy-MM-dd") ·
+                            Inicio: @Model.StartDate.ToString("yyyy-MM-dd")
                         </div>
                     </div>
 
-                    <!-- Bid history panel -->
+                
+                    @if (isActive && !isOwner)
+                    {
+                        <div class="medieval-panel p-6" id="bid-form-panel">
+                            <div class="corner tl"></div><div class="corner tr"></div>
+                            <div class="corner bl"></div><div class="corner br"></div>
+
+                            <h2 class="section-title mb-4"> Realizar Puja</h2>
+
+                            <div class="flex gap-3 items-end">
+                                <div class="flex-1">
+                                    <label class="text-stone-500 text-xs uppercase tracking-widest mb-1 block">
+                                        Monto (Oz) — mínimo:
+                                        <span id="min-bid-label" class="text-yellow-600">
+                                            @((currentHighest + (Model.IncrementoMinimo ?? 0)).ToString("N2"))
+                                        </span>
+                                    </label>
+                                    <input type="number"
+                                           id="bid-amount"
+                                           step="0.01"
+                                           min="@((currentHighest + (Model.IncrementoMinimo ?? 0)).ToString("F2", System.Globalization.CultureInfo.InvariantCulture))"
+                                           placeholder="Ingresa tu oferta"
+                                           class="w-full bg-[#150f0c] border border-yellow-900/40 text-yellow-100
+                                                  text-sm px-4 py-2 focus:outline-none focus:border-yellow-600
+                                                  font-['Cinzel'] placeholder-stone-700" />
+                                </div>
+                                <button id="btn-place-bid"
+                                        onclick="placeBid()"
+                                        class="px-6 py-2 border border-yellow-700 text-yellow-500 text-xs
+                                               uppercase tracking-[0.2em] hover:border-yellow-400 hover:text-yellow-300
+                                               hover:bg-yellow-900/10 transition-all duration-300 whitespace-nowrap">
+                                    Pujar 
+                                </button>
+                            </div>
+                            <p class="text-stone-700 text-xs font-serif italic mt-2">
+                                Puja lanzada en nombre de: <span class="text-stone-500">@currentUserName</span>
+                            </p>
+                        </div>
+                    }
+                    else if (isOwner && isActive)
+                    {
+                        <div class="medieval-panel p-5 border-red-900/40">
+                            <div class="corner tl"></div><div class="corner tr"></div>
+                            <div class="corner bl"></div><div class="corner br"></div>
+                            <p class="text-red-700 text-xs font-serif italic text-center">
+                                 No puedes pujar en tu propia subasta.
+                            </p>
+                        </div>
+                    }
+                    else if (!isActive)
+                    {
+                        <div class="medieval-panel p-5" id="closed-notice">
+                            <div class="corner tl"></div><div class="corner tr"></div>
+                            <div class="corner bl"></div><div class="corner br"></div>
+                            <p class="text-stone-500 text-xs font-serif italic text-center">
+                                 Esta subasta no acepta más pujas.
+                            </p>
+                        </div>
+                    }
+
+               
                     <div class="medieval-panel p-6 flex-1">
                         <div class="corner tl"></div><div class="corner tr"></div>
                         <div class="corner bl"></div><div class="corner br"></div>
 
-                        <h2 class="section-title mb-6">🗡 Crónica de Pujas</h2>
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="section-title">🗡 Crónica de Pujas</h2>
+                            <span class="text-stone-600 text-xs font-serif italic" id="last-updated">
+                                Actualizado en tiempo real
+                            </span>
+                        </div>
 
-                        @if (Model.AuctionBidHistory != null && Model.AuctionBidHistory.Any())
-                        {
-                            <div class="overflow-x-auto">
-                                <table class="w-full text-sm">
+                        <div id="bid-history-container">
+                            @if (Model.AuctionBidHistory != null && Model.AuctionBidHistory.Any())
+                            {
+                                <table class="w-full text-sm" id="bid-table">
                                     <thead>
                                         <tr class="border-b border-yellow-900/40">
-                                            <th class="text-left text-yellow-800 text-xs uppercase tracking-[0.2em] pb-3 font-normal">Fecha</th>
+                                            <th class="text-left text-yellow-800 text-xs uppercase tracking-[0.2em] pb-3 font-normal">Fecha y Hora</th>
                                             <th class="text-left text-yellow-800 text-xs uppercase tracking-[0.2em] pb-3 font-normal">Pujador</th>
                                             <th class="text-right text-yellow-800 text-xs uppercase tracking-[0.2em] pb-3 font-normal">Monto</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        @foreach (var bh in Model.AuctionBidHistory.OrderByDescending(b => b.BidDate).Take(10))
+                                    <tbody id="bid-table-body">
+                                        @foreach (var bh in Model.AuctionBidHistory.OrderByDescending(b => b.BidDate))
                                         {
-                                            <tr class="border-b border-yellow-900/20 hover:bg-yellow-900/10 transition-colors duration-200">
-                                                <td class="py-3 text-stone-500 text-xs font-serif">@bh.BidDate</td>
-                                                <td class="py-3 text-yellow-600 text-xs">@bh.User.UserName</td>
-                                                <td class="py-3 text-yellow-300 text-sm text-right font-semibold">@bh.Amount.ToString("N2") <span class="text-yellow-800 text-xs">Oz</span></td>
+                                            <tr class="border-b border-yellow-900/20 hover:bg-yellow-900/10 transition-colors">
+                                                <td class="py-3 text-stone-500 text-xs font-serif">@bh.BidDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                                <td class="py-3 text-yellow-600 text-xs">@bh.User?.UserName</td>
+                                                <td class="py-3 text-yellow-300 text-sm text-right font-semibold">
+                                                    @bh.Amount.ToString("N2") <span class="text-yellow-800 text-xs">Oz</span>
+                                                </td>
                                             </tr>
                                         }
                                     </tbody>
                                 </table>
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="flex flex-col items-center justify-center py-12">
-                                <span class="text-yellow-900 text-4xl mb-3">⚜</span>
-                                <p class="text-stone-600 font-serif italic text-sm">Ningún caballero ha hecho su puja aún.</p>
-                            </div>
-                        }
+                            }
+                            else
+                            {
+                                <div class="flex flex-col items-center justify-center py-12" id="no-bids-msg">
+                                    <span class="text-yellow-900 text-4xl mb-3">⚜</span>
+                                    <p class="text-stone-600 font-serif italic text-sm">Ningún caballero ha hecho su puja aún.</p>
+                                </div>
+                            }
+                        </div>
                     </div>
 
-                    <!-- Actions -->
+                  
                     <div class="flex items-center justify-between pt-2">
-                        <p class="text-stone-700 text-xs font-serif italic">
-                            Última actualización: @DateTime.Now.ToString("yyyy-MM-dd HH:mm")
-                        </p>
-                        <div class="flex gap-3">
-                            <a onclick="history.back()"
-                               class="px-6 py-2 border border-stone-700/60 text-stone-400 text-xs uppercase tracking-[0.15em]
-              hover:border-stone-500 hover:text-stone-200 transition-all duration-300 cursor-pointer">
-                                ← Volver
-                            </a>
-                            <a asp-action="Edit" asp-route-id="@Model.Id"
-                               class="px-6 py-2 border border-yellow-800/60 text-yellow-600 text-xs uppercase tracking-[0.15em]
-                                      hover:border-yellow-500 hover:text-yellow-400 hover:bg-yellow-900/10 transition-all duration-300">
-                                Editar
-                            </a>
-                        </div>
+                        <a onclick="history.back()"
+                           class="px-6 py-2 border border-stone-700/60 text-stone-400 text-xs uppercase tracking-[0.15em]
+                                  hover:border-stone-500 hover:text-stone-200 transition-all duration-300 cursor-pointer">
+                            ← Volver
+                        </a>
                     </div>
 
                 </div>
             </div>
 
-            <!-- Footer ornament -->
+        
             <div class="mt-16 text-center">
                 <div class="flex justify-center items-center gap-4 opacity-20">
                     <div class="h-px w-24 bg-yellow-700"></div>
@@ -306,310 +387,464 @@
                     <div class="h-px w-24 bg-yellow-700"></div>
                 </div>
             </div>
-        }
+        </div>
 
-    </div>
-
-    <!-- Bottom line -->
-    <div class="relative z-10 h-1 bg-gradient-to-r from-transparent via-yellow-600 to-transparent mt-4"></div>
-
+        
+        <div class="relative z-10 h-1 bg-gradient-to-r from-transparent via-yellow-600 to-transparent mt-4"></div>
+    }
 </div>
+
+@section Scripts {
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"
+        crossorigin="anonymous"></script>
+<script>
+
+const AUCTION_ID      = @Model!.Id;
+const CURRENT_USER_ID = @currentUserId;
+const INCREMENTO_MIN  = @((Model?.IncrementoMinimo ?? 0).ToString("F2", System.Globalization.CultureInfo.InvariantCulture));
+const END_DATE        = new Date("@endDateIso");
+const IS_ACTIVE_INIT  = @(isActive ? "true" : "false");
+
+let isAuctionActive = IS_ACTIVE_INIT;
+let currentHighest  = @currentHighest.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
+let currentLeaderId = @currentLeaderId;
+let iHadLead        = false; 
+
+
+const connection = new signalR.HubConnectionBuilder()
+    .withUrl("/auctionHub")
+    .withAutomaticReconnect()
+    .build();
+
+// Evento: se registró una nueva puja
+connection.on("BidPlaced", (data) => {
+    if (data.auctionId !== AUCTION_ID) return;
+
+    // ¿El usuario actual perdió el liderazgo?
+    if (iHadLead && data.highestUserId !== CURRENT_USER_ID) {
+        showToast( "¡Tu puja fue superada!", "Otro caballero ha ofrecido más. ¡Contraataca!", "warning");
+        iHadLead = false;
+    }
+
+    // Si el usuario actual lidera ahora, marcarlo
+    if (data.highestUserId === CURRENT_USER_ID) {
+        iHadLead = true;
+    }
+
+    // Actualizar UI
+    currentHighest  = data.highestAmount;
+    currentLeaderId = data.highestUserId;
+
+    updateHighestBid(data.highestAmount, data.highestUser);
+    updateBidHistory(data.bidHistory);
+    updateMinBidLabel(data.highestAmount);
+});
+
+// Evento: la subasta se cerró automáticamente
+connection.on("AuctionClosed", (data) => {
+    if (data.auctionId !== AUCTION_ID) return;
+
+    isAuctionActive = false;
+    markAuctionClosed(data);
+});
+
+async function startSignalR() {
+    try {
+        await connection.start();
+        await connection.invoke("JoinAuction", AUCTION_ID.toString());
+        console.log("[SignalR] Conectado a subasta", AUCTION_ID);
+    } catch (err) {
+        console.error("[SignalR] Error al conectar:", err);
+        setTimeout(startSignalR, 5000);
+    }
+}
+
+startSignalR();
+
+// ─── FUNCIÓN PARA REGISTRAR PUJA ────────────────────────────────────────────
+async function placeBid() {
+    if (!isAuctionActive) {
+        showToast( "Subasta cerrada", "No se pueden registrar más pujas.", "error");
+        return;
+    }
+
+    const amountInput = document.getElementById("bid-amount");
+    const amount = parseFloat(amountInput.value);
+
+    if (isNaN(amount) || amount <= 0) {
+        showToast( "Monto inválido", "Ingresa un monto válido mayor a cero.", "error");
+        return;
+    }
+
+    const minRequired = parseFloat(currentHighest) + parseFloat(INCREMENTO_MIN);
+    if (amount < minRequired) {
+        showToast( "Monto insuficiente",
+            `Tu puja debe ser al menos ${minRequired.toFixed(2)} Oz.`, "error");
+        return;
+    }
+
+    const btn = document.getElementById("btn-place-bid");
+    btn.disabled = true;
+    btn.textContent = "Enviando...";
+
+    try {
+        const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value ?? "";
+
+        const resp = await fetch(`/Auctions/PlaceBid`, {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: `auctionId=${AUCTION_ID}&amount=${amount}`
+        });
+
+        const result = await resp.json();
+
+        if (result.success) {
+            showToast( "¡Puja registrada!", result.message, "success");
+            amountInput.value = "";
+            iHadLead = true;
+        } else {
+            showToast(, "Puja rechazada", result.message, "error");
+        }
+    } catch (err) {
+        showToast(, "Error de conexión", "No se pudo registrar la puja. Intenta de nuevo.", "error");
+    } finally {
+        btn.disabled = false;
+        btn.textContent = "Pujar ";
+    }
+}
+
+// ─── ACTUALIZAR UI CON NUEVA PUJA ────────────────────────────────────────────
+function updateHighestBid(amount, userName) {
+    const el = document.getElementById("highest-amount");
+    if (el) {
+        el.innerHTML = `${parseFloat(amount).toFixed(2)} <span class="text-green-700 text-xs">Oz</span>`;
+        // Flash effect
+        el.classList.add("bid-flash");
+        setTimeout(() => el.classList.remove("bid-flash"), 800);
+    }
+    const userEl = document.getElementById("highest-user");
+    if (userEl) userEl.textContent = userName;
+}
+
+function updateMinBidLabel(highestAmount) {
+    const label = document.getElementById("min-bid-label");
+    if (label) {
+        const min = parseFloat(highestAmount) + parseFloat(INCREMENTO_MIN);
+        label.textContent = min.toFixed(2);
+    }
+    const input = document.getElementById("bid-amount");
+    if (input) {
+        const min = parseFloat(highestAmount) + parseFloat(INCREMENTO_MIN);
+        input.min = min.toFixed(2);
+    }
+}
+
+function updateBidHistory(history) {
+    // Actualizar contador
+    const totalEl = document.getElementById("total-bids");
+    if (totalEl) totalEl.textContent = history.length;
+
+    // Hora actualización
+    const updated = document.getElementById("last-updated");
+    if (updated) updated.textContent = "Actualizado: " + new Date().toLocaleTimeString();
+
+    // Reconstruir tabla
+    const container = document.getElementById("bid-history-container");
+    if (!container) return;
+
+    if (history.length === 0) return;
+
+    // Si había el mensaje "sin pujas", reemplazar
+    const noBids = document.getElementById("no-bids-msg");
+    if (noBids) noBids.remove();
+
+    let tbody = document.getElementById("bid-table-body");
+    if (!tbody) {
+        // Crear tabla si no existe
+        container.innerHTML = `
+            <table class="w-full text-sm" id="bid-table">
+                <thead>
+                    <tr class="border-b border-yellow-900/40">
+                        <th class="text-left text-yellow-800 text-xs uppercase tracking-[0.2em] pb-3 font-normal">Fecha y Hora</th>
+                        <th class="text-left text-yellow-800 text-xs uppercase tracking-[0.2em] pb-3 font-normal">Pujador</th>
+                        <th class="text-right text-yellow-800 text-xs uppercase tracking-[0.2em] pb-3 font-normal">Monto</th>
+                    </tr>
+                </thead>
+                <tbody id="bid-table-body"></tbody>
+            </table>`;
+        tbody = document.getElementById("bid-table-body");
+    }
+
+    tbody.innerHTML = history.map(b => `
+        <tr class="border-b border-yellow-900/20 hover:bg-yellow-900/10 transition-colors bid-new-row">
+            <td class="py-3 text-stone-500 text-xs font-serif">${b.bidDate}</td>
+            <td class="py-3 text-yellow-600 text-xs">${b.userName}</td>
+            <td class="py-3 text-yellow-300 text-sm text-right font-semibold">
+                ${parseFloat(b.amount).toFixed(2)} <span class="text-yellow-800 text-xs">Oz</span>
+            </td>
+        </tr>`).join("");
+}
+
+// ─── CIERRE DE SUBASTA ───────────────────────────────────────────────────────
+function markAuctionClosed(data) {
+    // Cambiar estado badge
+    const badge = document.getElementById("state-label");
+    if (badge) {
+        badge.textContent = "Finalizada";
+        badge.className = "badge-closed";
+    }
+
+    // Ocultar formulario de puja
+    const formPanel = document.getElementById("bid-form-panel");
+    if (formPanel) formPanel.remove();
+
+    // Mostrar aviso de cerrada
+    const closedNotice = document.getElementById("closed-notice");
+    if (!closedNotice) {
+        // Insertar aviso antes del historial
+        const histPanel = document.querySelector("#bid-history-container")?.closest(".medieval-panel");
+        if (histPanel) {
+            const notice = document.createElement("div");
+            notice.className = "medieval-panel p-5";
+            notice.innerHTML = `<div class="corner tl"></div><div class="corner tr"></div>
+                <div class="corner bl"></div><div class="corner br"></div>
+                <p class="text-stone-500 text-xs font-serif italic text-center"> Esta subasta no acepta más pujas.</p>`;
+            histPanel.parentNode.insertBefore(notice, histPanel);
+        }
+    }
+
+    // Mostrar banner ganador
+    const banner = document.getElementById("winner-banner");
+    const bannerText = document.getElementById("winner-banner-text");
+    if (banner && bannerText) {
+        bannerText.textContent = data.hasWinner
+            ? `¡Subasta finalizada! Ganador: ${data.winnerName} — ${parseFloat(data.winningAmount).toFixed(2)} Oz`
+            : "La subasta ha finalizado sin pujas";
+        banner.classList.remove("hidden");
+    }
+
+    showToast(
+        data.hasWinner ? "♛" : "🔒",
+        "Subasta finalizada",
+        data.hasWinner
+            ? `Ganador: ${data.winnerName} con ${parseFloat(data.winningAmount).toFixed(2)} Oz`
+            : "La subasta cerró sin recibir pujas.",
+        "info"
+    );
+}
+
+// ─── CONTADOR DE TIEMPO ──────────────────────────────────────────────────────
+function updateCountdown() {
+    const el = document.getElementById("countdown-timer");
+    if (!el) return;
+
+    if (!isAuctionActive) {
+        el.textContent = "Subasta finalizada";
+        el.className = "text-red-600 text-sm font-semibold";
+        return;
+    }
+
+    const now  = new Date();
+    const diff = END_DATE - now;
+
+    if (diff <= 0) {
+        el.textContent = " ¡Tiempo agotado!";
+        el.className = "text-red-500 text-sm font-semibold";
+        // Llamar al endpoint de cierre automático
+        checkAndCloseAuction();
+        return;
+    }
+
+    const days    = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours   = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    const parts = [];
+    if (days > 0)    parts.push(`${days}d`);
+    if (hours > 0)   parts.push(`${hours}h`);
+    parts.push(`${minutes}m ${seconds}s`);
+
+    el.textContent = parts.join(" ");
+
+    // Colorear en rojo cuando queden menos de 60 segundos
+    if (diff < 60000) {
+        el.className = "text-red-500 text-sm font-bold animate-pulse";
+    } else if (diff < 300000) {
+        el.className = "text-orange-400 text-sm font-semibold";
+    } else {
+        el.className = "text-yellow-300 text-sm font-semibold";
+    }
+}
+
+setInterval(updateCountdown, 1000);
+updateCountdown();
+
+// ─── CIERRE AUTOMÁTICO ───────────────────────────────────────────────────────
+let closeAttempted = false;
+async function checkAndCloseAuction() {
+    if (closeAttempted) return;
+    closeAttempted = true;
+    try {
+        const resp = await fetch(`/Auctions/CheckAndCloseAuction`, {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: `id=${AUCTION_ID}`
+        });
+        const data = await resp.json();
+        if (data.closed) {
+            isAuctionActive = false;
+            markAuctionClosed(data);
+        }
+    } catch (e) {
+        console.error("[Cierre auto] Error:", e);
+    }
+}
+
+// ─── TOAST / NOTIFICACIONES ──────────────────────────────────────────────────
+function showToast(icon, title, body, type) {
+    const el    = document.getElementById("toast-notification");
+    const icEl  = document.getElementById("toast-icon");
+    const titEl = document.getElementById("toast-title");
+    const bodEl = document.getElementById("toast-body");
+
+    icEl.textContent  = icon;
+    titEl.textContent = title;
+    bodEl.textContent = body;
+
+    // Color del borde según tipo
+    const colors = {
+        success: "#15803d",
+        error:   "#991b1b",
+        warning: "#92400e",
+        info:    "#1d4ed8"
+    };
+    el.style.borderColor = colors[type] ?? "#78350f";
+    el.classList.remove("hidden");
+
+    setTimeout(hideToast, 6000);
+}
+
+function hideToast() {
+    document.getElementById("toast-notification")?.classList.add("hidden");
+}
+
+// Enter en el input de puja
+document.addEventListener("DOMContentLoaded", () => {
+    const input = document.getElementById("bid-amount");
+    if (input) {
+        input.addEventListener("keydown", e => {
+            if (e.key === "Enter") placeBid();
+        });
+    }
+});
+</script>
+}
 
 <style>
     @@keyframes rise {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        from { opacity: 0; transform: translateY(30px); }
+        to   { opacity: 1; transform: translateY(0); }
     }
-
     @@keyframes fadeIn {
-        from {
-            opacity: 0;
-        }
-
-        to {
-            opacity: 1;
-        }
+        from { opacity: 0; }
+        to   { opacity: 1; }
     }
-
     @@keyframes float {
-        0%, 100% {
-            transform: translateY(0) translateX(0);
-            opacity: 0;
-        }
-
-        10% {
-            opacity: 1;
-        }
-
-        90% {
-            opacity: 0.6;
-        }
-
-        100% {
-            transform: translateY(-100vh) translateX(20px);
-            opacity: 0;
-        }
+        0%,100% { transform: translateY(0) translateX(0); opacity: 0; }
+        10%  { opacity: 1; }
+        90%  { opacity: 0.6; }
+        100% { transform: translateY(-100vh) translateX(20px); opacity: 0; }
     }
-
     @@keyframes grain {
-        0%, 100% {
-            transform: translate(0,0);
-        }
-
-        25% {
-            transform: translate(1px,1px);
-        }
-
-        50% {
-            transform: translate(-1px,0);
-        }
-
-        75% {
-            transform: translate(0,-1px);
-        }
+        0%,100% { transform: translate(0,0); }
+        25%  { transform: translate(1px,1px); }
+        50%  { transform: translate(-1px,0); }
+        75%  { transform: translate(0,-1px); }
+    }
+    @@keyframes bidFlash {
+        0%   { color: #4ade80; }
+        50%  { color: #fde68a; text-shadow: 0 0 15px rgba(250,204,21,0.8); }
+        100% { color: #4ade80; }
+    }
+    @@keyframes rowSlide {
+        from { opacity: 0; transform: translateX(-10px); }
+        to   { opacity: 1; transform: translateX(0); }
     }
 
-    html, body {
-        margin: 0;
-        padding: 0;
-        background-color: #1a1412;
-    }
-
-    .animate-rise {
-        animation: rise 1s ease-out forwards;
-    }
-
-    .animate-fade-in-delay {
-        animation: fadeIn 1.2s ease-out 0.3s both;
-    }
+    html, body { margin: 0; padding: 0; background-color: #1a1412; }
+    .animate-rise           { animation: rise 1s ease-out forwards; }
+    .animate-fade-in-delay  { animation: fadeIn 1.2s ease-out 0.3s both; }
+    .bid-flash              { animation: bidFlash 0.8s ease-in-out; }
+    .bid-new-row            { animation: rowSlide 0.4s ease-out; }
 
     .grain-overlay {
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        z-index: 100;
+        position: fixed; inset: 0; pointer-events: none; z-index: 100;
         opacity: 0.035;
         background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
         animation: grain 0.5s steps(1) infinite;
     }
-
     .ember {
-        position: absolute;
-        width: 3px;
-        height: 3px;
-        border-radius: 50%;
-        background: #f97316;
-        box-shadow: 0 0 6px #f97316, 0 0 12px #ea580c;
-        animation: float linear infinite;
-        bottom: -10px;
+        position: absolute; width: 3px; height: 3px; border-radius: 50%;
+        background: #f97316; box-shadow: 0 0 6px #f97316, 0 0 12px #ea580c;
+        animation: float linear infinite; bottom: -10px;
     }
-
-    .ember-1 {
-        left: 10%;
-        animation-duration: 8s;
-        animation-delay: 0s
-    }
-
-    .ember-2 {
-        left: 25%;
-        animation-duration: 11s;
-        animation-delay: 2s
-    }
-
-    .ember-3 {
-        left: 50%;
-        animation-duration: 9s;
-        animation-delay: 4s
-    }
-
-    .ember-4 {
-        left: 70%;
-        animation-duration: 13s;
-        animation-delay: 1s
-    }
-
-    .ember-5 {
-        left: 85%;
-        animation-duration: 7s;
-        animation-delay: 3s
-    }
-
+    .ember-1 { left: 10%; animation-duration: 8s;  animation-delay: 0s }
+    .ember-2 { left: 25%; animation-duration: 11s; animation-delay: 2s }
+    .ember-3 { left: 50%; animation-duration: 9s;  animation-delay: 4s }
+    .ember-4 { left: 70%; animation-duration: 13s; animation-delay: 1s }
+    .ember-5 { left: 85%; animation-duration: 7s;  animation-delay: 3s }
     .ash {
-        position: absolute;
-        width: 2px;
-        height: 2px;
-        border-radius: 50%;
-        background: #9ca3af;
-        box-shadow: 0 0 4px #6b7280;
-        animation: float linear infinite;
-        bottom: -10px
+        position: absolute; width: 2px; height: 2px; border-radius: 50%;
+        background: #9ca3af; box-shadow: 0 0 4px #6b7280;
+        animation: float linear infinite; bottom: -10px;
     }
+    .ash-1 { left: 20%; animation-duration: 12s; animation-delay: 1s }
+    .ash-2 { left: 55%; animation-duration: 10s; animation-delay: 5s }
+    .ash-3 { left: 80%; animation-duration: 14s; animation-delay: 3s }
 
-    .ash-1 {
-        left: 20%;
-        animation-duration: 12s;
-        animation-delay: 1s
-    }
-
-    .ash-2 {
-        left: 55%;
-        animation-duration: 10s;
-        animation-delay: 5s
-    }
-
-    .ash-3 {
-        left: 80%;
-        animation-duration: 14s;
-        animation-delay: 3s
-    }
-
-    /* Panel */
     .medieval-panel {
-        position: relative;
-        background: #211810;
+        position: relative; background: #211810;
         border: 1px solid rgba(120,83,15,0.35);
         transition: border-color 0.4s, box-shadow 0.4s;
     }
-
-        .medieval-panel:hover {
-            border-color: rgba(180,130,0,0.5);
-            box-shadow: 0 0 30px rgba(100,60,0,0.2);
-        }
-
-    /* Corner ornaments */
-    .corner {
-        position: absolute;
-        width: 14px;
-        height: 14px;
+    .medieval-panel:hover {
+        border-color: rgba(180,130,0,0.5);
+        box-shadow: 0 0 30px rgba(100,60,0,0.2);
     }
+    .corner { position: absolute; width: 14px; height: 14px; }
+    .corner.tl { top: 6px;    left: 6px;  border-top: 1px solid #78350f80; border-left: 1px solid #78350f80; }
+    .corner.tr { top: 6px;    right: 6px; border-top: 1px solid #78350f80; border-right: 1px solid #78350f80; }
+    .corner.bl { bottom: 6px; left: 6px;  border-bottom: 1px solid #78350f80; border-left: 1px solid #78350f80; }
+    .corner.br { bottom: 6px; right: 6px; border-bottom: 1px solid #78350f80; border-right: 1px solid #78350f80; }
+    .medieval-panel:hover .corner { border-color: #b4530980; }
 
-        .corner.tl {
-            top: 6px;
-            left: 6px;
-            border-top: 1px solid #78350f80;
-            border-left: 1px solid #78350f80;
-        }
-
-        .corner.tr {
-            top: 6px;
-            right: 6px;
-            border-top: 1px solid #78350f80;
-            border-right: 1px solid #78350f80;
-        }
-
-        .corner.bl {
-            bottom: 6px;
-            left: 6px;
-            border-bottom: 1px solid #78350f80;
-            border-left: 1px solid #78350f80;
-        }
-
-        .corner.br {
-            bottom: 6px;
-            right: 6px;
-            border-bottom: 1px solid #78350f80;
-            border-right: 1px solid #78350f80;
-        }
-
-    .medieval-panel:hover .corner {
-        border-color: #b4530980;
-    }
-
-    /* Section title */
     .section-title {
-        color: #fcd34d;
-        font-size: 0.65rem;
-        text-transform: uppercase;
-        letter-spacing: 0.25em;
-        font-family: 'Cinzel',serif;
+        color: #fcd34d; font-size: 0.65rem; text-transform: uppercase;
+        letter-spacing: 0.25em; font-family: 'Cinzel', serif;
     }
+    .detail-row { display: flex; flex-direction: column; gap: 0.25rem; }
+    .detail-row dt { font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.2em; color: #78716c; }
+    .detail-row dd { font-size: 0.8rem; color: #d6d3d1; font-family: 'Cinzel', serif; }
 
-    /* Detail rows */
-    .detail-row {
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
-    }
-
-        .detail-row dt {
-            font-size: 0.55rem;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            color: #78716c;
-        }
-
-        .detail-row dd {
-            font-size: 0.8rem;
-            color: #d6d3d1;
-            font-family: 'Cinzel',serif;
-        }
-
-    /* Stat blocks */
     .stat-block {
-        display: flex;
-        flex-direction: column;
-        gap: 0.2rem;
-        padding: 0.65rem 0.85rem;
-        background: rgba(0,0,0,0.25);
+        display: flex; flex-direction: column; gap: 0.2rem;
+        padding: 0.65rem 0.85rem; background: rgba(0,0,0,0.25);
         border: 1px solid rgba(120,83,15,0.2);
     }
+    .stat-label { font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.2em; color: #78716c; }
+    .stat-value { font-size: 0.95rem; color: #fcd34d; font-family: 'Cinzel', serif; font-weight: 600; }
 
-    .stat-label {
-        font-size: 0.55rem;
-        text-transform: uppercase;
-        letter-spacing: 0.2em;
-        color: #78716c;
-    }
-
-    .stat-value {
-        font-size: 0.95rem;
-        color: #fcd34d;
-        font-family: 'Cinzel',serif;
-        font-weight: 600;
-    }
-
-    /* Category tags */
-    .category-tag {
-        display: inline-block;
-        padding: 0.15rem 0.65rem;
-        border: 1px solid rgba(120,83,15,0.5);
-        color: #b45309;
-        font-size: 0.6rem;
-        text-transform: uppercase;
-        letter-spacing: 0.15em;
-        font-family: 'Cinzel',serif;
-        background: rgba(120,53,15,0.1);
-    }
-
-    /* Badges */
     .badge-open {
-        display: inline-block;
-        padding: 0.2rem 0.85rem;
-        border: 1px solid #15803d;
-        color: #4ade80;
-        font-size: 0.6rem;
-        text-transform: uppercase;
-        letter-spacing: 0.2em;
-        font-family: 'Cinzel',serif;
+        display: inline-block; padding: 0.2rem 0.85rem;
+        border: 1px solid #15803d; color: #4ade80; font-size: 0.6rem;
+        text-transform: uppercase; letter-spacing: 0.2em; font-family: 'Cinzel', serif;
         background: rgba(21,128,61,0.12);
     }
-
     .badge-closed {
-        display: inline-block;
-        padding: 0.2rem 0.85rem;
-        border: 1px solid #44403c;
-        color: #a8a29e;
-        font-size: 0.6rem;
-        text-transform: uppercase;
-        letter-spacing: 0.2em;
-        font-family: 'Cinzel',serif;
+        display: inline-block; padding: 0.2rem 0.85rem;
+        border: 1px solid #44403c; color: #a8a29e; font-size: 0.6rem;
+        text-transform: uppercase; letter-spacing: 0.2em; font-family: 'Cinzel', serif;
         background: rgba(68,64,60,0.12);
     }
 </style>

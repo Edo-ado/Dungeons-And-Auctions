@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Events;
 using System.Text;
+using DNDA.Web.Hubs;
 
 
 
@@ -72,6 +73,8 @@ builder.Host.UseSerilog(Log.Logger);
 
 //Controllers y Views
 builder.Services.AddControllersWithViews();
+builder.Services.AddSignalR()
+   ;
 
 //Repositories
 builder.Services.AddScoped<IRepositoryUser, RepositoryUser>();
@@ -158,6 +161,7 @@ app.UseStaticFiles();
 app.UseSession();
 app.UseRouting();
 app.UseAuthorization();
+app.MapHub<AuctionHub>("/auctionHub");
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

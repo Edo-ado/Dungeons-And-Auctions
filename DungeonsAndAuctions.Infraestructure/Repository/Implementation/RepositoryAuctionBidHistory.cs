@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using D_A.Infraestructure.Data;
+﻿using D_A.Infraestructure.Data;
 using D_A.Infraestructure.Models;
 using D_A.Infraestructure.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +7,6 @@ namespace D_A.Infraestructure.Repository.Implementation
 {
     public class RepositoryAuctionBidHistory : IRepositoryAuctionBidHistory
     {
-
         private readonly DAContext _context;
 
         public RepositoryAuctionBidHistory(DAContext context)
@@ -42,16 +36,53 @@ namespace D_A.Infraestructure.Repository.Implementation
                 .ToListAsync();
         }
 
-
-        // Implementación del método CountBidsByAuction
         public async Task<int> CountBidsByAuction(int AuctionId)
         {
             return await _context.AuctionBidHistory
                 .CountAsync(bid => bid.AuctionId == AuctionId);
-
-            
-
         }
 
+       
+
+
+
+        public async Task<List<AuctionBidHistory>> GetBidsByAuctionAsync(int auctionId)
+        {
+            return await _context.AuctionBidHistory
+                .AsNoTracking()
+                .Include(b => b.User)
+                .Where(b => b.AuctionId == auctionId)
+                .OrderByDescending(b => b.BidDate)
+                .ToListAsync();
+        }
+
+        public async Task<AuctionBidHistory?> GetHighestBidAsync(int auctionId)
+        {
+            return await _context.AuctionBidHistory
+                .AsNoTracking()
+                .Include(b => b.User)
+                .Where(b => b.AuctionId == auctionId)
+                .OrderByDescending(b => b.Amount)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task AddBidAsync(AuctionBidHistory bid)
+        {
+            _context.AuctionBidHistory.Add(bid);
+            await _context.SaveChangesAsync();
+        }
+
+    
+        public async Task MarkAllBidsAsNotLastAsync(int auctionId)
+        {
+            var bids = await _context.AuctionBidHistory
+                .Where(b => b.AuctionId == auctionId && b.IsLastBid)
+                .ToListAsync();
+
+            foreach (var b in bids)
+                b.IsLastBid = false;
+
+            await _context.SaveChangesAsync();
+        }
     }
 }
