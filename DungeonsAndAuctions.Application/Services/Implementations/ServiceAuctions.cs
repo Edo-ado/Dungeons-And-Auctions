@@ -141,5 +141,11 @@ namespace D_A.Application.Services.Implementations
             var auctions = await _repository.GetAllAuctionsValid();
             return _mapper.Map<List<AuctionsDTO?>>(auctions);
         }
+
+        public Task CloseAuction(int id)
+        {
+            
+            return _repository.CloseAuction(id);
+        }
     }
 }
