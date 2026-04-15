@@ -10,10 +10,8 @@ public class AuctionBidHistoryProfile : Profile
 {
     public AuctionBidHistoryProfile()
     {
-        //es el traductpr q le dice a automapper como convertir users a userDTO y así al reves
-        //esto es necesario 
-        CreateMap<AuctionBidHistory, AuctionBidHistoryDTO>();//users a DTO es cuando lees de una BN
-        CreateMap<AuctionBidHistoryDTO, AuctionBidHistory>();
-         
+        CreateMap<AuctionBidHistory, AuctionBidHistoryDTO>();
+        CreateMap<AuctionBidHistoryDTO, AuctionBidHistory>()
+            .ForMember(dest => dest.AuctionWinner, opt => opt.Ignore());
     }
 }

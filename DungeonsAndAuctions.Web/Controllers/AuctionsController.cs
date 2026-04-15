@@ -19,11 +19,13 @@ namespace DNDA.Web.Controllers
         private readonly IServiceUser _serviceUser;
         private readonly IServiceAuctionBidHistory _serviceBidHistory;
         private readonly IHubContext<AuctionHub> _hubContext;
+        private readonly IServicePayment _servicePayment;
 
-        
+        private readonly IServiceAuctionWinner _serviceWinner;
 
 
-        private const int UsuarioActualId = 2;
+
+        private const int UsuarioActualId = 4;
        
 
         public AuctionsController(
@@ -31,13 +33,16 @@ namespace DNDA.Web.Controllers
             IServiceObject ServiceObject,
             IServiceUser serviceUser,
             IServiceAuctionBidHistory serviceBidHistory,
-            IHubContext<AuctionHub> hubContext)
+            IHubContext<AuctionHub> hubContext,
+            IServiceAuctionWinner serviceWinner, IServicePayment servicePayment)
         {
             _ServiceAuctions = ServiceAuctions;
             _serviceUser = serviceUser;
             _ServiceObject = ServiceObject;
             _serviceBidHistory = serviceBidHistory;
             _hubContext = hubContext;
+            _serviceWinner = serviceWinner;
+            _servicePayment = servicePayment;
         }
 
         public async Task<IActionResult> Index()
@@ -80,32 +85,25 @@ namespace DNDA.Web.Controllers
 
       
         [HttpPost]
-              [HttpPost]
+    
         public async Task<IActionResult> PlaceBid(int auctionId, decimal amount)
         {
-           
             int userId = UsuarioActualId;
-
             var errorMsg = await _serviceBidHistory.PlaceBidAsync(auctionId, userId, amount);
-
             if (errorMsg != null)
                 return Json(new { success = false, message = errorMsg });
 
             try
             {
-              
                 var highestBid = await _serviceBidHistory.GetHighestBidAsync(auctionId);
                 var bids = await _serviceBidHistory.GetBidsByAuctionAsync(auctionId);
 
-             
-                var historyPayload = bids.Select(b => new
-                {
+                var historyPayload = bids.Select(b => new {
                     userName = b.User?.UserName ?? "—",
                     amount = b.Amount,
                     bidDate = b.BidDate.ToString("yyyy-MM-dd HH:mm:ss")
                 }).ToList();
 
-               
                 await _hubContext.Clients.Group($"auction-{auctionId}").SendAsync(
                     "BidPlaced",
                     new
@@ -118,7 +116,6 @@ namespace DNDA.Web.Controllers
                     }
                 );
 
-
                 return Json(new
                 {
                     success = true,
@@ -126,19 +123,14 @@ namespace DNDA.Web.Controllers
                     highestAmount = highestBid?.Amount ?? 0,
                     highestUser = highestBid?.User?.UserName ?? "—"
                 });
-
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[SignalR Error] PlaceBid: {ex.Message}");
-             
+                // Retorna el error real al cliente para depuración
+                Console.WriteLine($"[SignalR Error] {ex}");
+                return Json(new { success = false, message = $"Error interno: {ex.Message}" });
             }
-
-            return Json(new { success = true, message = "Puja registrada con éxito" });
-
-
         }
-     
         [HttpGet]
         public async Task<IActionResult> GetAuctionState(int id)
         {
@@ -164,51 +156,104 @@ namespace DNDA.Web.Controllers
             });
         }
 
-       
+        [HttpPost]
+        [HttpPost]
         [HttpPost]
         public async Task<IActionResult> CheckAndCloseAuction(int id)
         {
             var auction = await _ServiceAuctions.GetAuctionById(id);
-            if (auction == null) return Json(new { closed = false });
-
-           
-            if (auction.idstate != 1)
-                return Json(new { closed = false, alreadyClosed = true });
-
-         
-            var today = DateOnly.FromDateTime(DateTime.Now);
-            if (today < auction.EndDate)
+            if (auction == null)
                 return Json(new { closed = false });
 
-          
-            await _ServiceAuctions.CloseAuction(id); 
-            
 
+            if (auction.idstate != 1)
+            {
+                
+                var winnerBids = await _serviceBidHistory.GetHighestBidAsync(id);
+                return Json(new
+                {
+                    closed = true,                              // ← TRUE para que el JS lo procese
+                    alreadyClosed = true,
+                    winnerName = winnerBids?.User?.UserName ?? "Sin ganador",
+                    winnerUserId = winnerBids?.UserId ?? 0,
+                    winningAmount = winnerBids?.Amount ?? 0,
+                    hasWinner = winnerBids != null
+                });
+            }
+
+
+            if (DateTime.Now < auction.EndDate)
+                return Json(new { closed = false });
+
+   
             var winnerBid = await _serviceBidHistory.GetHighestBidAsync(id);
+
+          
+            if (winnerBid == null)
+            {
+                await Task.Delay(100);
+                winnerBid = await _serviceBidHistory.GetHighestBidAsync(id);
+            }
+
             string winnerName = winnerBid != null
                 ? (winnerBid.User?.UserName ?? "—")
                 : "Sin ganador";
 
-          
-            await _hubContext.Clients.Group($"auction-{id}").SendAsync(
-                "AuctionClosed",
-                new
+            try
+            {
+                if (winnerBid != null)
                 {
-                    auctionId = id,
+                    Console.WriteLine($"[Cierre] WinnerBid: UserId={winnerBid.UserId}, Amount={winnerBid.Amount}");
+
+                    await _serviceWinner.CreateWinnerAsync(
+                        auctionId: id,
+                        userId: winnerBid.UserId,
+                        finalPrice: winnerBid.Amount,
+                        bidWinningId: winnerBid.Id
+                    );
+
+                    Console.WriteLine("[Cierre] Winner creado OK");
+
+                    await _servicePayment.GeneratePayment(id);
+                    Console.WriteLine("[Cierre] Payment generado OK");
+                }
+                else
+                {
+                    Console.WriteLine($"[Cierre] No hay pujas para subasta {id}");
+                }
+
+              
+                await _ServiceAuctions.CloseAuction(id);
+
+          
+                await _hubContext.Clients.Group($"auction-{id}").SendAsync(
+                    "AuctionClosed",
+                    new
+                    {
+                        auctionId = id,
+                        winnerName,
+                        winnerUserId = winnerBid?.UserId ?? 0,
+                        winningAmount = winnerBid?.Amount ?? 0,
+                        hasWinner = winnerBid != null
+                    }
+                );
+
+                return Json(new
+                {
+                    closed = true,
                     winnerName,
                     winnerUserId = winnerBid?.UserId ?? 0,
                     winningAmount = winnerBid?.Amount ?? 0,
                     hasWinner = winnerBid != null
-                }
-            );
-
-            return Json(new
+                });
+            }
+            catch (Exception ex)
             {
-                closed = true,
-                winnerName,
-                winningAmount = winnerBid?.Amount ?? 0,
-                hasWinner = winnerBid != null
-            });
+                var inner = ex.InnerException?.Message ?? ex.Message;
+                Console.WriteLine($"[Cierre] ERROR: {inner}");
+
+                return Json(new { closed = false, error = inner });
+            }
         }
 
         public int CantidadDePujas(int id)
@@ -244,10 +289,10 @@ namespace DNDA.Web.Controllers
             if (auction.EndDate <= auction.StartDate)
                 ModelState.AddModelError("EndDate", "La fecha de cierre debe ser mayor a la fecha de inicio.");
 
-            if (auction.StartDate == DateOnly.MinValue)
+            if (auction.StartDate == DateTime.MinValue)
                 ModelState.AddModelError("StartDate", "La fecha de inicio es requerida.");
 
-            if (auction.EndDate == DateOnly.MinValue)
+            if (auction.EndDate == DateTime.MinValue)
                 ModelState.AddModelError("EndDate", "La fecha de cierre es requerida.");
 
             if (ModelState.IsValid)
@@ -332,10 +377,10 @@ namespace DNDA.Web.Controllers
             if (auction.idobject == null || auction.idobject == 0)
                 ModelState.AddModelError("idobject", "Debe seleccionar una reliquia.");
 
-            if (auction.StartDate == DateOnly.MinValue)
+            if (auction.StartDate == DateTime.MinValue)
                 ModelState.AddModelError("StartDate", "La fecha de inicio es requerida.");
 
-            if (auction.EndDate == DateOnly.MinValue)
+            if (auction.EndDate == DateTime.MinValue)
                 ModelState.AddModelError("EndDate", "La fecha de cierre es requerida.");
 
             if (auction.EndDate <= auction.StartDate)
@@ -436,5 +481,8 @@ namespace DNDA.Web.Controllers
             TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion("Subasta baneada", "La subasta fue baneada y removida de la plataforma.", SweetAlertMessageType.success);
             return RedirectToAction(nameof(IndexMaintenance));
         }
+
+
+
     }
 }

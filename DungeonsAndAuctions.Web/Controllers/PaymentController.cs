@@ -27,9 +27,8 @@ namespace DNDA.Web.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var payment = await _service.GetPaymentByAuctionAsync(id);
-            if (payment == null)
-                return NotFound("payment es null");
 
+            if (payment == null) return View("NoBids");
 
             var usercomprador = await _serviceUser.GetWinnerUserByPaymentAsync(payment.WinnerUserId.Value);
 
@@ -49,10 +48,11 @@ namespace DNDA.Web.Controllers
 
         //confirmación del pago 
         [HttpPost]
+      
         public async Task<IActionResult> Confirm(int paymentId)
         {
-            await _service.ConfirmPaymentAsync(paymentId);
-            return RedirectToAction("Details", new { paymentId });
+            var payment = await _service.ConfirmPaymentAsync(paymentId);
+            return RedirectToAction("Details", new { id = payment.AuctionId });
         }
     }
 }

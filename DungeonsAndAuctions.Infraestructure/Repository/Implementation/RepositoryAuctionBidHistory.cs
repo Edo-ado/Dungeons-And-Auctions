@@ -72,17 +72,12 @@ namespace D_A.Infraestructure.Repository.Implementation
             await _context.SaveChangesAsync();
         }
 
-    
+
         public async Task MarkAllBidsAsNotLastAsync(int auctionId)
         {
-            var bids = await _context.AuctionBidHistory
+            await _context.AuctionBidHistory
                 .Where(b => b.AuctionId == auctionId && b.IsLastBid)
-                .ToListAsync();
-
-            foreach (var b in bids)
-                b.IsLastBid = false;
-
-            await _context.SaveChangesAsync();
+                .ExecuteUpdateAsync(s => s.SetProperty(b => b.IsLastBid, false));
         }
     }
 }

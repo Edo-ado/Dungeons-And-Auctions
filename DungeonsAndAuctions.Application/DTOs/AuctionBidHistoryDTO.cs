@@ -16,8 +16,7 @@ namespace D_A.Application.DTOs
         [DisplayName("AuctionId")]
         public int AuctionId { get; set; }
         [DisplayName("BidDate")]
-        public DateOnly BidDate { get; set; } = new DateOnly(2000, 1, 1);
-
+        public DateTime BidDate { get; set; }
         [DisplayName("Amount")]
         public decimal Amount { get; set; }
 
@@ -25,7 +24,7 @@ namespace D_A.Application.DTOs
         public bool IsLastBid { get; set; }
 
         [DisplayName("Id")]
-        public string Id { get; set; } = string.Empty;
+        public int Id { get; set; }
 
         public  Auctions Auction { get; set; } = null!;
 
