@@ -64,10 +64,7 @@ namespace D_A.Application.Services.Implementations
             //  Obtiene la puja más alta actual
             var highestBid = await _repository.GetHighestBidAsync(auctionId);
             decimal currentHighest = highestBid?.Amount ?? auction.BasePrice;
-
-            //  Validar que el monto es mayor que la puja actual
-            if (amount <= currentHighest)
-                return $"Tu puja debe ser mayor a la puja actual ({currentHighest:N2} Oz).";
+            decimal incremento = auction.IncrementoMinimo;
 
             //  Valida incremento mínimo
             decimal minRequired = currentHighest + auction.IncrementoMinimo;
@@ -75,19 +72,28 @@ namespace D_A.Application.Services.Implementations
                 return $"Tu puja debe ser al menos {minRequired:N2} Oz (incremento mínimo: {auction.IncrementoMinimo:N2} Oz).";
 
             // ─── REGISTRAR LA PUJA ──────────────────────────────────────────
-      
-            await _repository.MarkAllBidsAsNotLastAsync(auctionId);
 
-            var bid = new AuctionBidHistory
+            try
             {
-                AuctionId = auctionId,
-                UserId = userId,
-                Amount = amount,
-                BidDate = DateTime.Now,
-                IsLastBid = true
-            };
+                await _repository.MarkAllBidsAsNotLastAsync(auctionId);
+                var bid = new AuctionBidHistory
+                {
+                    AuctionId = auctionId,
+                    UserId = userId,
+                    Amount = amount,
+                    BidDate = DateTime.UtcNow,
+                    IsLastBid = true
+                };
+                await _repository.AddBidAsync(bid);
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
+            {
+                // Esto te muestra el error REAL de la base de datos
+                var inner = ex.InnerException?.Message ?? ex.Message;
+                return $"DB ERROR: {inner}";
+            }
 
-            await _repository.AddBidAsync(bid);
+     
             return null; 
         }
     }

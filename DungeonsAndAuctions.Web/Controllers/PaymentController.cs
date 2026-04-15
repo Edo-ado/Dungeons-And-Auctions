@@ -48,10 +48,11 @@ namespace DNDA.Web.Controllers
 
         //confirmación del pago 
         [HttpPost]
+      
         public async Task<IActionResult> Confirm(int paymentId)
         {
-            await _service.ConfirmPaymentAsync(paymentId);
-            return RedirectToAction("Details", new { paymentId });
+            var payment = await _service.ConfirmPaymentAsync(paymentId);
+            return RedirectToAction("Details", new { id = payment.AuctionId });
         }
     }
 }

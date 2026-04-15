@@ -86,7 +86,7 @@ builder.Services.AddScoped<IRepositoryCategory, RepositoryCategory>();
 builder.Services.AddScoped<IRepositoryGender, RepositoryGender>();
 builder.Services.AddScoped<IRepositoryQuaility, RepositoryQuality>();
 
-
+builder.Services.AddScoped<IRepositoryAuctionWinner, RepositoryAuctionWinner>();
 builder.Services.AddScoped<IRepositoryPayment, RepositoryPayment>();
 
 //Services
@@ -99,6 +99,9 @@ builder.Services.AddScoped<IServiceQuality, ServiceQuality>();
 builder.Services.AddScoped<IServicePayment, ServicePayment>();
 
 
+builder.Services.AddScoped<IServiceAuctionWinner, ServiceAuctionWinner>();
+
+
 builder.Services.AddScoped<IServiceCountry, ServiceCountry>();
 builder.Services.AddScoped<IServiceGender, ServiceGender>();
 
@@ -108,6 +111,7 @@ builder.Services.AddAutoMapper(config =>
     config.AddProfile<UserProfile>();
     config.AddProfile<ObjectProfile>();
     config.AddProfile<AuctionProfile>();
+    config.AddProfile<AuctionBidHistoryProfile>();
     config.AddProfile<QualityProfile>();
     config.AddProfile<GenderProfile>();
     config.AddProfile<CountryProfile>();// <-- Añadido: registra el nuevo perfil de Genders

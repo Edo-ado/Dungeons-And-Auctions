@@ -44,6 +44,8 @@ public partial class DAContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        
+
         modelBuilder.Entity<AuctionBidHistory>(entity =>
         {
             entity.Property(e => e.Id)
@@ -69,7 +71,7 @@ public partial class DAContext : DbContext
             entity.HasKey(e => e.Idauctionwinner);
 
             entity.Property(e => e.Idauctionwinner)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("idauctionwinner");
             entity.Property(e => e.Actionid).HasColumnName("actionid");
             entity.Property(e => e.Bidwinningid)
@@ -211,7 +213,7 @@ public partial class DAContext : DbContext
         modelBuilder.Entity<Payment>(entity =>
         {
             entity.Property(e => e.PaymentId)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("paymentID");
             entity.Property(e => e.Amount)
                 .HasColumnType("decimal(18, 0)")
@@ -312,4 +314,5 @@ public partial class DAContext : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
 }

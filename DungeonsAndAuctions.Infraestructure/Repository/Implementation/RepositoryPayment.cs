@@ -21,20 +21,20 @@ namespace D_A.Infraestructure.Repository.Implementation
 
         public async Task GeneratePayment(int auctionId)
         {
-            var winner = await _context.AuctionWinner.FirstOrDefaultAsync(w => w.Actionid == auctionId);
+            var winner = await _context.AuctionWinner
+                .FirstOrDefaultAsync(w => w.Actionid == auctionId);
 
             if (winner == null) return;
 
-            var alreadyexists = await _context.Payment.AnyAsync(p => p.AuctionId == auctionId);
-
-            if (alreadyexists) return;
+            var alreadyExists = await _context.Payment.AnyAsync(p => p.AuctionId == auctionId);
+            if (alreadyExists) return;
 
             var payment = new Payment
             {
                 AuctionId = auctionId,
-                WinnerUserId = winner.Idauctionwinner,
-                Amount = winner.Finalprice,
-                PaymentStatusId = 2,//pndiente
+                WinnerUserId = winner.Idauctionwinner,     
+                Amount = (long)winner.Finalprice,
+                PaymentStatusId = 2,
                 DateCreated = DateTime.Now
             };
 

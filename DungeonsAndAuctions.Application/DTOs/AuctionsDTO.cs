@@ -20,12 +20,12 @@ namespace D_A.Application.DTOs
 
         [Required(ErrorMessage = "La fecha de inicio es requerida")]
         [DisplayName("Start Date")]
-        public DateOnly StartDate { get; set; } = new DateOnly();
+        public DateTime StartDate { get; set; } = new DateTime();
 
 
         [Required(ErrorMessage = "La fecha de cierre es requerida")]
         [DisplayName("End Date")]
-        public DateOnly EndDate { get; set; } = new DateOnly();
+        public DateTime EndDate { get; set; } = new DateTime();
 
         [DisplayName("Active?")]
         public bool IsActive { get; set; }
