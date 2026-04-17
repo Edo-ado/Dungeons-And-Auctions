@@ -698,16 +698,13 @@ function updateCountdown() {
             const diff = END_DATE - now;
 
                   if (diff <= 0) {
-            el.textContent = "⌛ Cerrando subasta...";
+            el.textContent = "Subasta Cerrada";
             el.className = "text-red-500 text-sm font-semibold animate-pulse";
             clearInterval(countdownInterval);
 
        
             const badge = document.getElementById("state-label");
-            if (badge) {
-                badge.textContent = "Finalizando...";
-                badge.className = "badge-closed";
-            }
+        
 
             checkAndCloseAuction();
             return;
@@ -769,6 +766,8 @@ updateCountdown();
                       if (data.closed || data.alreadyClosed) {
                     isAuctionActive = false;
                     markAuctionClosed(data);
+                   
+
                 } else if (data.error) {
                     console.error('[Cierre] error del servidor:', data.error);
                  
