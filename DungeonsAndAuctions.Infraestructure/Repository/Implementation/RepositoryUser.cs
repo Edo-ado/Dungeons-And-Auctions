@@ -1,6 +1,7 @@
 ﻿using D_A.Infraestructure.Data;
 using D_A.Infraestructure.Models;
 using D_A.Infraestructure.Repository.Interfaces;
+using DNDA.Web.Models.Reports;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -89,5 +90,26 @@ namespace D_A.Infraestructure.Repository.Implementation
                 .FirstOrDefaultAsync(u => u.Id == winner.Winnerid);
         }
 
+        public async Task<ICollection<BuyerActivity>> GetBuyerActivityReportAsync(DateTime dateFrom, DateTime dateTo)
+        {
+            return await _context.AuctionBidHistory
+                .Where(b => b.BidDate >= dateFrom && b.BidDate <= dateTo)
+                .GroupBy(b => new
+                {
+                    b.UserId,
+                    b.User.FirstName,
+                    b.User.LastName,
+                    b.User.Email
+                })
+                .Select(g => new BuyerActivity
+                {
+                    BuyerName = g.Key.FirstName + " " + g.Key.LastName,
+                    Email = g.Key.Email,
+                    AuctionsParticipated = g.Select(b => b.AuctionId).Distinct().Count(),
+                    TotalBids = g.Count()
+                })
+                .OrderByDescending(x => x.AuctionsParticipated)
+                .ToListAsync();
+        }
     }
 }

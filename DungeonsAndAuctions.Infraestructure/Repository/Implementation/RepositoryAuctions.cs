@@ -1,6 +1,7 @@
 ﻿using D_A.Infraestructure.Data;
 using D_A.Infraestructure.Models;
 using D_A.Infraestructure.Repository.Interfaces;
+using DNDA.Web.Models.Reports;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -312,5 +313,29 @@ namespace D_A.Infraestructure.Repository.Implementation
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<SystemActivity> GetSystemActivityReportAsync(DateTime dateFrom, DateTime dateTo)
+        {
+            var auctionsCreated = await _context.Auctions
+                .Where(a => a.StartDate >= dateFrom && a.StartDate <= dateTo)
+                .CountAsync();
+
+            var bidsPlaced = await _context.AuctionBidHistory
+                .Where(b => b.BidDate >= dateFrom && b.BidDate <= dateTo)
+                .CountAsync();
+
+            var auctionsFinished = await _context.Auctions
+                .Where(a => a.EndDate >= dateFrom && a.EndDate <= dateTo && !a.IsActive)
+                .CountAsync();
+
+            return new SystemActivity
+            {
+                AuctionsCreated = auctionsCreated,
+                BidsPlaced = bidsPlaced,
+                AuctionsFinished = auctionsFinished,
+                DateFrom = dateFrom,
+                DateTo = dateTo
+            };
         }
+    }
 }

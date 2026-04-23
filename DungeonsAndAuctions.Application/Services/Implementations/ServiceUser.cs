@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
-using D_A.Infraestructure.Repository.Interfaces;
 using D_A.Application.DTOs;
 using D_A.Application.Services.Interfaces;
+using D_A.Infraestructure.Repository.Implementation;
+using D_A.Infraestructure.Repository.Interfaces;
+using DNDA.Web.Models.Reports;
 
 namespace D_A.Application.Services.Implementations
 {
@@ -58,6 +60,11 @@ namespace D_A.Application.Services.Implementations
             var user = await _repository.GetWinnerUserByPaymentAsync(winnerUserId);
             if (user == null) return null;
             return _mapper.Map<UsersDTO>(user);
+        }
+
+        public async Task<ICollection<BuyerActivity>> GetBuyerActivityReportAsync(DateTime dateFrom, DateTime dateTo)
+        {
+            return await _repository.GetBuyerActivityReportAsync(dateFrom, dateTo);
         }
     }
 }

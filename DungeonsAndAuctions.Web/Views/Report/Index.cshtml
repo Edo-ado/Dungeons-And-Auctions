@@ -1,0 +1,485 @@
+﻿report_page = '''@{
+ViewData["Title"] = "Reportes del Reino";
+}
+
+<div class="relative min-h-screen overflow-hidden font-[\'Cinzel\']" style="background-color: #1a1412;">
+    <div class="grain-overlay"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80"></div>
+
+    <!-- Partículas -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="ember ember-1"></div>
+        <div class="ember ember-2"></div>
+        <div class="ember ember-3"></div>
+        <div class="ember ember-4"></div>
+        <div class="ash ash-1"></div>
+        <div class="ash ash-2"></div>
+        <div class="ash ash-3"></div>
+    </div>
+
+    <div class="relative z-10 h-1 bg-gradient-to-r from-transparent via-yellow-600 to-transparent"></div>
+
+    <div class="relative z-10 max-w-6xl mx-auto px-6 py-16">
+
+        <!-- Título de la sección -->
+        <div class="text-center mb-16 animate-fade-in">
+            <div class="flex items-center justify-center gap-4 mb-4">
+                <div class="h-px w-24 bg-gradient-to-r from-transparent to-yellow-700"></div>
+                <span class="text-red-700 text-2xl drop-shadow-[0_0_12px_rgba(180,0,0,0.6)]">⚜</span>
+                <div class="h-px w-24 bg-gradient-to-l from-transparent to-yellow-700"></div>
+            </div>
+            <p class="text-yellow-600 text-xs tracking-[0.5em] uppercase mb-2">Archivos del Reino</p>
+            <h1 class="text-yellow-500 text-3xl md:text-4xl font-bold tracking-widest uppercase mb-4">
+                Reportes
+            </h1>
+            <p class="text-stone-400 text-sm font-serif italic max-w-xl mx-auto">
+                "Consulta los registros sagrados del reino. Cada cifra, un testimonio del poder y la gloria de las subastas."
+            </p>
+        </div>
+
+        <!-- Grid de reportes -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+
+            <!-- ═══════════════════════════════════════ -->
+            <!-- REPORTE 1: ACTIVIDAD DE COMPRADORES     -->
+            <!-- ═══════════════════════════════════════ -->
+            <div class="group relative border border-yellow-900/50 bg-[#2a1f1a]/90 p-8 hover:border-yellow-700 transition-all duration-500 hover:shadow-[0_0_30px_rgba(100,60,0,0.2)]">
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#1a1412] px-3">
+                    <span class="text-yellow-500 text-2xl">♛</span>
+                </div>
+                <div class="absolute top-2 left-2 w-4 h-4 border-t border-l border-yellow-800"></div>
+                <div class="absolute top-2 right-2 w-4 h-4 border-t border-r border-yellow-800"></div>
+                <div class="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-yellow-800"></div>
+                <div class="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-yellow-800"></div>
+
+                <h2 class="text-yellow-500 uppercase tracking-[0.2em] text-sm font-bold text-center mb-2 mt-2">
+                    Actividad de Compradores
+                </h2>
+                <p class="text-stone-500 text-xs font-serif italic text-center mb-6">
+                    Subastas en las que participaron los compradores y sus pujas totales en un periodo.
+                </p>
+
+                <div class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-yellow-700 text-xs tracking-widest uppercase block mb-1">Desde</label>
+                            <input type="date" id="buyer-date-from"
+                                   class="w-full bg-[#1a1412] border border-yellow-900/60 text-stone-300 text-sm px-3 py-2 focus:outline-none focus:border-yellow-600 transition-colors" />
+                        </div>
+                        <div>
+                            <label class="text-yellow-700 text-xs tracking-widest uppercase block mb-1">Hasta</label>
+                            <input type="date" id="buyer-date-to"
+                                   class="w-full bg-[#1a1412] border border-yellow-900/60 text-stone-300 text-sm px-3 py-2 focus:outline-none focus:border-yellow-600 transition-colors" />
+                        </div>
+                    </div>
+
+                    <div id="buyer-error" class="hidden text-red-500 text-xs font-serif italic text-center py-1"></div>
+
+                    <button onclick="generateBuyerReport()"
+                            class="group/btn relative w-full px-6 py-3 bg-red-900 border border-red-700 text-yellow-100 uppercase tracking-[0.2em] text-xs font-bold transition-all duration-300 hover:bg-red-800 hover:border-yellow-600 hover:shadow-[0_0_20px_rgba(180,0,0,0.3)]">
+                        <span class="relative z-10 flex items-center justify-center gap-2">
+                            <span>⚔</span>
+                            <span>Generar Reporte</span>
+                        </span>
+                    </button>
+
+                    <div id="buyer-loading" class="hidden text-center py-2">
+                        <span class="text-yellow-700 text-xs tracking-widest animate-pulse">Invocando los archivos...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════ -->
+            <!-- REPORTE 2: ACTIVIDAD DEL SISTEMA        -->
+            <!-- ═══════════════════════════════════════ -->
+            <div class="group relative border border-yellow-900/50 bg-[#2a1f1a]/90 p-8 hover:border-yellow-700 transition-all duration-500 hover:shadow-[0_0_30px_rgba(100,60,0,0.2)]">
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#1a1412] px-3">
+                    <span class="text-red-700 text-2xl">⚜</span>
+                </div>
+                <div class="absolute top-2 left-2 w-4 h-4 border-t border-l border-yellow-800"></div>
+                <div class="absolute top-2 right-2 w-4 h-4 border-t border-r border-yellow-800"></div>
+                <div class="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-yellow-800"></div>
+                <div class="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-yellow-800"></div>
+
+                <h2 class="text-yellow-500 uppercase tracking-[0.2em] text-sm font-bold text-center mb-2 mt-2">
+                    Actividad del Sistema
+                </h2>
+                <p class="text-stone-500 text-xs font-serif italic text-center mb-6">
+                    Resumen general del reino: subastas creadas, pujas realizadas y subastas finalizadas.
+                </p>
+
+                <div class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-yellow-700 text-xs tracking-widest uppercase block mb-1">Desde</label>
+                            <input type="date" id="system-date-from"
+                                   class="w-full bg-[#1a1412] border border-yellow-900/60 text-stone-300 text-sm px-3 py-2 focus:outline-none focus:border-yellow-600 transition-colors" />
+                        </div>
+                        <div>
+                            <label class="text-yellow-700 text-xs tracking-widest uppercase block mb-1">Hasta</label>
+                            <input type="date" id="system-date-to"
+                                   class="w-full bg-[#1a1412] border border-yellow-900/60 text-stone-300 text-sm px-3 py-2 focus:outline-none focus:border-yellow-600 transition-colors" />
+                        </div>
+                    </div>
+
+                    <div id="system-error" class="hidden text-red-500 text-xs font-serif italic text-center py-1"></div>
+
+                    <!-- Opciones de visualización -->
+                    <div>
+                        <label class="text-yellow-700 text-xs tracking-widest uppercase block mb-2">Tipo de Visualización</label>
+                        <div class="flex gap-3">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="system-viz" value="pdf" checked
+                                       class="accent-yellow-600" />
+                                <span class="text-stone-400 text-xs uppercase tracking-wider">PDF</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="system-viz" value="chart"
+                                       class="accent-yellow-600" />
+                                <span class="text-stone-400 text-xs uppercase tracking-wider">Gráfica</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="system-viz" value="both"
+                                       class="accent-yellow-600" />
+                                <span class="text-stone-400 text-xs uppercase tracking-wider">Ambos</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button onclick="generateSystemReport()"
+                            class="group/btn relative w-full px-6 py-3 bg-transparent border border-yellow-800 text-yellow-600 uppercase tracking-[0.2em] text-xs font-bold transition-all duration-300 hover:border-yellow-500 hover:text-yellow-400 hover:shadow-[0_0_20px_rgba(180,130,0,0.2)]">
+                        <span class="flex items-center justify-center gap-2">
+                            <span>🗡</span>
+                            <span>Consultar el Registro</span>
+                        </span>
+                    </button>
+
+                    <div id="system-loading" class="hidden text-center py-2">
+                        <span class="text-yellow-700 text-xs tracking-widest animate-pulse">Invocando los archivos...</span>
+                    </div>
+                </div>
+
+                <!-- Área de gráfica del sistema -->
+                <div id="system-chart-area" class="hidden mt-6 border-t border-yellow-900/40 pt-6">
+                    <h3 class="text-yellow-700 text-xs tracking-widest uppercase text-center mb-4">Actividad del Periodo</h3>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="bg-[#1a1412] border border-yellow-900/40 p-4 text-center">
+                            <div id="stat-created" class="text-yellow-500 text-2xl font-bold">—</div>
+                            <div class="text-stone-500 text-xs mt-1 tracking-wider uppercase">Creadas</div>
+                        </div>
+                        <div class="bg-[#1a1412] border border-red-900/40 p-4 text-center">
+                            <div id="stat-bids" class="text-red-400 text-2xl font-bold">—</div>
+                            <div class="text-stone-500 text-xs mt-1 tracking-wider uppercase">Pujas</div>
+                        </div>
+                        <div class="bg-[#1a1412] border border-yellow-900/40 p-4 text-center">
+                            <div id="stat-finished" class="text-stone-300 text-2xl font-bold">—</div>
+                            <div class="text-stone-500 text-xs mt-1 tracking-wider uppercase">Finalizadas</div>
+                        </div>
+                    </div>
+                    <canvas id="system-chart" class="mt-6 w-full" height="200"></canvas>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="relative z-10 h-1 bg-gradient-to-r from-transparent via-yellow-600 to-transparent mt-10"></div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    let systemChart = null;
+
+    function validateDates(fromId, toId, errorId) {
+        const from = document.getElementById(fromId).value;
+        const to = document.getElementById(toId).value;
+        const errorEl = document.getElementById(errorId);
+
+        if (!from || !to) {
+            errorEl.textContent = "Por favor selecciona ambas fechas.";
+            errorEl.classList.remove("hidden");
+            return null;
+        }
+        if (new Date(from) > new Date(to)) {
+            errorEl.textContent = "La fecha de inicio no puede ser mayor a la fecha final.";
+            errorEl.classList.remove("hidden");
+            return null;
+        }
+        errorEl.classList.add("hidden");
+        return { from, to };
+    }
+
+    function generateBuyerReport() {
+        const dates = validateDates("buyer-date-from", "buyer-date-to", "buyer-error");
+        if (!dates) return;
+
+        const loading = document.getElementById("buyer-loading");
+        loading.classList.remove("hidden");
+ 
+
+    const url = `/Report/GetBuyerActivityReport?dateFrom=${dates.from}&dateTo=${dates.to}`;
+
+        fetch(url)
+            .then(res => {
+                if (!res.ok) return res.text().then(t => { throw new Error(t); });
+                return res.blob();
+            })
+            .then(blob => {
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+               link.download = `reporte-compradores-${dates.from}-${dates.to}.pdf`;
+                link.click();
+            })
+            .catch(err => {
+                const errorEl = document.getElementById("buyer-error");
+                errorEl.textContent = err.message || "Error al generar el reporte.";
+                errorEl.classList.remove("hidden");
+            })
+            .finally(() => loading.classList.add("hidden"));
+    }
+
+    function generateSystemReport() {
+        const dates = validateDates("system-date-from", "system-date-to", "system-error");
+        if (!dates) return;
+
+        const viz = document.querySelector('input[name="system-viz"]:checked').value;
+        const loading = document.getElementById("system-loading");
+        loading.classList.remove("hidden");
+
+    const url = `/Report/GetSystemActivityReport?dateFrom=${dates.from}&dateTo=${dates.to}`;
+
+        fetch(url)
+            .then(res => {
+                if (!res.ok) return res.text().then(t => { throw new Error(t); });
+                return res.json();
+            })
+            .then(data => {
+                if (viz === "pdf" || viz === "both") {
+              const pdfUrl = `/Report/GetSystemActivityReportPdf?dateFrom=${dates.from}&dateTo=${dates.to}`;
+                    const link = document.createElement("a");
+                    link.href = pdfUrl;
+                    link.download = `reporte-sistema-${dates.from}-${dates.to}.pdf`;
+                    link.click();
+                }
+
+                if (viz === "chart" || viz === "both") {
+                    renderSystemChart(data);
+                }
+            })
+            .catch(err => {
+                const errorEl = document.getElementById("system-error");
+                errorEl.textContent = err.message || "Error al consultar el registro.";
+                errorEl.classList.remove("hidden");
+            })
+            .finally(() => loading.classList.add("hidden"));
+    }
+
+    function renderSystemChart(data) {
+        const chartArea = document.getElementById("system-chart-area");
+        chartArea.classList.remove("hidden");
+
+        document.getElementById("stat-created").textContent = data.auctionsCreated ?? "—";
+        document.getElementById("stat-bids").textContent = data.bidsPlaced ?? "—";
+        document.getElementById("stat-finished").textContent = data.auctionsFinished ?? "—";
+
+        const ctx = document.getElementById("system-chart").getContext("2d");
+
+        if (systemChart) systemChart.destroy();
+
+        systemChart = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: ["Subastas Creadas", "Pujas Realizadas", "Subastas Finalizadas"],
+                datasets: [{
+                    label: "Actividad del Sistema",
+                    data: [data.auctionsCreated, data.bidsPlaced, data.auctionsFinished],
+                    backgroundColor: [
+                        "rgba(234, 179, 8, 0.4)",
+                        "rgba(185, 28, 28, 0.4)",
+                        "rgba(120, 113, 108, 0.4)"
+                    ],
+                    borderColor: [
+                        "rgba(234, 179, 8, 0.9)",
+                        "rgba(185, 28, 28, 0.9)",
+                        "rgba(120, 113, 108, 0.9)"
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        ticks: { color: "#a8a29e", font: { family: "Cinzel", size: 10 } },
+                        grid: { color: "rgba(120, 113, 108, 0.1)" }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: "#a8a29e", font: { size: 10 } },
+                        grid: { color: "rgba(120, 113, 108, 0.1)" }
+                    }
+                }
+            }
+        });
+    }
+</script>
+
+<style>
+    @@keyframes rise {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    @@keyframes float {
+        0%, 100% {
+            transform: translateY(0) translateX(0);
+            opacity: 0;
+        }
+
+        10% {
+            opacity: 1;
+        }
+
+        90% {
+            opacity: 0.6;
+        }
+
+        100% {
+            transform: translateY(-100vh) translateX(20px);
+            opacity: 0;
+        }
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 1.5s ease-out forwards;
+    }
+
+    .ember {
+        position: absolute;
+        width: 3px;
+        height: 3px;
+        border-radius: 50%;
+        background: #f97316;
+        box-shadow: 0 0 6px #f97316, 0 0 12px #ea580c;
+        animation: float linear infinite;
+        bottom: -10px;
+    }
+
+    .ember-1 {
+        left: 10%;
+        animation-duration: 8s;
+        animation-delay: 0s;
+    }
+
+    .ember-2 {
+        left: 30%;
+        animation-duration: 11s;
+        animation-delay: 2s;
+    }
+
+    .ember-3 {
+        left: 60%;
+        animation-duration: 9s;
+        animation-delay: 4s;
+    }
+
+    .ember-4 {
+        left: 85%;
+        animation-duration: 13s;
+        animation-delay: 1s;
+    }
+
+    .ash {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        border-radius: 50%;
+        background: #9ca3af;
+        box-shadow: 0 0 4px #6b7280;
+        animation: float linear infinite;
+        bottom: -10px;
+    }
+
+    .ash-1 {
+        left: 20%;
+        animation-duration: 12s;
+        animation-delay: 1s;
+    }
+
+    .ash-2 {
+        left: 50%;
+        animation-duration: 15s;
+        animation-delay: 3s;
+    }
+
+    .ash-3 {
+        left: 80%;
+        animation-duration: 10s;
+        animation-delay: 5s;
+    }
+
+    @@keyframes grain {
+        0%, 100% {
+            transform: translate(0, 0);
+        }
+
+        25% {
+            transform: translate(1px, 1px);
+        }
+
+        50% {
+            transform: translate(-1px, 0);
+        }
+
+        75% {
+            transform: translate(0, -1px);
+        }
+    }
+
+    .grain-overlay {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 100;
+        opacity: 0.035;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        animation: grain 0.5s steps(1) infinite;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        filter: invert(0.4) sepia(1) saturate(2) hue-rotate(10deg);
+        cursor: pointer;
+    }
+
+    input[type="date"] {
+        color-scheme: dark;
+    }
+</style>
+'''
+
+with open("Reports.cshtml", "w", encoding="utf-8") as f:
+    f.write(report_page)
+
+print("Archivo generado exitosamente")

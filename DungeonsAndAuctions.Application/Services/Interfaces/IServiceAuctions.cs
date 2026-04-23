@@ -1,5 +1,6 @@
 ﻿using D_A.Application.DTOs;
 using D_A.Infraestructure.Models;
+using DNDA.Web.Models.Reports;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,8 @@ namespace D_A.Application.Services.Interfaces
         Task<List<AuctionsDTO>> GetAuctionsByObjectID(int id);
         Task<AuctionsDTO?> GetAuctionById(int id);
 
-      
+        Task<SystemActivity> GetSystemActivityReportAsync(DateTime dateFrom, DateTime dateTo);
+
 
         Task CreateAuction(AuctionsDTO auction);
         Task UpdateAuction(AuctionsDTO auction);

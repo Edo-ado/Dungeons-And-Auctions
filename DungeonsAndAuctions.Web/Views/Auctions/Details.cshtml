@@ -656,7 +656,7 @@ function updateBidHistory(history) {
             }
 
             if (isWinner) {
-                // Toast + countdown + redirección al pago
+                //Toast + countdown + redirección al pago
                 showToast("♛", "¡Has ganado la subasta!", "Serás redirigida al pago en unos segundos...", "success");
 
                 let secs = 4;
@@ -670,7 +670,7 @@ function updateBidHistory(history) {
                         secs--;
                         if (secs <= 0) {
                             clearInterval(iv);
-                            window.location.href = `/Payment/Details/${AUCTION_ID}`; // ← REDIRECCIÓN AQUÍ
+                            window.location.href = `/Payment/Details/${AUCTION_ID}`;
                         } else {
                             cd.textContent = `Redirigiendo al pago en ${secs}...`;
                         }
