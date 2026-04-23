@@ -1,4 +1,6 @@
-﻿@model DNDA.Web.Models.LoginViewModel
+﻿@using DNDA.Web.Models
+
+@model LoginViewModel
 @{
     ViewData["Title"] = "Iniciar Sesión";
     Layout = "_LayoutAuth";
@@ -19,8 +21,6 @@
         <div class="ash ash-3"></div>
     </div>
 
-    <!--   <div class="relative z-10 h-1 bg-gradient-to-r from-transparent via-yellow-600 to-transparent absolute top-0 w-full"></div>-->
-
     <!-- Card de login -->
     <div class="relative z-10 w-full max-w-md px-6 py-4 animate-rise">
 
@@ -39,6 +39,14 @@
             </p>
         </div>
 
+        <!-- Aviso de registro exitoso -->
+        @if (TempData["RegisterSuccess"] != null)
+        {
+            <div class="mb-4 border border-green-800/60 bg-green-950/40 px-4 py-3 text-green-400 text-xs font-serif italic text-center">
+                ⚜ @TempData["RegisterSuccess"]
+            </div>
+        }
+
         <!-- Panel -->
         <div class="relative border border-yellow-900/60 bg-[#2a1f1a]/95 p-8">
             <!-- Esquinas decorativas -->
@@ -51,7 +59,7 @@
                 Acceder al Reino
             </h2>
 
-            <!-- Errores de validación -->
+            <!-- Errores de validación del modelo -->
             @if (!ViewData.ModelState.IsValid)
             {
                 <div class="mb-4 border border-red-900/60 bg-red-950/40 px-4 py-3">
@@ -63,7 +71,7 @@
             @if (TempData["Error"] != null)
             {
                 <div class="mb-4 border border-red-900/60 bg-red-950/40 px-4 py-3 text-red-400 text-xs font-serif italic text-center">
-                    @TempData["Error"]
+                    ⚠ @TempData["Error"]
                 </div>
             }
 

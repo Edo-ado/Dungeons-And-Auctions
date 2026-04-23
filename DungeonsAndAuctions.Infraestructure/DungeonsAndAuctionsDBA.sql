@@ -174,14 +174,14 @@ INSERT INTO Roles (Name,Description) VALUES
 ('Guest',' Can only view the auctions, cannot interact without logging in')
 ;
 
-INSERT INTO Users (
-UserName,FirstName,LastName,PasswordHash,BirthDate,
-CountryId,GenderId,AboutMe,Email,PhoneNumber,
-RoleId,IsBlocked,RegisterDate,LastLogin,Active)
-VALUES
-('ashley_admin','Ashley','Rivera',0x41646D696E313233,'2006-01-21',1,1,'Fundadora del sistema.','ashley.admin@mail.com','8888-1111',1,0,'2026-02-20','2026-02-20',1),
-('juan_user','Juan','Perez',0x55736572313233,'1998-05-10',2,2,'Amante de las subastas.','juan.perez@mail.com','7777-2222',2,0,'2026-02-20',NULL,1),
-('luna_mod','Luna','Martinez',0x4D6F64313233,'2000-09-15',1,3,'Moderador activo.','luna.mod@mail.com',NULL,3,0,'2026-02-20',NULL,1);
+--INSERT INTO Users (
+--UserName,FirstName,LastName,PasswordHash,BirthDate,
+--CountryId,GenderId,AboutMe,Email,PhoneNumber,
+--RoleId,IsBlocked,RegisterDate,LastLogin,Active)
+--VALUES
+--('ashley_admin','Ashley','Rivera',0x41646D696E313233,'2006-01-21',1,1,'Fundadora del sistema.','ashley.admin@mail.com','8888-1111',1,0,'2026-02-20','2026-02-20',1),
+--('juan_user','Juan','Perez',0x55736572313233,'1998-05-10',2,2,'Amante de las subastas.','juan.perez@mail.com','7777-2222',2,0,'2026-02-20',NULL,1),
+--('luna_mod','Luna','Martinez',0x4D6F64313233,'2000-09-15',1,3,'Moderador activo.','luna.mod@mail.com',NULL,3,0,'2026-02-20',NULL,1);
 
 
 Insert into AuctionState(Name) 
@@ -253,134 +253,134 @@ VALUES
 
 
 
-		Insert into Objects(UserId, Name, Year, Description, RegistrationDate, MarketPrice, IsActive, idState) values (2, 'Wooden bow', 1976, 'a wooden bow', GETDATE(),null, 1,  2)
-		Insert into ObjectCategories(ObjectId, CategoryId)values( 1,2)
-		Insert into ObjectCategories(ObjectId, CategoryId)values( 1,4)
-		Insert into ObjectCategories(ObjectId, CategoryId)values( 1,6)
-		Insert into ObjectCategories(ObjectId, CategoryId)values( 1,20)
+--		Insert into Objects(UserId, Name, Year, Description, RegistrationDate, MarketPrice, IsActive, idState) values (2, 'Wooden bow', 1976, 'a wooden bow', GETDATE(),null, 1,  2)
+--		Insert into ObjectCategories(ObjectId, CategoryId)values( 1,2)
+--		Insert into ObjectCategories(ObjectId, CategoryId)values( 1,4)
+--		Insert into ObjectCategories(ObjectId, CategoryId)values( 1,6)
+--		Insert into ObjectCategories(ObjectId, CategoryId)values( 1,20)
 	
-		Insert into Objects(UserId, Name, Year, Description, RegistrationDate, MarketPrice, IsActive,  idState) values (2, 'Diamond sword', 550, 'A diamond sword form MC', GETDATE(),null, 1, 1)
-		Insert into ObjectCategories(ObjectId, CategoryId)values( 2,2)
-		Insert into ObjectCategories(ObjectId, CategoryId)values( 2,5)
-		Insert into ObjectCategories(ObjectId, CategoryId)values( 2,22)
+--		Insert into Objects(UserId, Name, Year, Description, RegistrationDate, MarketPrice, IsActive,  idState) values (2, 'Diamond sword', 550, 'A diamond sword form MC', GETDATE(),null, 1, 1)
+--		Insert into ObjectCategories(ObjectId, CategoryId)values( 2,2)
+--		Insert into ObjectCategories(ObjectId, CategoryId)values( 2,5)
+--		Insert into ObjectCategories(ObjectId, CategoryId)values( 2,22)
 		
 
-		Insert into Objects(UserId, Name, Year, Description, RegistrationDate, MarketPrice, IsActive, idState) values (2, 'Great hero soul', null, 'Consume to obtain 20,000 souls.', GETDATE(),null,1, 5)
-		Insert into ObjectCategories(ObjectId, CategoryId)values( 3,21)
+--		Insert into Objects(UserId, Name, Year, Description, RegistrationDate, MarketPrice, IsActive, idState) values (2, 'Great hero soul', null, 'Consume to obtain 20,000 souls.', GETDATE(),null,1, 5)
+--		Insert into ObjectCategories(ObjectId, CategoryId)values( 3,21)
 		
 
-		Insert into Objects(UserId, Name, Year, Description, RegistrationDate, MarketPrice, IsActive,  idState) values (2, 'Zweihander', null, 'Ultra greatsword with a large, long blade. Wielded with two hands, yet still requiring great strength due to its weight. ', GETDATE(),null, 1, 3)
-		Insert into ObjectCategories(ObjectId, CategoryId)values( 4,2)
-		Insert into ObjectCategories(ObjectId, CategoryId)values( 4,5)
-		Insert into ObjectCategories(ObjectId, CategoryId)values(4,18)
+--		Insert into Objects(UserId, Name, Year, Description, RegistrationDate, MarketPrice, IsActive,  idState) values (2, 'Zweihander', null, 'Ultra greatsword with a large, long blade. Wielded with two hands, yet still requiring great strength due to its weight. ', GETDATE(),null, 1, 3)
+--		Insert into ObjectCategories(ObjectId, CategoryId)values( 4,2)
+--		Insert into ObjectCategories(ObjectId, CategoryId)values( 4,5)
+--		Insert into ObjectCategories(ObjectId, CategoryId)values(4,18)
 
 
-		Insert into Auctions(StartDate, EndDate, IsActive, BasePrice,IncrementoMinimo,idstate,idusercreator,idobject) values (GETDATE(), GETDATE()+1, 1, 250, 10, 1, 2, 1 	)
-		Insert into Auctions(StartDate, EndDate, IsActive, BasePrice,IncrementoMinimo,idstate,idusercreator,idobject) values (GETDATE(), GETDATE()+1, 1, 700, 30, 1, 2, 2 	)
-		Insert into Auctions(StartDate, EndDate, IsActive, BasePrice,IncrementoMinimo,idstate,idusercreator,idobject) values (GETDATE(), GETDATE()+1, 1, 20000, 1200, 2, 2, 3 	)
-		Insert into Auctions(StartDate, EndDate, IsActive, BasePrice,IncrementoMinimo,idstate,idusercreator,idobject) values (GETDATE(), GETDATE()+1, 1, 6000, 350, 3, 2, 4	)
+--		Insert into Auctions(StartDate, EndDate, IsActive, BasePrice,IncrementoMinimo,idstate,idusercreator,idobject) values (GETDATE(), GETDATE()+1, 1, 250, 10, 1, 2, 1 	)
+--		Insert into Auctions(StartDate, EndDate, IsActive, BasePrice,IncrementoMinimo,idstate,idusercreator,idobject) values (GETDATE(), GETDATE()+1, 1, 700, 30, 1, 2, 2 	)
+--		Insert into Auctions(StartDate, EndDate, IsActive, BasePrice,IncrementoMinimo,idstate,idusercreator,idobject) values (GETDATE(), GETDATE()+1, 1, 20000, 1200, 2, 2, 3 	)
+--		Insert into Auctions(StartDate, EndDate, IsActive, BasePrice,IncrementoMinimo,idstate,idusercreator,idobject) values (GETDATE(), GETDATE()+1, 1, 6000, 350, 3, 2, 4	)
 
 
-        Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,25,1,0,GETDATE())
-         Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,30,1,0,GETDATE())
-          Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,74,1,0,GETDATE())
-           Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,12,1,1,GETDATE())
+--        Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,25,1,0,GETDATE())
+--         Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,30,1,0,GETDATE())
+--          Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,74,1,0,GETDATE())
+--           Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,12,1,1,GETDATE())
 
 
-            Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,40,2,0,GETDATE())
-             Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,30,2,0,GETDATE())
-              Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,70,2,0,GETDATE())
-               Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,100,2,1,GETDATE())
+--            Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,40,2,0,GETDATE())
+--             Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,30,2,0,GETDATE())
+--              Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,70,2,0,GETDATE())
+--               Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,100,2,1,GETDATE())
 
 
-                Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,1200,1,0,GETDATE())
-                 Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,1500,1,0,GETDATE())
-                  Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,1600,1,1,GETDATE())
-
-
-
-                  INSERT INTO [dbo].[Images]
-    ([IdObject],
-     [Name],
-     [ImageData])
-VALUES (
-    2,
-    'Diamond Sword',
-    CONVERT(varbinary(max), (SELECT * FROM OPENROWSET(BULK 'C:\ImagenesProyecto\diamondsword1.png', SINGLE_BLOB) AS image))
-);
-GO
-
-INSERT INTO [dbo].[Images]
-    ([IdObject],
-     [Name],
-     [ImageData])
-VALUES (
-    1,
-    'Wooden Bow 2',
-    CONVERT(varbinary(max), (SELECT * FROM OPENROWSET(BULK 'C:\ImagenesProyecto\woodenbow1.png', SINGLE_BLOB) AS image))
-);
-GO
+--                Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,1200,1,0,GETDATE())
+--                 Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,1500,1,0,GETDATE())
+--                  Insert into AuctionBidHistory(UserId,Amount,AuctionId,IsLastBid,BidDate) values (2,1600,1,1,GETDATE())
 
 
 
-INSERT INTO [dbo].[Images]
-    ([IdObject],
-     [Name],
-     [ImageData])
-VALUES (
-    1,
-    'Wooden Bow 2',
-    CONVERT(varbinary(max), (SELECT * FROM OPENROWSET(BULK 'C:\ImagenesProyecto\woodenbow2.png', SINGLE_BLOB) AS image))
-);
-GO
+--                  INSERT INTO [dbo].[Images]
+--    ([IdObject],
+--     [Name],
+--     [ImageData])
+--VALUES (
+--    2,
+--    'Diamond Sword',
+--    CONVERT(varbinary(max), (SELECT * FROM OPENROWSET(BULK 'C:\ImagenesProyecto\diamondsword1.png', SINGLE_BLOB) AS image))
+--);
+--GO
 
-INSERT INTO [dbo].[Images]
-    ([IdObject],
-     [Name],
-     [ImageData])
-VALUES (
-    3,
-    'Great Hero Soul',
-    CONVERT(varbinary(max), (SELECT * FROM OPENROWSET(BULK 'C:\ImagenesProyecto\SoulOfaGreatChampion.png', SINGLE_BLOB) AS image))
-);
-GO
-
-INSERT INTO [dbo].[Images]
-    ([IdObject],
-     [Name],
-     [ImageData])
-VALUES (
-    4,
-    'Zwei 1',
-    CONVERT(varbinary(max), (SELECT * FROM OPENROWSET(BULK 'C:\ImagenesProyecto\zwi1.png', SINGLE_BLOB) AS image))
-);
-GO
+--INSERT INTO [dbo].[Images]
+--    ([IdObject],
+--     [Name],
+--     [ImageData])
+--VALUES (
+--    1,
+--    'Wooden Bow 2',
+--    CONVERT(varbinary(max), (SELECT * FROM OPENROWSET(BULK 'C:\ImagenesProyecto\woodenbow1.png', SINGLE_BLOB) AS image))
+--);
+--GO
 
 
 
-INSERT INTO [dbo].[Images]
-    ([IdObject],
-     [Name],
-     [ImageData])
-VALUES (
-    4,
-    'Zwei 2',
-    CONVERT(varbinary(max), (SELECT * FROM OPENROWSET(BULK 'C:\ImagenesProyecto\zwi2.png', SINGLE_BLOB) AS image))
-);
-GO
+--INSERT INTO [dbo].[Images]
+--    ([IdObject],
+--     [Name],
+--     [ImageData])
+--VALUES (
+--    1,
+--    'Wooden Bow 2',
+--    CONVERT(varbinary(max), (SELECT * FROM OPENROWSET(BULK 'C:\ImagenesProyecto\woodenbow2.png', SINGLE_BLOB) AS image))
+--);
+--GO
+
+--INSERT INTO [dbo].[Images]
+--    ([IdObject],
+--     [Name],
+--     [ImageData])
+--VALUES (
+--    3,
+--    'Great Hero Soul',
+--    CONVERT(varbinary(max), (SELECT * FROM OPENROWSET(BULK 'C:\ImagenesProyecto\SoulOfaGreatChampion.png', SINGLE_BLOB) AS image))
+--);
+--GO
+
+--INSERT INTO [dbo].[Images]
+--    ([IdObject],
+--     [Name],
+--     [ImageData])
+--VALUES (
+--    4,
+--    'Zwei 1',
+--    CONVERT(varbinary(max), (SELECT * FROM OPENROWSET(BULK 'C:\ImagenesProyecto\zwi1.png', SINGLE_BLOB) AS image))
+--);
+--GO
 
 
 
-INSERT INTO [dbo].[Images]
-    ([IdObject],
-     [Name],
-     [ImageData])
-VALUES (
-    4,
-    'Zwei 3',
-    CONVERT(varbinary(max), (SELECT * FROM OPENROWSET(BULK 'C:\ImagenesProyecto\zwei3.png', SINGLE_BLOB) AS image))
-);
-GO
+--INSERT INTO [dbo].[Images]
+--    ([IdObject],
+--     [Name],
+--     [ImageData])
+--VALUES (
+--    4,
+--    'Zwei 2',
+--    CONVERT(varbinary(max), (SELECT * FROM OPENROWSET(BULK 'C:\ImagenesProyecto\zwi2.png', SINGLE_BLOB) AS image))
+--);
+--GO
+
+
+
+--INSERT INTO [dbo].[Images]
+--    ([IdObject],
+--     [Name],
+--     [ImageData])
+--VALUES (
+--    4,
+--    'Zwei 3',
+--    CONVERT(varbinary(max), (SELECT * FROM OPENROWSET(BULK 'C:\ImagenesProyecto\zwei3.png', SINGLE_BLOB) AS image))
+--);
+--GO
 
 /* =========================
    FOREIGN KEYS

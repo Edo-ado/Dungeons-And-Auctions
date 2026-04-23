@@ -3,30 +3,23 @@
 @{
     ViewData["Title"] = "Subasta — " + (Model?.IdobjectNavigation?.Name ?? "Reliquia");
 
-
     int currentUserId   = ViewBag.CurrentUserId  ?? 0;
     string currentUserName = ViewBag.CurrentUserName ?? "—";
     bool isOwner        = ViewBag.IsOwner         ?? false;
 
-   
     var highestBid = Model?.AuctionBidHistory?.OrderByDescending(b => b.Amount).FirstOrDefault();
     decimal currentHighest = highestBid?.Amount ?? Model?.BasePrice ?? 0;
     string  currentLeader  = highestBid?.User?.UserName ?? "Sin pujas";
     int     currentLeaderId = highestBid?.UserId ?? 0;
 
-
-    bool isActive = Model?.idstate == 1;
-
-
+        bool isActive = Model?.idstate == 1;
     string endDateIso = Model?.EndDate.ToString("yyyy-MM-ddTHH:mm:ss") ?? "";
-    }
+}
 
 <div class="relative min-h-screen overflow-hidden font-['Cinzel']" style="background-color: #1a1412;">
 
-  
     <div class="grain-overlay"></div>
 
- 
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
         <div class="ember ember-1"></div><div class="ember ember-2"></div>
         <div class="ember ember-3"></div><div class="ember ember-4"></div>
@@ -34,7 +27,6 @@
         <div class="ash ash-2"></div><div class="ash ash-3"></div>
     </div>
 
- 
     <div class="relative z-10 h-1 bg-gradient-to-r from-transparent via-yellow-600 to-transparent"></div>
 
     @if (Model == null)
@@ -206,6 +198,14 @@
                         {
                             <p class="text-red-700 text-xs mt-1 font-serif italic">Eres el vendedor de esta subasta.</p>
                         }
+
+                     
+                        <div class="mt-3">
+                            <h3 class="text-stone-400 text-xs uppercase">En la sala</h3>
+                            <ul id="active-users-list" class="flex flex-wrap gap-2 mt-2 text-yellow-500 text-xs">
+                            
+                            </ul>
+                        </div>
                     </div>
 
                 </div>
@@ -407,205 +407,245 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"
         crossorigin="anonymous"></script>
 <script>
-                let countdownInterval;
+    let countdownInterval;
 
-const AUCTION_ID      = @Model!.Id;
-        let auctionClosedHandled = false;
-const CURRENT_USER_ID = @currentUserId;
-const INCREMENTO_MIN  = @((Model?.IncrementoMinimo ?? 0).ToString("F2", System.Globalization.CultureInfo.InvariantCulture));
-                      const _ed = "@endDateIso".split(/[T:\-]/);
-        const END_DATE = new Date(
-            parseInt(_ed[0]),
-            parseInt(_ed[1]) - 1,
-            parseInt(_ed[2]),
-            parseInt(_ed[3]),
-            parseInt(_ed[4]),
-            parseInt(_ed[5])
-        );
-        console.log("END_DATE:", END_DATE);
-      
-const IS_ACTIVE_INIT  = @(isActive ? "true" : "false");
-        let closeAttempted = false;
-let isAuctionActive = IS_ACTIVE_INIT;
-let currentHighest  = @currentHighest.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
-let currentLeaderId = @currentLeaderId;
-let iHadLead        = false; 
+    const AUCTION_ID      = @Model!.Id;
+    let auctionClosedHandled = false;
+    const CURRENT_USER_ID = @currentUserId;
+    const CURRENT_USER_NAME = "@currentUserName";
+    const INCREMENTO_MIN  = @((Model?.IncrementoMinimo ?? 0).ToString("F2", System.Globalization.CultureInfo.InvariantCulture));
+    const _ed = "@endDateIso".split(/[T:\-]/);
+    const END_DATE = new Date(
+        parseInt(_ed[0]),
+        parseInt(_ed[1]) - 1,
+        parseInt(_ed[2]),
+        parseInt(_ed[3]),
+        parseInt(_ed[4]),
+        parseInt(_ed[5])
+    );
+    console.log("END_DATE:", END_DATE);
 
+    const IS_ACTIVE_INIT  = @(isActive ? "true" : "false");
+    let closeAttempted = false;
+    let isAuctionActive = IS_ACTIVE_INIT;
+    let currentHighest  = @currentHighest.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
+    let currentLeaderId = @currentLeaderId;
+    let iHadLead        = false; 
 
-const connection = new signalR.HubConnectionBuilder()
-    .withUrl("/auctionHub")
-    .withAutomaticReconnect()
-    .build();
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/auctionHub")
+        .withAutomaticReconnect()
+        .build();
 
-// Evento: se registró una nueva puja
-connection.on("BidPlaced", (data) => {
-    if (data.auctionId !== AUCTION_ID) return;
-
-    // ¿El usuario actual perdió el liderazgo?
-    if (iHadLead && data.highestUserId !== CURRENT_USER_ID) {
-        showToast( "¡Tu puja fue superada!", "Otro caballero ha ofrecido más. ¡Contraataca!", "warning");
-        iHadLead = false;
-    }
-
-    // Si el usuario actual lidera ahora, marcarlo
-    if (data.highestUserId === CURRENT_USER_ID) {
-        iHadLead = true;
-    }
-
-    // Actualizar UI
-    currentHighest  = data.highestAmount;
-    currentLeaderId = data.highestUserId;
-
-    updateHighestBid(data.highestAmount, data.highestUser);
-    updateBidHistory(data.bidHistory);
-    updateMinBidLabel(data.highestAmount);
-});
-
-// Evento: la subasta se cerró automáticamente
-connection.on("AuctionClosed", (data) => {
-    if (data.auctionId !== AUCTION_ID) return;
-
-    isAuctionActive = false;
-    markAuctionClosed(data);
-});
-
-async function startSignalR() {
-    try {
-                    if (connection.state !== signalR.HubConnectionState.Disconnected) return;
-                await connection.start();
-        await connection.invoke("JoinAuction", AUCTION_ID.toString());
-        console.log("[SignalR] Conectado a subasta", AUCTION_ID);
-    } catch (err) {
-        console.error("[SignalR] Error al conectar:", err);
-        setTimeout(startSignalR, 5000);
-    }
-}
-
-startSignalR();
-
-// ─── FUNCIÓN PARA REGISTRAR PUJA ────────────────────────────────────────────
-async function placeBid() {
-    if (!isAuctionActive) {
-        showToast( "Subasta cerrada", "No se pueden registrar más pujas.", "error");
-        return;
-    }
-
-    const amountInput = document.getElementById("bid-amount");
-    const amount = parseFloat(amountInput.value);
-
-    if (isNaN(amount) || amount <= 0) {
-        showToast( "Monto inválido", "Ingresa un monto válido mayor a cero.", "error");
-        return;
-    }
-
-    const minRequired = parseFloat(currentHighest) + parseFloat(INCREMENTO_MIN);
-    if (amount < minRequired) {
-        showToast( "Monto insuficiente",
-            `Tu puja debe ser al menos ${minRequired.toFixed(2)} Oz.`, "error");
-        return;
-    }
-
-    const btn = document.getElementById("btn-place-bid");
-    btn.disabled = true;
-    btn.textContent = "Enviando...";
-
-    try {
-        const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value ?? "";
-
-        const resp = await fetch(`/Auctions/PlaceBid`, {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: `auctionId=${AUCTION_ID}&amount=${amount}`
-        });
-
-        const result = await resp.json();
-
-        if (result.success) {
-            showToast( "¡Puja registrada!", result.message, "success");
-            amountInput.value = "";
-            iHadLead = true;
-        } else {
-            showToast("!", "Puja rechazada", result.message, "error");
+    // Evento: lista de usuarios activos actualizada
+    connection.on("ActiveUsersUpdated", (users) => {
+        try {
+            updateActiveUsersUI(users || []);
+        } catch (e) {
+            console.error("Error updateActiveUsersUI:", e);
         }
-    } catch (err) {
+    });
+
+    // Evento: se registró una nueva puja
+    connection.on("BidPlaced", (data) => {
+        if (data.auctionId !== AUCTION_ID) return;
+
+        if (iHadLead && data.highestUserId !== CURRENT_USER_ID) {
+            showToast( "¡Tu puja fue superada!", "Otro caballero ha ofrecido más. ¡Contraataca!", "warning");
+            iHadLead = false;
+        }
+
+        if (data.highestUserId === CURRENT_USER_ID) {
+            iHadLead = true;
+        }
+
+        currentHighest  = data.highestAmount;
+        currentLeaderId = data.highestUserId;
+
+        updateHighestBid(data.highestAmount, data.highestUser);
+        updateBidHistory(data.bidHistory);
+        updateMinBidLabel(data.highestAmount);
+    });
+
+    // Evento: la subasta se cerró automáticamente
+    connection.on("AuctionClosed", (data) => {
+        if (data.auctionId !== AUCTION_ID) return;
+        isAuctionActive = false;
+        markAuctionClosed(data);
+    });
+
+    async function startSignalR() {
+        try {
+            if (connection.state !== signalR.HubConnectionState.Disconnected) return;
+            await connection.start();
+            // Unirse a la sala con userId y userName para tracking
+            await connection.invoke("JoinAuction", AUCTION_ID.toString(), Number(CURRENT_USER_ID), CURRENT_USER_NAME);
+            console.log("[SignalR] Conectado a subasta", AUCTION_ID);
+        } catch (err) {
+            console.error("[SignalR] Error al conectar:", err);
+            setTimeout(startSignalR, 5000);
+        }
+    }
+
+    // Al cerrar/navegar fuera, notificar al hub
+    window.addEventListener('beforeunload', function (e) {
+        try {
+            if (connection && connection.state === signalR.HubConnectionState.Connected) {
+                connection.invoke("LeaveAuction", AUCTION_ID.toString()).catch(()=>{/*ignore*/});
+                connection.stop().catch(()=>{/*ignore*/});
+            }
+        } catch {}
+    });
+
+    startSignalR();
+
+    // Actualiza la lista de usuarios activos en el DOM
+    function updateActiveUsersUI(users) {
+        const ul = document.getElementById("active-users-list");
+        if (!ul) return;
+        ul.innerHTML = "";
+
+        if (!Array.isArray(users) || users.length === 0) {
+            const li = document.createElement("li");
+            li.className = "px-2 py-1 bg-yellow-900/10 rounded text-yellow-400 text-xs";
+            li.textContent = "Nadie conectado";
+            ul.appendChild(li);
+            return;
+        }
+
+        users.forEach(u => {
+            const li = document.createElement("li");
+            li.className = "px-2 py-1 bg-yellow-900/10 rounded text-yellow-300 text-xs";
+            const isMe = Number(u.userId) === Number(CURRENT_USER_ID);
+            li.textContent = (isMe ? "Tú — " : "") + (u.userName ?? "—");
+            if (isMe) li.classList.add("font-semibold", "bg-yellow-900/20");
+            ul.appendChild(li);
+        });
+    }
+
+    // ─── FUNCIÓN PARA REGISTRAR PUJA ────────────────────────────────────────────
+    async function placeBid() {
+        if (!isAuctionActive) {
+            showToast( "Subasta cerrada", "No se pueden registrar más pujas.", "error");
+            return;
+        }
+
+        const amountInput = document.getElementById("bid-amount");
+        const amount = parseFloat(amountInput.value);
+
+        if (isNaN(amount) || amount <= 0) {
+            showToast( "Monto inválido", "Ingresa un monto válido mayor a cero.", "error");
+            return;
+        }
+
+        const minRequired = parseFloat(currentHighest) + parseFloat(INCREMENTO_MIN);
+        if (amount < minRequired) {
+            showToast( "Monto insuficiente",
+                `Tu puja debe ser al menos ${minRequired.toFixed(2)} Oz.`, "error");
+            return;
+        }
+
+        const btn = document.getElementById("btn-place-bid");
+        btn.disabled = true;
+        btn.textContent = "Enviando...";
+
+        try {
+            const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value ?? "";
+
+            const resp = await fetch(`/Auctions/PlaceBid`, {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: `auctionId=${AUCTION_ID}&amount=${amount}`
+            });
+
+            const result = await resp.json();
+
+            if (result.success) {
+                showToast( "¡Puja registrada!", result.message, "success");
+                amountInput.value = "";
+                iHadLead = true;
+            } else {
+                showToast("!", "Puja rechazada", result.message, "error");
+            }
+        } catch (err) {
                 showToast("⚠", "Error de conexión", "No se pudo registrar la puja. Intenta de nuevo.", "error");
-    } finally {
-        btn.disabled = false;
-        btn.textContent = "Pujar ";
-    }
-}
-
-// ─── ACTUALIZAR UI CON NUEVA PUJA ────────────────────────────────────────────
-function updateHighestBid(amount, userName) {
-    const el = document.getElementById("highest-amount");
-    if (el) {
-        el.innerHTML = `${parseFloat(amount).toFixed(2)} <span class="text-green-700 text-xs">Oz</span>`;
-        // Flash effect
-        el.classList.add("bid-flash");
-        setTimeout(() => el.classList.remove("bid-flash"), 800);
-    }
-    const userEl = document.getElementById("highest-user");
-    if (userEl) userEl.textContent = userName;
-}
-
-function updateMinBidLabel(highestAmount) {
-    const label = document.getElementById("min-bid-label");
-    if (label) {
-        const min = parseFloat(highestAmount) + parseFloat(INCREMENTO_MIN);
-        label.textContent = min.toFixed(2);
-    }
-    const input = document.getElementById("bid-amount");
-    if (input) {
-        const min = parseFloat(highestAmount) + parseFloat(INCREMENTO_MIN);
-        input.min = min.toFixed(2);
-    }
-}
-
-function updateBidHistory(history) {
-    // Actualizar contador
-    const totalEl = document.getElementById("total-bids");
-    if (totalEl) totalEl.textContent = history.length;
-
-    // Hora actualización
-    const updated = document.getElementById("last-updated");
-    if (updated) updated.textContent = "Actualizado: " + new Date().toLocaleTimeString();
-
-    // Reconstruir tabla
-    const container = document.getElementById("bid-history-container");
-    if (!container) return;
-
-    if (history.length === 0) return;
-
-    // Si había el mensaje "sin pujas", reemplazar
-    const noBids = document.getElementById("no-bids-msg");
-    if (noBids) noBids.remove();
-
-    let tbody = document.getElementById("bid-table-body");
-    if (!tbody) {
-        // Crear tabla si no existe
-        container.innerHTML = `
-            <table class="w-full text-sm" id="bid-table">
-                <thead>
-                    <tr class="border-b border-yellow-900/40">
-                        <th class="text-left text-yellow-800 text-xs uppercase tracking-[0.2em] pb-3 font-normal">Fecha y Hora</th>
-                        <th class="text-left text-yellow-800 text-xs uppercase tracking-[0.2em] pb-3 font-normal">Pujador</th>
-                        <th class="text-right text-yellow-800 text-xs uppercase tracking-[0.2em] pb-3 font-normal">Monto</th>
-                    </tr>
-                </thead>
-                <tbody id="bid-table-body"></tbody>
-            </table>`;
-        tbody = document.getElementById("bid-table-body");
+        } finally {
+            btn.disabled = false;
+            btn.textContent = "Pujar ";
+        }
     }
 
-    tbody.innerHTML = history.map(b => `
-        <tr class="border-b border-yellow-900/20 hover:bg-yellow-900/10 transition-colors bid-new-row">
-            <td class="py-3 text-stone-500 text-xs font-serif">${b.bidDate}</td>
-            <td class="py-3 text-yellow-600 text-xs">${b.userName}</td>
-            <td class="py-3 text-yellow-300 text-sm text-right font-semibold">
-                ${parseFloat(b.amount).toFixed(2)} <span class="text-yellow-800 text-xs">Oz</span>
-            </td>
-        </tr>`).join("");
-}
+    // ─── ACTUALIZAR UI CON NUEVA PUJA ────────────────────────────────────────────
+    function updateHighestBid(amount, userName) {
+        const el = document.getElementById("highest-amount");
+        if (el) {
+            el.innerHTML = `${parseFloat(amount).toFixed(2)} <span class="text-green-700 text-xs">Oz</span>`;
+            // Flash effect
+            el.classList.add("bid-flash");
+            setTimeout(() => el.classList.remove("bid-flash"), 800);
+        }
+        const userEl = document.getElementById("highest-user");
+        if (userEl) userEl.textContent = userName;
+    }
+
+    function updateMinBidLabel(highestAmount) {
+        const label = document.getElementById("min-bid-label");
+        if (label) {
+            const min = parseFloat(highestAmount) + parseFloat(INCREMENTO_MIN);
+            label.textContent = min.toFixed(2);
+        }
+        const input = document.getElementById("bid-amount");
+        if (input) {
+            const min = parseFloat(highestAmount) + parseFloat(INCREMENTO_MIN);
+            input.min = min.toFixed(2);
+        }
+    }
+
+    function updateBidHistory(history) {
+        // Actualizar contador
+        const totalEl = document.getElementById("total-bids");
+        if (totalEl) totalEl.textContent = history.length;
+
+        // Hora actualización
+        const updated = document.getElementById("last-updated");
+        if (updated) updated.textContent = "Actualizado: " + new Date().toLocaleTimeString();
+
+        // Reconstruir tabla
+        const container = document.getElementById("bid-history-container");
+        if (!container) return;
+
+        if (history.length === 0) return;
+
+        // Si había el mensaje "sin pujas", reemplazar
+        const noBids = document.getElementById("no-bids-msg");
+        if (noBids) noBids.remove();
+
+        let tbody = document.getElementById("bid-table-body");
+        if (!tbody) {
+            // Crear tabla si no existe
+            container.innerHTML = `
+                <table class="w-full text-sm" id="bid-table">
+                    <thead>
+                        <tr class="border-b border-yellow-900/40">
+                            <th class="text-left text-yellow-800 text-xs uppercase tracking-[0.2em] pb-3 font-normal">Fecha y Hora</th>
+                            <th class="text-left text-yellow-800 text-xs uppercase tracking-[0.2em] pb-3 font-normal">Pujador</th>
+                            <th class="text-right text-yellow-800 text-xs uppercase tracking-[0.2em] pb-3 font-normal">Monto</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bid-table-body"></tbody>
+                </table>`;
+            tbody = document.getElementById("bid-table-body");
+        }
+
+        tbody.innerHTML = history.map(b => `
+            <tr class="border-b border-yellow-900/20 hover:bg-yellow-900/10 transition-colors bid-new-row">
+                <td class="py-3 text-stone-500 text-xs font-serif">${b.bidDate}</td>
+                <td class="py-3 text-yellow-600 text-xs">${b.userName}</td>
+                <td class="py-3 text-yellow-300 text-sm text-right font-semibold">
+                    ${parseFloat(b.amount).toFixed(2)} <span class="text-yellow-800 text-xs">Oz</span>
+                </td>
+            </tr>`).join("");
+    }
 
 // ─── CIERRE DE SUBASTA ───────────────────────────────────────────────────────
         // ─── CIERRE DE SUBASTA ───────────────────────────────────────────────────────
