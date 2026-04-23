@@ -38,11 +38,7 @@ public partial class Users
     public bool Active { get; set; }
 
     public virtual ICollection<AuctionBidHistory> AuctionBidHistory { get; set; } = new List<AuctionBidHistory>();
-
-
     public virtual ICollection<Auctions> Auctions { get; set; } = new List<Auctions>();
-
-    
 
     public virtual ICollection<Objects> Objects { get; set; } = new List<Objects>();
 
