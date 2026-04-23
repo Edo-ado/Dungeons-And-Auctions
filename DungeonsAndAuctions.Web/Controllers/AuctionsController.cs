@@ -25,7 +25,7 @@ namespace DNDA.Web.Controllers
 
 
 
-        private const int UsuarioActualId = 4;
+        private const int UsuarioActualId = 7;
        
 
         public AuctionsController(
@@ -172,7 +172,7 @@ namespace DNDA.Web.Controllers
                 var winnerBids = await _serviceBidHistory.GetHighestBidAsync(id);
                 return Json(new
                 {
-                    closed = true,                              // ← TRUE para que el JS lo procese
+                    closed = true,                              //TRUE para que el JS lo procese
                     alreadyClosed = true,
                     winnerName = winnerBids?.User?.UserName ?? "Sin ganador",
                     winnerUserId = winnerBids?.UserId ?? 0,
@@ -203,8 +203,7 @@ namespace DNDA.Web.Controllers
             {
                 if (winnerBid != null)
                 {
-                    Console.WriteLine($"[Cierre] WinnerBid: UserId={winnerBid.UserId}, Amount={winnerBid.Amount}");
-
+                   
                     await _serviceWinner.CreateWinnerAsync(
                         auctionId: id,
                         userId: winnerBid.UserId,
@@ -212,14 +211,14 @@ namespace DNDA.Web.Controllers
                         bidWinningId: winnerBid.Id
                     );
 
-                    Console.WriteLine("[Cierre] Winner creado OK");
+                 
 
                     await _servicePayment.GeneratePayment(id);
-                    Console.WriteLine("[Cierre] Payment generado OK");
+                 
                 }
                 else
                 {
-                    Console.WriteLine($"[Cierre] No hay pujas para subasta {id}");
+             
                 }
 
               
@@ -250,7 +249,7 @@ namespace DNDA.Web.Controllers
             catch (Exception ex)
             {
                 var inner = ex.InnerException?.Message ?? ex.Message;
-                Console.WriteLine($"[Cierre] ERROR: {inner}");
+             
 
                 return Json(new { closed = false, error = inner });
             }

@@ -1,6 +1,7 @@
 ﻿
 
 using D_A.Infraestructure.Models;
+using DNDA.Web.Models.Reports;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace D_A.Infraestructure.Repository.Interfaces
         Task<List<Auctions>> GetAllAuctions();
 
 
+        Task<SystemActivity> GetSystemActivityReportAsync(DateTime dateFrom, DateTime dateTo);
 
         Task<Auctions?> AllDetails(int id);
         Task<int> CountAuctionsBySellerAsync(int userId);//cantidad subastas de vendedor (RoleId=2)

@@ -3,6 +3,7 @@ using D_A.Application.DTOs;
 using D_A.Application.Services.Interfaces;
 using D_A.Infraestructure.Models;
 using D_A.Infraestructure.Repository.Interfaces;
+using DNDA.Web.Models.Reports;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -146,6 +147,11 @@ namespace D_A.Application.Services.Implementations
         {
             
             return _repository.CloseAuction(id);
+        }
+
+        public async Task<SystemActivity> GetSystemActivityReportAsync(DateTime dateFrom, DateTime dateTo)
+        {
+            return await _repository.GetSystemActivityReportAsync(dateFrom, dateTo);
         }
     }
 }
