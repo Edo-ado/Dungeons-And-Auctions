@@ -1,7 +1,6 @@
-﻿@model IEnumerable<D_A.Application.DTOs.AuctionsDTO>
+﻿
+@model IEnumerable<D_A.Application.DTOs.AuctionsDTO>
 @using D_A.Application.DTOs
-
-
 
 @{
     ViewData["Title"] = "El Reino de las Subastas";
@@ -10,7 +9,6 @@
 
 <link href="~/css/AuctionsIndex.css" rel="stylesheet">
 
- 
 <div class="relative min-h-screen overflow-hidden font-['Cinzel']" style="background-color: #1a1412;">
 
     <div class="grain-overlay"></div>
@@ -18,9 +16,9 @@
     <div class="relative z-10 h-1 bg-gradient-to-r from-transparent via-yellow-600 to-transparent"></div>
 
     <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-         
+
         <!-- HEADER -->
-        <div Name="Header" class="flex flex-col items-center text-center mb-16 animate-rise">
+        <div class="flex flex-col items-center text-center mb-16 animate-rise">
             <div class="flex items-center gap-4 mb-6">
                 <div class="h-px w-20 bg-gradient-to-r from-transparent to-yellow-700"></div>
                 <svg class="w-5 h-5 text-yellow-700" fill="currentColor" viewBox="0 0 24 24">
@@ -49,41 +47,48 @@
                 Todas <span class="tab-count">@Model.Count()</span>
             </button>
             <button class="filter-pill @(activeTab == "open" ? "active" : "")" data-tab="open">
-                Abiertas <span class="tab-count">  @Enumerable.Count(ViewBag.Open)  </span>
+                Abiertas <span class="tab-count">@Enumerable.Count(ViewBag.Open)</span>
             </button>
             <button class="filter-pill @(activeTab == "close" ? "active" : "")" data-tab="close">
-                Cerradas  <span class="tab-count">  @Enumerable.Count(ViewBag.Close)  </span>
+                Cerradas <span class="tab-count">@Enumerable.Count(ViewBag.Close)</span>
             </button>
             <button class="filter-pill @(activeTab == "banned" ? "active" : "")" data-tab="banned">
-                Baneadas  <span class="tab-count">  @Enumerable.Count(ViewBag.Banned)  </span>
+                Baneadas <span class="tab-count">@Enumerable.Count(ViewBag.Banned)</span>
             </button>
             <button class="filter-pill @(activeTab == "Inactive" ? "active" : "")" data-tab="Inactive">
-                Inactivas  <span class="tab-count">  @Enumerable.Count(ViewBag.Inactive)  </span>
+                Inactivas <span class="tab-count">@Enumerable.Count(ViewBag.Inactive)</span>
             </button>
         </div>
 
         <!-- DIVIDER -->
-        <div Name="Divisor" class="flex items-center gap-4 mb-12">
+        <div class="flex items-center gap-4 mb-12">
             <div class="h-px flex-1 bg-gradient-to-r from-transparent to-yellow-900/60"></div>
             <span class="text-yellow-900 text-xs tracking-[0.3em] uppercase">⚜ Reliquias en pugna ⚜</span>
             <div class="h-px flex-1 bg-gradient-to-l from-transparent to-yellow-900/60"></div>
         </div>
 
         <!-- TAB PANELS -->
+        {{!-- CORRECCIÓN: se eliminaron los "))" extra en cada PartialAsync --}}
+
         <div id="tab-all" class="tab-panel @(activeTab == "all" ? "" : "hidden")">
             @await Html.PartialAsync("_SubastasActivas", Model)
         </div>
+
         <div id="tab-open" class="tab-panel @(activeTab == "open" ? "" : "hidden")">
-            @await Html.PartialAsync("_SubastasActivas", (IEnumerable<AuctionsDTO>)ViewBag.Open))
+            @await Html.PartialAsync("_SubastasActivas", (IEnumerable<AuctionsDTO>)ViewBag.Open)
         </div>
+
         <div id="tab-close" class="tab-panel @(activeTab == "close" ? "" : "hidden")">
-            @await Html.PartialAsync("_SubastasInactivas", (IEnumerable<AuctionsDTO>)ViewBag.Close))
+            @await Html.PartialAsync("_SubastasInactivas", (IEnumerable<AuctionsDTO>)ViewBag.Close)
         </div>
+
         <div id="tab-banned" class="tab-panel @(activeTab == "banned" ? "" : "hidden")">
-            @await Html.PartialAsync("_SubastasBaneadas", (IEnumerable<AuctionsDTO>)ViewBag.Banned))
+            @await Html.PartialAsync("_SubastasBaneadas", (IEnumerable<AuctionsDTO>)ViewBag.Banned)
         </div>
-        <div id="tab-banned" class="tab-panel @(activeTab == "banned" ? "" : "hidden")">
-            @await Html.PartialAsync("_SubastasBaneadas", (IEnumerable<AuctionsDTO>)ViewBag.Inactive))
+
+        {{!-- CORRECCIÓN: id y condición cambiados de "banned" a "Inactive" --}}
+        <div id="tab-Inactive" class="tab-panel @(activeTab == "Inactive" ? "" : "hidden")">
+            @await Html.PartialAsync("_SubastasInactivas", (IEnumerable<AuctionsDTO>)ViewBag.Inactive)
         </div>
 
         <!-- FOOTER -->
@@ -101,7 +106,3 @@
 </div>
 
 <script src="~/js/AuctionIndex.js"></script>
-
-
-
-        

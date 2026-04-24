@@ -1,4 +1,6 @@
-﻿<nav class="bg-[#2a1f1a]
+﻿@* Path: DungeonsAndAuctions.Web/Views/Shared/_Header.cshtml *@
+@* CORRECCIÓN: Logout apuntaba a Auth/Logout (controlador inexistente) → Account/Logout *@
+<nav class="bg-[#2a1f1a]
             border-t-4 border-yellow-700
             border-b border-yellow-900
             shadow-[0_12px_30px_rgba(0,0,0,0.85)]">
@@ -19,8 +21,7 @@
                 <a class="hover:text-yellow-400 transition duration-300 hover:drop-shadow-[0_0_8px_rgba(255,215,0,0.8)]"
                    asp-controller="Auctions" asp-action="Index">Subastas</a>
                 <a class="hover:text-yellow-400 transition duration-300 hover:drop-shadow-[0_0_8px_rgba(255,215,0,0.8)]"
-                   asp-controller="Perfil" asp-action="Index">Mi Perfil</a>
-             
+                   asp-controller="User" asp-action="Details" asp-route-id="@(Context.Session.GetInt32("UserId") ?? 0)">Mi Perfil</a>
             </div>
 
             <!-- Derecha -->
@@ -32,23 +33,18 @@
                     <a class="hover:text-yellow-400 transition"
                        asp-controller="Object" asp-action="Index">All Objects</a>
                     <a class="hover:text-yellow-400 transition"
-                       asp-controller="Auctions" asp-action="IndexMaintenance">All Auctions</a> 
+                       asp-controller="Auctions" asp-action="IndexMaintenance">All Auctions</a>
                     <a class="hover:text-yellow-400 transition"
                        asp-controller="Report" asp-action="Index">Reportes</a>
-                    <a class="hover:text-yellow-400 transition"
-                       asp-controller="Account" asp-action="Login">Login</a>
                 </div>
                 <div class="hidden lg:block w-px h-10 bg-yellow-700 opacity-40"></div>
+
+                @* CORRECCIÓN: era asp-controller="Auth" (no existe) → Account *@
                 <a class="text-red-500 hover:text-yellow-400 font-semibold transition uppercase tracking-wide font-['Cinzel']"
-                   asp-controller="Auth" asp-action="Logout">
+                   asp-controller="Account" asp-action="Logout">
                     Cerrar sesión
                 </a>
             </div>
-
-         
-
-
-
 
         </div>
     </div>

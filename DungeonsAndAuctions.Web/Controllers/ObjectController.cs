@@ -8,6 +8,7 @@ using D_A.Web.Models;
 using DNDA.Web.Util;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using DNDA.Web.Extensions; // <-- añadido
 
 namespace DNDA.Web.Controllers
 {
@@ -18,9 +19,6 @@ namespace DNDA.Web.Controllers
         private readonly IServiceCategories _serviceCategorias;
         private readonly IServiceQuality _serviceQuality;
         private readonly IServiceUser _ServiceUser;
-
-
-
 
         public ObjectController(IServiceObject serviceObject, IServiceAuctions serviceAuctions, IServiceCategories serviceCategories, IServiceQuality serviceQuality, IServiceUser serviceUser)
         {
@@ -128,9 +126,17 @@ namespace DNDA.Web.Controllers
         public async Task<ActionResult> Create()
         {
             await LoadCombosAsync();
-            var userAsigned = await _ServiceUser.FindByIdAsync(1);//usuario simulado
-            ViewBag.UserName = userAsigned?.UserName;
-            ViewBag.UserId = userAsigned?.Id;
+
+            // Obtener usuario real desde sesión
+            var currentUser = HttpContext.Session.GetObject<UsersDTO>(AccountController.SessionKeyUser);
+            if (currentUser == null || User?.Identity?.IsAuthenticated != true)
+            {
+                // No hay usuario en sesión: redirigir para iniciar sesión
+                return RedirectToAction("Login", "Account");
+            }
+
+            ViewBag.UserName = currentUser.UserName;
+            ViewBag.UserId = currentUser.Id;
             return View(new ObjectsDTO());
         }
 
@@ -140,9 +146,6 @@ namespace DNDA.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(ObjectsDTO dto, List<IFormFile> imagenes, string[] selectedCategorias)
         {
-
-      
-
             selectedCategorias ??= Array.Empty<string>();
             //Validación de categorías 
             if (selectedCategorias.Length == 0)
@@ -170,43 +173,42 @@ namespace DNDA.Web.Controllers
             }
 
             ModelState.Remove("imageFile");
-           
+
             if (!ModelState.IsValid)
             {
-                //Recopilar todos los errores del ModelState
                 var errores = string.Join("<br>",
                     ModelState.Values
                         .SelectMany(v => v.Errors)
                         .Select(e => e.ErrorMessage)
                 );
 
-                // Notificación SweetAlert con el detalle de errores
                 ViewBag.Notificacion = SweetAlertHelper.CrearNotificacion(
                     "Errores de validación",
                     $"El formulario contiene errores:<br>{errores}",
                     SweetAlertMessageType.warning
                 );
-                // Importante: Recargar combos antes de retornar vista
                 await LoadCombosAsync(selectedCategorias);
                 return View(dto);
             }
 
-            //convierto categorias a list int
             var categoryIds = selectedCategorias
                 .Select(x => int.Parse(x))
                 .ToList();
 
-            //usuario falso
-            dto.UserId = 1;
+            // Obtener usuario real desde sesión (en vez de hardcodear)
+            var currentUser = HttpContext.Session.GetObject<UsersDTO>(AccountController.SessionKeyUser);
+            if (currentUser == null || User?.Identity?.IsAuthenticated != true)
+            {
+                // Si no hay usuario, redirigir a login (o manejar según flujo)
+                return RedirectToAction("Login", "Account");
+            }
+
+            dto.UserId = currentUser.Id;
             dto.IsActive = true;
             dto.RegistrationDate = DateOnly.FromDateTime(DateTime.Now);
 
-
             await _serviceObject.AddAsync(dto, categoryIds, dto.Imagenes);
 
-
-
-            //Notificar creación
             TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
                 "Objeto creado correctamente",
                 $"El objeto {dto.Name} fue registrado exitosamente.",

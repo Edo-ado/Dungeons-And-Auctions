@@ -1,0 +1,371 @@
+
+@model RegisterViewModel
+@{
+    ViewData["Title"] = "Solicitar Ingreso al Reino";
+    Layout = "_LayoutAuth";
+}
+
+<div class="relative min-h-screen overflow-hidden font-['Cinzel'] flex items-center justify-center py-12" style="background-color: #1a1412;">
+    <div class="grain-overlay"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-transparent to-black/90"></div>
+
+    <!-- Partículas de brasa -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="ember ember-1"></div>
+        <div class="ember ember-2"></div>
+        <div class="ember ember-3"></div>
+        <div class="ember ember-4"></div>
+        <div class="ash ash-1"></div>
+        <div class="ash ash-2"></div>
+        <div class="ash ash-3"></div>
+    </div>
+
+    <!-- Card de registro -->
+    <div class="relative z-10 w-full max-w-2xl px-6 py-4 animate-rise">
+
+        <!-- Encabezado / Logo -->
+        <div class="text-center mb-8">
+            <div class="flex items-center justify-center gap-4 mb-4">
+                <div class="h-px w-16 bg-gradient-to-r from-transparent to-yellow-700"></div>
+                <span class="text-red-700 text-xl drop-shadow-[0_0_12px_rgba(180,0,0,0.6)]">⚜</span>
+                <div class="h-px w-16 bg-gradient-to-l from-transparent to-yellow-700"></div>
+            </div>
+            <img src="/Images/Logo/Logo.png"
+                 class="h-32 md:h-40 object-contain drop-shadow-[0_0_20px_rgba(180,0,0,0.4)] mx-auto mb-2"
+                 alt="Dungeons & Auctions" />
+            <p class="text-stone-500 text-xs font-serif italic tracking-wider">
+                "Todo héroe comienza con un nombre. El tuyo determinará tu legado."
+            </p>
+        </div>
+
+        <!-- Panel principal -->
+        <div class="relative border border-yellow-900/60 bg-[#2a1f1a]/95 p-8">
+            <!-- Esquinas decorativas -->
+            <div class="absolute top-2 left-2 w-4 h-4 border-t border-l border-yellow-800"></div>
+            <div class="absolute top-2 right-2 w-4 h-4 border-t border-r border-yellow-800"></div>
+            <div class="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-yellow-800"></div>
+            <div class="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-yellow-800"></div>
+
+            <h2 class="text-yellow-500 uppercase tracking-[0.3em] text-sm font-bold text-center mb-2">
+                Solicitar Ingreso al Reino
+            </h2>
+            <p class="text-stone-600 text-[10px] font-serif italic text-center mb-8 tracking-wide">
+                Completa el pergamino de inscripción para unirte a los Dungeons &amp; Auctions
+            </p>
+
+            <!-- Errores globales -->
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="mb-6 border border-red-900/60 bg-red-950/40 px-4 py-3">
+                    <div asp-validation-summary="All" class="text-red-400 text-xs font-serif italic space-y-1"></div>
+                </div>
+            }
+
+            <form asp-controller="Account" asp-action="Register" method="post" class="space-y-8">
+                @Html.AntiForgeryToken()
+
+                <!-- ─── SECCIÓN 1: Identidad ─── -->
+                <section>
+                    <div class="flex items-center gap-3 mb-5">
+                        <span class="text-red-700 text-sm">⚔</span>
+                        <h3 class="text-yellow-600 uppercase tracking-[0.25em] text-xs font-bold">Identidad del Guerrero</h3>
+                        <div class="h-px flex-1 bg-yellow-900/40"></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                        <!-- Nombre -->
+                        <div>
+                            <label asp-for="FirstName" class="text-yellow-700 text-xs tracking-widest uppercase block mb-1">
+                                Nombre de Pila
+                            </label>
+                            <input asp-for="FirstName"
+                                   type="text"
+                                   placeholder="Aragorn"
+                                   class="w-full bg-[#1a1412] border border-yellow-900/60 text-stone-300 text-sm px-3 py-2 placeholder-stone-600 focus:outline-none focus:border-yellow-600 transition-colors" />
+                            <span asp-validation-for="FirstName" class="text-red-400 text-xs mt-1 block font-serif italic"></span>
+                        </div>
+
+                        <!-- Apellido -->
+                        <div>
+                            <label asp-for="LastName" class="text-yellow-700 text-xs tracking-widest uppercase block mb-1">
+                                Apellido del Linaje
+                            </label>
+                            <input asp-for="LastName"
+                                   type="text"
+                                   placeholder="Elessar"
+                                   class="w-full bg-[#1a1412] border border-yellow-900/60 text-stone-300 text-sm px-3 py-2 placeholder-stone-600 focus:outline-none focus:border-yellow-600 transition-colors" />
+                            <span asp-validation-for="LastName" class="text-red-400 text-xs mt-1 block font-serif italic"></span>
+                        </div>
+
+                        <!-- Username -->
+                        <div>
+                            <label asp-for="UserName" class="text-yellow-700 text-xs tracking-widest uppercase block mb-1">
+                                Alias en el Reino
+                            </label>
+                            <input asp-for="UserName"
+                                   type="text"
+                                   placeholder="ElReyAragorn"
+                                   class="w-full bg-[#1a1412] border border-yellow-900/60 text-stone-300 text-sm px-3 py-2 placeholder-stone-600 focus:outline-none focus:border-yellow-600 transition-colors" />
+                            <span asp-validation-for="UserName" class="text-red-400 text-xs mt-1 block font-serif italic"></span>
+                        </div>
+
+                        <!-- Fecha de nacimiento -->
+                        <div>
+                            <label asp-for="BirthDate" class="text-yellow-700 text-xs tracking-widest uppercase block mb-1">
+                                Fecha de Nacimiento
+                            </label>
+                            <input asp-for="BirthDate"
+                                   type="date"
+                                   class="w-full bg-[#1a1412] border border-yellow-900/60 text-stone-300 text-sm px-3 py-2 focus:outline-none focus:border-yellow-600 transition-colors" />
+                            <span asp-validation-for="BirthDate" class="text-red-400 text-xs mt-1 block font-serif italic"></span>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- ─── SECCIÓN 2: Origen & Género ─── -->
+                <section>
+                    <div class="flex items-center gap-3 mb-5">
+                        <span class="text-red-700 text-sm">♛</span>
+                        <h3 class="text-yellow-600 uppercase tracking-[0.25em] text-xs font-bold">Origen &amp; Rol</h3>
+                        <div class="h-px flex-1 bg-yellow-900/40"></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+
+                        <!-- País -->
+                        <div>
+                            <label asp-for="CountryId" class="text-yellow-700 text-xs tracking-widest uppercase block mb-1">
+                                País de Origen
+                            </label>
+                            <select asp-for="CountryId"
+                                    asp-items="ViewBag.ListPais"
+                                    class="w-full bg-[#1a1412] border border-yellow-900/60 text-stone-300 text-sm px-3 py-2 focus:outline-none focus:border-yellow-600 transition-colors">
+                                <option value="">-- Selecciona --</option>
+                            </select>
+                            <span asp-validation-for="CountryId" class="text-red-400 text-xs mt-1 block font-serif italic"></span>
+                        </div>
+
+                        <!-- Género -->
+                        <div>
+                            <label asp-for="GenderId" class="text-yellow-700 text-xs tracking-widest uppercase block mb-1">
+                                Género
+                            </label>
+                            <select asp-for="GenderId"
+                                    asp-items="ViewBag.ListGenero"
+                                    class="w-full bg-[#1a1412] border border-yellow-900/60 text-stone-300 text-sm px-3 py-2 focus:outline-none focus:border-yellow-600 transition-colors">
+                                <option value="">-- Selecciona --</option>
+                            </select>
+                            <span asp-validation-for="GenderId" class="text-red-400 text-xs mt-1 block font-serif italic"></span>
+                        </div>
+
+                        <!-- Rol -->
+                        <div>
+                            <label asp-for="RoleId" class="text-yellow-700 text-xs tracking-widest uppercase block mb-1">
+                                Rol en el Reino
+                            </label>
+                            <select asp-for="RoleId"
+                                    class="w-full bg-[#1a1412] border border-yellow-900/60 text-stone-300 text-sm px-3 py-2 focus:outline-none focus:border-yellow-600 transition-colors">
+                                <option value="1">⚔ Comprador</option>
+                                <option value="2">🏰 Vendedor</option>
+                            </select>
+                            <span asp-validation-for="RoleId" class="text-red-400 text-xs mt-1 block font-serif italic"></span>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- ─── SECCIÓN 3: Contacto ─── -->
+                <section>
+                    <div class="flex items-center gap-3 mb-5">
+                        <span class="text-red-700 text-sm">📜</span>
+                        <h3 class="text-yellow-600 uppercase tracking-[0.25em] text-xs font-bold">Correo &amp; Mensajería</h3>
+                        <div class="h-px flex-1 bg-yellow-900/40"></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                        <!-- Email -->
+                        <div>
+                            <label asp-for="Email" class="text-yellow-700 text-xs tracking-widest uppercase block mb-1">
+                                Correo Arcano
+                            </label>
+                            <input asp-for="Email"
+                                   type="email"
+                                   placeholder="tu@correo.com"
+                                   class="w-full bg-[#1a1412] border border-yellow-900/60 text-stone-300 text-sm px-3 py-2 placeholder-stone-600 focus:outline-none focus:border-yellow-600 transition-colors" />
+                            <span asp-validation-for="Email" class="text-red-400 text-xs mt-1 block font-serif italic"></span>
+                        </div>
+
+                        <!-- Teléfono -->
+                        <div>
+                            <label asp-for="PhoneNumber" class="text-yellow-700 text-xs tracking-widest uppercase block mb-1">
+                                Número de Mensajería <span class="text-stone-600">(opcional)</span>
+                            </label>
+                            <input asp-for="PhoneNumber"
+                                   type="tel"
+                                   placeholder="+506 8888-8888"
+                                   class="w-full bg-[#1a1412] border border-yellow-900/60 text-stone-300 text-sm px-3 py-2 placeholder-stone-600 focus:outline-none focus:border-yellow-600 transition-colors" />
+                            <span asp-validation-for="PhoneNumber" class="text-red-400 text-xs mt-1 block font-serif italic"></span>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- ─── SECCIÓN 4: Contraseña ─── -->
+                <section>
+                    <div class="flex items-center gap-3 mb-5">
+                        <span class="text-red-700 text-sm">🗡</span>
+                        <h3 class="text-yellow-600 uppercase tracking-[0.25em] text-xs font-bold">Juramento Secreto</h3>
+                        <div class="h-px flex-1 bg-yellow-900/40"></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                        <!-- Contraseña -->
+                        <div>
+                            <label asp-for="Password" class="text-yellow-700 text-xs tracking-widest uppercase block mb-1">
+                                Contraseña
+                            </label>
+                            <div class="relative">
+                                <input asp-for="Password"
+                                       type="password"
+                                       id="password-input"
+                                       placeholder="••••••••"
+                                       class="w-full bg-[#1a1412] border border-yellow-900/60 text-stone-300 text-sm px-3 py-2 placeholder-stone-600 focus:outline-none focus:border-yellow-600 transition-colors pr-10" />
+                                <button type="button" onclick="togglePassword('password-input')"
+                                        class="absolute right-3 top-1/2 -translate-y-1/2 text-stone-500 hover:text-yellow-600 transition-colors text-xs">
+                                    👁
+                                </button>
+                            </div>
+                            <span asp-validation-for="Password" class="text-red-400 text-xs mt-1 block font-serif italic"></span>
+                        </div>
+
+                        <!-- Confirmar contraseña -->
+                        <div>
+                            <label asp-for="ConfirmPassword" class="text-yellow-700 text-xs tracking-widest uppercase block mb-1">
+                                Confirmar Contraseña
+                            </label>
+                            <div class="relative">
+                                <input asp-for="ConfirmPassword"
+                                       type="password"
+                                       id="confirm-password-input"
+                                       placeholder="••••••••"
+                                       class="w-full bg-[#1a1412] border border-yellow-900/60 text-stone-300 text-sm px-3 py-2 placeholder-stone-600 focus:outline-none focus:border-yellow-600 transition-colors pr-10" />
+                                <button type="button" onclick="togglePassword('confirm-password-input')"
+                                        class="absolute right-3 top-1/2 -translate-y-1/2 text-stone-500 hover:text-yellow-600 transition-colors text-xs">
+                                    👁
+                                </button>
+                            </div>
+                            <span asp-validation-for="ConfirmPassword" class="text-red-400 text-xs mt-1 block font-serif italic"></span>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- ─── SECCIÓN 5: Sobre mí (opcional) ─── -->
+                <section>
+                    <div class="flex items-center gap-3 mb-5">
+                        <span class="text-red-700 text-sm">⚜</span>
+                        <h3 class="text-yellow-600 uppercase tracking-[0.25em] text-xs font-bold">Tu Leyenda <span class="text-stone-600 normal-case tracking-normal">(opcional)</span></h3>
+                        <div class="h-px flex-1 bg-yellow-900/40"></div>
+                    </div>
+                    <textarea asp-for="AboutMe"
+                              rows="3"
+                              placeholder="Cuéntanos tu historia en el reino... ¿Qué te trae a estas tierras?"
+                              class="w-full bg-[#1a1412] border border-yellow-900/60 text-stone-300 text-sm px-3 py-2 placeholder-stone-600 focus:outline-none focus:border-yellow-600 transition-colors resize-none font-serif"></textarea>
+                    <span asp-validation-for="AboutMe" class="text-red-400 text-xs mt-1 block font-serif italic"></span>
+                </section>
+
+                <!-- Botón submit -->
+                <button type="submit"
+                        class="w-full mt-2 px-6 py-3 bg-red-900 border border-red-700 text-yellow-100 uppercase tracking-[0.2em] text-xs font-bold transition-all duration-300 hover:bg-red-800 hover:border-yellow-600 hover:shadow-[0_0_20px_rgba(180,0,0,0.3)]">
+                    <span class="flex items-center justify-center gap-2">
+                        <span>⚜</span>
+                        <span>Unirme al Reino</span>
+                    </span>
+                </button>
+            </form>
+
+            <!-- Link a login -->
+            <div class="mt-6 text-center">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="h-px flex-1 bg-yellow-900/40"></div>
+                    <span class="text-stone-600 text-xs">⚔</span>
+                    <div class="h-px flex-1 bg-yellow-900/40"></div>
+                </div>
+                <p class="text-stone-500 text-xs font-serif">
+                    ¿Ya tienes acceso al reino?
+                    <a asp-controller="Account" asp-action="Login"
+                       class="text-yellow-700 hover:text-yellow-500 transition-colors ml-1 underline underline-offset-2">
+                        Iniciar sesión
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="relative z-10 h-1 bg-gradient-to-r from-transparent via-yellow-600 to-transparent absolute bottom-0 w-full"></div>
+</div>
+
+<script>
+    function togglePassword(id) {
+        const input = document.getElementById(id);
+        input.type = input.type === "password" ? "text" : "password";
+    }
+</script>
+
+<style>
+    @@keyframes rise {
+        from { opacity: 0; transform: translateY(30px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @@keyframes float {
+        0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+        10%       { opacity: 1; }
+        90%       { opacity: 0.6; }
+        100%      { transform: translateY(-100vh) translateX(20px); opacity: 0; }
+    }
+
+    .animate-rise { animation: rise 0.8s ease-out forwards; }
+
+    .ember {
+        position: absolute; width: 3px; height: 3px; border-radius: 50%;
+        background: #f97316;
+        box-shadow: 0 0 6px #f97316, 0 0 12px #ea580c;
+        animation: float linear infinite; bottom: -10px;
+    }
+    .ember-1 { left: 10%; animation-duration: 8s; }
+    .ember-2 { left: 40%; animation-duration: 11s; animation-delay: 2s; }
+    .ember-3 { left: 65%; animation-duration: 9s;  animation-delay: 4s; }
+    .ember-4 { left: 88%; animation-duration: 13s; animation-delay: 1s; }
+
+    .ash {
+        position: absolute; width: 2px; height: 2px; border-radius: 50%;
+        background: #9ca3af; box-shadow: 0 0 4px #6b7280;
+        animation: float linear infinite; bottom: -10px;
+    }
+    .ash-1 { left: 20%; animation-duration: 12s; animation-delay: 1s; }
+    .ash-2 { left: 55%; animation-duration: 15s; animation-delay: 3s; }
+    .ash-3 { left: 80%; animation-duration: 10s; animation-delay: 5s; }
+
+    @@keyframes grain {
+        0%, 100% { transform: translate(0,0); }
+        25%       { transform: translate(1px,1px); }
+        50%       { transform: translate(-1px,0); }
+        75%       { transform: translate(0,-1px); }
+    }
+
+    .grain-overlay {
+        position: fixed; inset: 0; pointer-events: none; z-index: 100;
+        opacity: 0.035;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        animation: grain 0.5s steps(1) infinite;
+    }
+
+    input::placeholder, textarea::placeholder { font-family: serif; font-style: italic; }
+
+    select option { background-color: #1a1412; color: #d6d3d1; }
+</style>

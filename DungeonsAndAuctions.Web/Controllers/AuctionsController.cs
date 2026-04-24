@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Security.Claims;
 using D_A.Application.DTOs;
 using D_A.Application.Services.Implementations;
 using D_A.Application.Services.Interfaces;
@@ -9,9 +10,12 @@ using DNDA.Web.Hubs;
 using DNDA.Web.Util;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using DNDA.Web.Extensions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DNDA.Web.Controllers
 {
+    [Authorize]
     public class AuctionsController : Controller
     {
         private readonly IServiceAuctions _ServiceAuctions;
@@ -20,13 +24,7 @@ namespace DNDA.Web.Controllers
         private readonly IServiceAuctionBidHistory _serviceBidHistory;
         private readonly IHubContext<AuctionHub> _hubContext;
         private readonly IServicePayment _servicePayment;
-
         private readonly IServiceAuctionWinner _serviceWinner;
-
-
-
-        private const int UsuarioActualId = 7;
-       
 
         public AuctionsController(
             IServiceAuctions ServiceAuctions,
@@ -43,6 +41,19 @@ namespace DNDA.Web.Controllers
             _hubContext = hubContext;
             _serviceWinner = serviceWinner;
             _servicePayment = servicePayment;
+        }
+
+        // Helper: obtiene el UsersDTO del usuario autenticado (Claims -> carga DTO desde Servicio)
+        private async Task<UsersDTO?> GetCurrentUserAsync()
+        {
+            if (User?.Identity?.IsAuthenticated != true)
+                return null;
+
+            var idClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(idClaim, out var userId))
+                return null;
+
+            return await _serviceUser.FindByIdAsync(userId);
         }
 
         public async Task<IActionResult> Index()
@@ -72,23 +83,24 @@ namespace DNDA.Web.Controllers
             var auction = await _ServiceAuctions.AllDetails(id);
             if (auction == null) return NotFound();
 
-          
-            var currentUser = await _serviceUser.FindByIdAsync(UsuarioActualId);
-            ViewBag.CurrentUserId = UsuarioActualId;
+            var currentUser = await GetCurrentUserAsync();
+            var currentUserId = currentUser?.Id ?? 0;
+            ViewBag.CurrentUserId = currentUserId;
             ViewBag.CurrentUserName = currentUser?.UserName ?? "Desconocido";
 
-           
-            ViewBag.IsOwner = auction.idusercreator == UsuarioActualId;
+            ViewBag.IsOwner = auction.idusercreator == currentUserId;
 
             return View(auction);
         }
 
-      
         [HttpPost]
-    
         public async Task<IActionResult> PlaceBid(int auctionId, decimal amount)
         {
-            int userId = UsuarioActualId;
+            var currentUser = await GetCurrentUserAsync();
+            if (currentUser == null)
+                return Json(new { success = false, message = "Debes iniciar sesión para pujar." });
+
+            int userId = currentUser.Id;
             var errorMsg = await _serviceBidHistory.PlaceBidAsync(auctionId, userId, amount);
             if (errorMsg != null)
                 return Json(new { success = false, message = errorMsg });
@@ -126,11 +138,11 @@ namespace DNDA.Web.Controllers
             }
             catch (Exception ex)
             {
-                // Retorna el error real al cliente para depuración
                 Console.WriteLine($"[SignalR Error] {ex}");
                 return Json(new { success = false, message = $"Error interno: {ex.Message}" });
             }
         }
+
         [HttpGet]
         public async Task<IActionResult> GetAuctionState(int id)
         {
@@ -157,22 +169,18 @@ namespace DNDA.Web.Controllers
         }
 
         [HttpPost]
-        [HttpPost]
-        [HttpPost]
         public async Task<IActionResult> CheckAndCloseAuction(int id)
         {
             var auction = await _ServiceAuctions.GetAuctionById(id);
             if (auction == null)
                 return Json(new { closed = false });
 
-
             if (auction.idstate != 1)
             {
-                
                 var winnerBids = await _serviceBidHistory.GetHighestBidAsync(id);
                 return Json(new
                 {
-                    closed = true,                              //TRUE para que el JS lo procese
+                    closed = true,
                     alreadyClosed = true,
                     winnerName = winnerBids?.User?.UserName ?? "Sin ganador",
                     winnerUserId = winnerBids?.UserId ?? 0,
@@ -181,14 +189,11 @@ namespace DNDA.Web.Controllers
                 });
             }
 
-
             if (DateTime.Now < auction.EndDate)
                 return Json(new { closed = false });
 
-   
             var winnerBid = await _serviceBidHistory.GetHighestBidAsync(id);
 
-          
             if (winnerBid == null)
             {
                 await Task.Delay(100);
@@ -203,7 +208,6 @@ namespace DNDA.Web.Controllers
             {
                 if (winnerBid != null)
                 {
-                   
                     await _serviceWinner.CreateWinnerAsync(
                         auctionId: id,
                         userId: winnerBid.UserId,
@@ -211,20 +215,11 @@ namespace DNDA.Web.Controllers
                         bidWinningId: winnerBid.Id
                     );
 
-                 
-
                     await _servicePayment.GeneratePayment(id);
-                 
-                }
-                else
-                {
-             
                 }
 
-              
                 await _ServiceAuctions.CloseAuction(id);
 
-          
                 await _hubContext.Clients.Group($"auction-{id}").SendAsync(
                     "AuctionClosed",
                     new
@@ -249,8 +244,6 @@ namespace DNDA.Web.Controllers
             catch (Exception ex)
             {
                 var inner = ex.InnerException?.Message ?? ex.Message;
-             
-
                 return Json(new { closed = false, error = inner });
             }
         }
@@ -258,14 +251,12 @@ namespace DNDA.Web.Controllers
         public int CantidadDePujas(int id)
             => _serviceBidHistory.CountBidsByAuction(id).Result;
 
-        
-
         public async Task<IActionResult> Create()
         {
             ViewBag.Objects = await _ServiceObject.ListActiveAsync();
-            var userAsigned = await _serviceUser.FindByIdAsync(UsuarioActualId);
-            ViewBag.UserName = userAsigned?.UserName;
-            ViewBag.UserId = userAsigned?.Id;
+            var currentUser = await GetCurrentUserAsync();
+            ViewBag.UserName = currentUser?.UserName;
+            ViewBag.UserId = currentUser?.Id;
             return View();
         }
 
@@ -302,13 +293,20 @@ namespace DNDA.Web.Controllers
                 {
                     ModelState.AddModelError("idobject", "El objeto ya tiene una subasta activa.");
                     ViewBag.Objects = await _ServiceObject.ListActiveAsync();
-                    var userAsigned2 = await _serviceUser.FindByIdAsync(UsuarioActualId);
-                    ViewBag.UserName = userAsigned2?.UserName;
-                    ViewBag.UserId = userAsigned2?.Id;
+                    var currentUser2 = await GetCurrentUserAsync();
+                    ViewBag.UserName = currentUser2?.UserName;
+                    ViewBag.UserId = currentUser2?.Id;
                     return View(auction);
                 }
 
-                auction.idusercreator = UsuarioActualId;
+                var currentUser = await GetCurrentUserAsync();
+                if (currentUser == null)
+                {
+                    // No autenticado o no se pudo obtener el usuario real
+                    return RedirectToAction("Login", "Account");
+                }
+
+                auction.idusercreator = currentUser.Id;
                 await _ServiceAuctions.CreateAuction(auction);
 
                 TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
@@ -321,9 +319,9 @@ namespace DNDA.Web.Controllers
             }
 
             ViewBag.Objects = await _ServiceObject.ListActiveAsync();
-            var userAsigned = await _serviceUser.FindByIdAsync(UsuarioActualId);
-            ViewBag.UserName = userAsigned?.UserName;
-            ViewBag.UserId = userAsigned?.Id;
+            var currentUserFallback = await GetCurrentUserAsync();
+            ViewBag.UserName = currentUserFallback?.UserName;
+            ViewBag.UserId = currentUserFallback?.Id;
             return View(auction);
         }
 
@@ -353,9 +351,9 @@ namespace DNDA.Web.Controllers
             }
 
             ViewBag.Objects = await _ServiceObject.ListActiveAsync();
-            var user = await _serviceUser.FindByIdAsync(UsuarioActualId);
-            ViewBag.UserName = user?.UserName;
-            ViewBag.UserId = user?.Id;
+            var usuario = await GetCurrentUserAsync();
+            ViewBag.UserName = usuario?.UserName;
+            ViewBag.UserId = usuario?.Id;
             return View(auction);
         }
 
@@ -390,13 +388,12 @@ namespace DNDA.Web.Controllers
                 var auctionFull = await _ServiceAuctions.GetAuctionById(id);
                 auction.IdobjectNavigation = auctionFull?.IdobjectNavigation;
                 auction.IdstateNavigation = auctionFull?.IdstateNavigation;
-                var usuario = await _serviceUser.FindByIdAsync(UsuarioActualId);
+                var usuario = await GetCurrentUserAsync();
                 ViewBag.UserName = usuario?.UserName;
                 ViewBag.UserId = usuario?.Id;
                 return View(auction);
             }
 
-            //rama ash: asignar el ID antes de actualizar
             auction.Id = id;
             await _ServiceAuctions.UpdateAuction(auction);
 
@@ -480,8 +477,5 @@ namespace DNDA.Web.Controllers
             TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion("Subasta baneada", "La subasta fue baneada y removida de la plataforma.", SweetAlertMessageType.success);
             return RedirectToAction(nameof(IndexMaintenance));
         }
-
-
-
     }
 }
