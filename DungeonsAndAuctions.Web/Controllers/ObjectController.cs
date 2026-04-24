@@ -35,7 +35,7 @@ namespace DNDA.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Vendedor")]
+        [Authorize(Roles = "Vendedor,Admin")]
         public async Task<ActionResult> ToggleActive(int id)
         {
 
@@ -77,13 +77,20 @@ namespace DNDA.Web.Controllers
 
 
         [HttpGet]
-
-        [Authorize(Roles = "Vendedor")]
+        [Authorize(Roles = "Vendedor,Admin")]
         public async Task<IActionResult> Index()
         {
-            //llama service
-            var collection = await _serviceObject.ListAsync(); //recibe objecto
-            return View(collection); //pasa DTOs a la vista
+            var collection = await _serviceObject.ListAsync();
+
+            // Vendedor solo ve sus propios objetos; Admin ve todos
+            if (!User.IsInRole("Admin"))
+            {
+                var currentUser = HttpContext.Session.GetObject<UsersDTO>(AccountController.SessionKeyUser);
+                if (currentUser != null)
+                    collection = collection.Where(o => o.UserId == currentUser.Id).ToList();
+            }
+
+            return View(collection);
         }
 
         [Authorize]
@@ -93,7 +100,7 @@ namespace DNDA.Web.Controllers
 
             var auctions = await _serviceActions.GetAuctionsByObjectID(id);
 
-            if(auctions != null)
+            if (auctions != null)
             {
 
                 ViewBag.AuctionsObjects = true;
@@ -130,7 +137,7 @@ namespace DNDA.Web.Controllers
         }
 
         // GET: ObjectController/Create
-        [Authorize(Roles = "Vendedor")]
+        [Authorize(Roles = "Vendedor,Admin")]
         public async Task<ActionResult> Create()
         {
             await LoadCombosAsync();
@@ -152,7 +159,7 @@ namespace DNDA.Web.Controllers
         // POST: LibroController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Vendedor")]
+        [Authorize(Roles = "Vendedor,Admin")]
         public async Task<ActionResult> Create(ObjectsDTO dto, List<IFormFile> imagenes, string[] selectedCategorias)
         {
             selectedCategorias ??= Array.Empty<string>();
@@ -229,7 +236,7 @@ namespace DNDA.Web.Controllers
 
 
         // GET: ObjectController/Edit/5
-        [Authorize(Roles = "Vendedor")]
+        [Authorize(Roles = "Vendedor,Admin")]
         public async Task<ActionResult> Edit(int id)
         {
 
@@ -246,7 +253,7 @@ namespace DNDA.Web.Controllers
 
             var dto = await _serviceObject.GetObjectById(id);
 
-            var selected = dto.Categories.Select(c => c.Id.ToString()).ToList(); 
+            var selected = dto.Categories.Select(c => c.Id.ToString()).ToList();
             dto.IsActive = dto.IsActive;
 
             //obtener info del usuario asignado al objeto
@@ -262,7 +269,7 @@ namespace DNDA.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Vendedor")]
+        [Authorize(Roles = "Vendedor,Admin")]
         public async Task<ActionResult> Edit(int id, ObjectsDTO dto, List<IFormFile>? imagenes, string[] selectedCategorias)
         {
 
@@ -298,7 +305,7 @@ namespace DNDA.Web.Controllers
                 ModelState.Remove("imagenes");
             }
 
-           
+
 
             var categoryIds = selectedCategorias.Select(x => int.Parse(x)).ToList();
             dto.IsActive = dto.IsActive;
@@ -322,4 +329,3 @@ namespace DNDA.Web.Controllers
 
 
 }
-

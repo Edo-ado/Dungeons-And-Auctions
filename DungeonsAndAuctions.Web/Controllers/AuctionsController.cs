@@ -72,10 +72,16 @@ namespace DNDA.Web.Controllers
             return View(all);
         }
 
-        [Authorize(Roles = "Vendedor")]
+        [Authorize(Roles = "Vendedor,Admin")]
         public async Task<IActionResult> IndexMaintenance()
         {
             var all = await _ServiceAuctions.GetAllAuctions();
+            var currentUser = await GetCurrentUserAsync();
+
+            // Vendedor solo ve sus propias subastas; Admin ve todas
+            if (currentUser != null && !User.IsInRole("Admin"))
+                all = all.Where(a => a?.idusercreator == currentUser.Id).ToList();
+
             return View(all);
         }
         [Authorize]
@@ -254,7 +260,7 @@ namespace DNDA.Web.Controllers
             => _serviceBidHistory.CountBidsByAuction(id).Result;
 
 
-        [Authorize(Roles = "Vendedor")]
+        [Authorize(Roles = "Vendedor,Admin")]
         public async Task<IActionResult> Create()
         {
             ViewBag.Objects = await _ServiceObject.ListActiveAsync();
@@ -265,7 +271,7 @@ namespace DNDA.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Vendedor")]
+        [Authorize(Roles = "Vendedor,Admin")]
         public async Task<IActionResult> Create(AuctionsDTO auction)
         {
             ModelState.Remove("idusercreator");
@@ -331,7 +337,7 @@ namespace DNDA.Web.Controllers
         }
 
 
-        [Authorize(Roles = "Vendedor")]
+        [Authorize(Roles = "Vendedor,Admin")]
         public async Task<ActionResult> Edit(int id)
         {
             var auction = await _ServiceAuctions.GetAuctionById(id);
@@ -339,7 +345,7 @@ namespace DNDA.Web.Controllers
 
 
             var currentUser = await GetCurrentUserAsync();
-            if (auction.idusercreator != currentUser?.Id)
+            if (auction.idusercreator != currentUser?.Id && !User.IsInRole("Admin"))
             {
                 TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
                     "No permitido",
@@ -378,7 +384,7 @@ namespace DNDA.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Vendedor")]
+        [Authorize(Roles = "Vendedor,Admin")]
         public async Task<ActionResult> Edit(int id, AuctionsDTO auction)
         {
             ModelState.Remove("idusercreator");
@@ -428,7 +434,7 @@ namespace DNDA.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Vendedor")]
+        [Authorize(Roles = "Vendedor,Admin")]
         public async Task<IActionResult> PublishAuction(int id)
         {
             var auction = await _ServiceAuctions.GetAuctionById(id);
@@ -451,14 +457,14 @@ namespace DNDA.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Vendedor")]
+        [Authorize(Roles = "Vendedor,Admin")]
         public async Task<IActionResult> CancellAuction(int id)
         {
             var auction = await _ServiceAuctions.GetAuctionById(id);
 
 
             var currentUser = await GetCurrentUserAsync();
-            if (auction.idusercreator != currentUser?.Id)
+            if (auction.idusercreator != currentUser?.Id && !User.IsInRole("Admin"))
             {
                 TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
                     "No permitido",

@@ -48,12 +48,12 @@
 
                         <tr class="@(isBanned ? "bg-red-950/40" : "hover:bg-[#362822]") transition-colors duration-200 group">
 
-                         
+
                             <td class="px-6 py-4 font-mono text-yellow-700">
                                 #@item.Id
                             </td>
 
-                         
+
                             <td class="px-6 py-4">
                                 <div class="text-base font-bold text-stone-200 group-hover:text-yellow-400 transition-colors uppercase tracking-tight">
                                     @item.IdobjectNavigation.Name
@@ -66,27 +66,27 @@
                                 @if (isBanned)
                                 {
                                     <span class="inline-block mt-1 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest bg-red-900 border border-red-500 text-red-300">
-                                         Subasta Baneada
+                                        Subasta Baneada
                                     </span>
                                 }
                             </td>
 
-                          
+
                             <td class="px-6 py-4">
-                               
+
                                 <span class="text-yellow-300 font-bold font-mono whitespace-nowrap">
                                     @((item.BasePrice ?? 0).ToString("F2"))Oz
                                 </span>
                             </td>
 
-                      
+
                             <td class="px-6 py-4">
                                 <span class="text-stone-400 font-mono">
                                     +  @((item.IncrementoMinimo ?? 0).ToString("N2"))Oz
                                 </span>
                             </td>
 
-                           
+
                             <td class="px-6 py-4 text-center">
                                 <span class="inline-block px-3 py-1 rounded-full bg-red-900/30 border border-red-800 text-red-400 text-xs font-bold font-mono">
                                     @item.TotalBids pujas
@@ -124,29 +124,29 @@
                             <td class="px-6 py-4 text-right text-sm font-bold align-middle">
                                 <div class="flex justify-end items-center gap-2 min-w-max">
 
-                                  
+
                                     <a asp-action="Details" asp-route-id="@item.Id"
                                        class="text-blue-500 hover:text-blue-300 transition-all uppercase tracking-widest text-xs whitespace-nowrap">
                                         Ver
                                     </a>
 
-                                   
+
 
                                     @if (isCancelled)
                                     {
-                                       
+
                                         <span class="text-yellow-900">|</span>
                                         <span class="text-stone-600 uppercase text-xs tracking-widest">Sin acciones</span>
                                     }
                                     else if (isBanned)
                                     {
-                                       
+
                                         <span class="text-yellow-900">|</span>
                                         <span class="text-red-800 uppercase text-xs tracking-widest font-bold">Baneada</span>
                                     }
                                     else if (isActive)
                                     {
-                                        
+
                                         <span class="text-yellow-900">|</span>
 
                                         <form asp-action="CancellAuction" asp-route-id="@item.Id" method="post" class="inline" data-confirm-action="CancellAuction">
@@ -157,19 +157,22 @@
                                             </button>
                                         </form>
 
-                                        <span class="text-yellow-900">|</span>
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <span class="text-yellow-900">|</span>
 
-                                        <form asp-action="BanAuction" asp-route-id="@item.Id" method="post" class="inline" data-confirm-action="BanAuction">
-                                            @Html.AntiForgeryToken()
-                                            <button type="submit"
-                                                    class="text-red-500 hover:text-red-300 transition-all uppercase tracking-widest text-xs whitespace-nowrap">
-                                                Banear
-                                            </button>
-                                        </form>
+                                            <form asp-action="BanAuction" asp-route-id="@item.Id" method="post" class="inline" data-confirm-action="BanAuction">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit"
+                                                        class="text-red-500 hover:text-red-300 transition-all uppercase tracking-widest text-xs whitespace-nowrap">
+                                                    Banear
+                                                </button>
+                                            </form>
+                                        }
                                     }
                                     else
                                     {
-                                       
+
                                         <span class="text-yellow-900">|</span>
 
                                         <a asp-action="Edit" asp-route-id="@item.Id" data-no-ajax
@@ -252,7 +255,7 @@
 @* vaina pa que esta cosa muestre bonito las confirmaciones *@
 @section Scripts {
     <script>
-      
+
         const confirmaciones = {
             PublishAuction: {
                 title: '¿Publicar subasta?',

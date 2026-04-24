@@ -19,8 +19,8 @@ namespace D_A.Application.Services.Implementations
         private readonly ILogger<ServiceUser> _logger;
 
         public ServiceUser(
-            IRepositoryUser repository, 
-            IMapper mapper, 
+            IRepositoryUser repository,
+            IMapper mapper,
             IOptions<AppConfig> options,
             ILogger<ServiceUser> logger)
         {
@@ -102,16 +102,17 @@ namespace D_A.Application.Services.Implementations
                 // Verificar contraseña
                 byte[] passwordHash = Cryptography.EncryptToBytes(password, _options.Value.Crypto.Secret);
 
-                bool passwordMatch = await _repository.LoginAsync(email, passwordHash) != null;
+                // Usar el usuario retornado por LoginAsync — incluye Role, Country y Gender
+                var authenticatedUser = await _repository.LoginAsync(email, passwordHash);
 
-                if (!passwordMatch)
+                if (authenticatedUser == null)
                 {
                     _logger.LogWarning("Contraseña incorrecta para: {Email}", email);
                     return null;
                 }
 
-                _logger.LogInformation("Login exitoso para: {Email} (Id={UserId})", email, user.Id);
-                return _mapper.Map<UsersDTO>(user);
+                _logger.LogInformation("Login exitoso para: {Email} (Id={UserId})", email, authenticatedUser.Id);
+                return _mapper.Map<UsersDTO>(authenticatedUser);
             }
             catch (Exception ex)
             {
