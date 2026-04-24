@@ -1,3 +1,4 @@
+@using DNDA.Web.Models
 
 @model RegisterViewModel
 @{
@@ -5,7 +6,7 @@
     Layout = "_LayoutAuth";
 }
 
-<div class="relative min-h-screen overflow-hidden font-['Cinzel'] flex items-center justify-center py-12" style="background-color: #1a1412;">
+<div class="relative overflow-hidden font-['Cinzel'] py-12 w-full" style="background-color: #1a1412;">
     <div class="grain-overlay"></div>
     <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-transparent to-black/90"></div>
 
@@ -21,7 +22,8 @@
     </div>
 
     <!-- Card de registro -->
-    <div class="relative z-10 w-full max-w-2xl px-6 py-4 animate-rise">
+    <!-- DESPUÉS -->
+    <div class="relative z-10 animate-rise" style="width: 100%; max-width: 42rem; padding: 1.5rem; margin-left: auto; margin-right: auto;">
 
         <!-- Encabezado / Logo -->
         <div class="text-center mb-8">

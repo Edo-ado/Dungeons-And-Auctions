@@ -183,5 +183,34 @@ namespace D_A.Application.Services.Implementations
                 return null;
             }
         }
+
+
+
+        public async Task<Users?> GetProfileAsync(int userId)
+    => await _repository.GetProfileAsync(userId);
+
+        public async Task<bool> UpdateProfileAsync(int userId, string firstName, string lastName, string? phoneNumber, string? aboutMe)
+            => await _repository.UpdateProfileAsync(userId, firstName, lastName, phoneNumber, aboutMe);
+
+        public async Task<bool> ChangePasswordAsync(int userId, string currentPassword, string newPassword)
+        {
+            byte[] currentHash = Cryptography.EncryptToBytes(currentPassword, _options.Value.Crypto.Secret);
+            byte[] newHash = Cryptography.EncryptToBytes(newPassword, _options.Value.Crypto.Secret);
+            return await _repository.ChangePasswordAsync(userId, currentHash, newHash);
+        }
+
+        public async Task<ICollection<AuctionBidHistory>> GetBidHistoryAsync(int userId)
+            => await _repository.GetBidHistoryAsync(userId);
+
+        public async Task<ICollection<Auctions>> GetUserAuctionsAsync(int userId)
+            => await _repository.GetUserAuctionsAsync(userId);
+
+        public async Task<ICollection<Payment>> GetUserPaymentsAsync(int userId)
+            => await _repository.GetUserPaymentsAsync(userId);
+
+
+
+
+
     }
 }

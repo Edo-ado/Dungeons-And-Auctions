@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = "Acceso Denegado";
+    Layout = "_LayoutAuth";
+}
+
+<div class="relative min-h-screen flex items-center justify-center font-['Cinzel']" style="background-color: #1a1412;">
+    <div class="text-center px-6">
+        <div class="text-red-700 text-6xl mb-4">⚔</div>
+        <h1 class="text-yellow-500 uppercase tracking-[0.3em] text-2xl font-bold mb-4">Acceso Denegado</h1>
+        <p class="text-stone-400 font-serif italic mb-8">No tienes permiso para entrar a estas tierras.</p>
+        <a asp-controller="Home" asp-action="Index"
+           class="px-6 py-3 bg-red-900 border border-red-700 text-yellow-100 uppercase tracking-[0.2em] text-xs font-bold hover:bg-red-800 transition-all">
+            Volver al Reino
+        </a>
+    </div>
+</div>
