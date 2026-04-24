@@ -18,6 +18,15 @@ namespace D_A.Infraestructure.Repository.Interfaces
 
         // ─── Nuevos para Auth ─────────────────────────────────────────────────
 
+  
+        Task<Users?> GetProfileAsync(int userId);
+        Task<bool> UpdateProfileAsync(int userId, string firstName, string lastName, string? phoneNumber, string? aboutMe);
+        Task<bool> ChangePasswordAsync(int userId, byte[] currentPasswordHash, byte[] newPasswordHash);
+        Task<ICollection<AuctionBidHistory>> GetBidHistoryAsync(int userId);
+        Task<ICollection<Auctions>> GetUserAuctionsAsync(int userId);
+        Task<ICollection<Payment>> GetUserPaymentsAsync(int userId);
+
+
 
         Task<Users?> FindByEmailAsync(string email);
 

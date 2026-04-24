@@ -5,13 +5,16 @@ using D_A.Application.Services.Interfaces;
 using D_A.Infraestructure.Models;
 using D_A.Web.Controllers;
 using D_A.Web.Models;
+using DNDA.Web.Extensions; // <-- añadido
 using DNDA.Web.Util;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using DNDA.Web.Extensions; // <-- añadido
 
 namespace DNDA.Web.Controllers
 {
+
+    [Authorize]
     public class ObjectController : Controller
     {
         private readonly IServiceObject _serviceObject;
@@ -32,6 +35,7 @@ namespace DNDA.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Vendedor")]
         public async Task<ActionResult> ToggleActive(int id)
         {
 
@@ -74,12 +78,15 @@ namespace DNDA.Web.Controllers
 
         [HttpGet]
 
+        [Authorize(Roles = "Vendedor")]
         public async Task<IActionResult> Index()
         {
             //llama service
             var collection = await _serviceObject.ListAsync(); //recibe objecto
             return View(collection); //pasa DTOs a la vista
         }
+
+        [Authorize]
         public async Task<IActionResult> Details(int id)
         {
             var objects = await _serviceObject.GetObjectById(id);
@@ -123,6 +130,7 @@ namespace DNDA.Web.Controllers
         }
 
         // GET: ObjectController/Create
+        [Authorize(Roles = "Vendedor")]
         public async Task<ActionResult> Create()
         {
             await LoadCombosAsync();
@@ -144,6 +152,7 @@ namespace DNDA.Web.Controllers
         // POST: LibroController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Vendedor")]
         public async Task<ActionResult> Create(ObjectsDTO dto, List<IFormFile> imagenes, string[] selectedCategorias)
         {
             selectedCategorias ??= Array.Empty<string>();
@@ -220,6 +229,7 @@ namespace DNDA.Web.Controllers
 
 
         // GET: ObjectController/Edit/5
+        [Authorize(Roles = "Vendedor")]
         public async Task<ActionResult> Edit(int id)
         {
 
@@ -252,6 +262,7 @@ namespace DNDA.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Vendedor")]
         public async Task<ActionResult> Edit(int id, ObjectsDTO dto, List<IFormFile>? imagenes, string[] selectedCategorias)
         {
 

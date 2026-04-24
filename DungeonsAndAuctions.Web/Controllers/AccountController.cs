@@ -14,6 +14,8 @@ using System.Security.Claims;
 
 namespace DNDA.Web.Controllers
 {
+
+
     public class AccountController : Controller
     {
         private readonly IServiceUser _serviceUser;
@@ -234,5 +236,10 @@ namespace DNDA.Web.Controllers
                 dataTextField: nameof(GendersDTO.Name),
                 selectedValue: selectedGender == 0 ? null : (object)selectedGender);
         }
+
+
+
+
+
     }
 }

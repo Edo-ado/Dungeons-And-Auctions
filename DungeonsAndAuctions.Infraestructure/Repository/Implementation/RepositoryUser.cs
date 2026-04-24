@@ -130,5 +130,78 @@ namespace D_A.Infraestructure.Repository.Implementation
             await _context.SaveChangesAsync();
             return entity.Id;
         }
+
+
+
+        public async Task<Users?> GetProfileAsync(int userId)
+        {
+            return await _context.Users
+                .Include(u => u.Country)
+                .Include(u => u.Gender)
+                .Include(u => u.Role)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+        }
+
+        public async Task<bool> UpdateProfileAsync(int userId, string firstName, string lastName, string? phoneNumber, string? aboutMe)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null) return false;
+
+            user.FirstName = firstName;
+            user.LastName = lastName;
+            user.PhoneNumber = phoneNumber;
+            user.AboutMe = aboutMe;
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> ChangePasswordAsync(int userId, byte[] currentPasswordHash, byte[] newPasswordHash)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null) return false;
+
+            if (!user.PasswordHash.SequenceEqual(currentPasswordHash)) return false;
+
+            user.PasswordHash = newPasswordHash;
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<ICollection<AuctionBidHistory>> GetBidHistoryAsync(int userId)
+        {
+            return await _context.AuctionBidHistory
+                .Include(b => b.Auction)
+                    .ThenInclude(a => a.IdobjectNavigation)
+                .Where(b => b.UserId == userId)
+                .OrderByDescending(b => b.BidDate)
+                .ToListAsync();
+        }
+
+        public async Task<ICollection<Auctions>> GetUserAuctionsAsync(int userId)
+        {
+            return await _context.Auctions
+                .Include(a => a.IdobjectNavigation)
+                .Include(a => a.IdstateNavigation)
+                .Where(a => a.Idusercreator == userId)
+                .OrderByDescending(a => a.StartDate)
+                .ToListAsync();
+        }
+
+        public async Task<ICollection<Payment>> GetUserPaymentsAsync(int userId)
+        {
+            return await _context.Payment
+                .Include(p => p.Auction)
+                    .ThenInclude(a => a!.IdobjectNavigation)
+                .Include(p => p.PaymentStatus)
+                .Where(p => p.WinnerUserId != null &&
+                            _context.AuctionWinner
+                                .Any(w => w.Idauctionwinner == p.WinnerUserId && w.Bidwinning.UserId == userId))
+                .OrderByDescending(p => p.DateCreated)
+                .ToListAsync();
+        }
+
+
+
     }
 }

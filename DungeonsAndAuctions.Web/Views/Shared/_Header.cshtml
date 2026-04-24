@@ -1,5 +1,4 @@
-﻿@* Path: DungeonsAndAuctions.Web/Views/Shared/_Header.cshtml *@
-@* CORRECCIÓN: Logout apuntaba a Auth/Logout (controlador inexistente) → Account/Logout *@
+﻿@* Path: Views/Shared/_Header.cshtml *@
 <nav class="bg-[#2a1f1a]
             border-t-4 border-yellow-700
             border-b border-yellow-900
@@ -14,38 +13,100 @@
                      alt="Logo" />
             </a>
 
-            <!-- Centro -->
+            <!-- Centro — visible para todos los autenticados -->
             <div class="flex space-x-16 font-['Cinzel'] text-red-500 tracking-[0.2em] uppercase text-2xl">
                 <a class="hover:text-yellow-400 transition duration-300 hover:drop-shadow-[0_0_8px_rgba(255,215,0,0.8)]"
                    asp-controller="Home" asp-action="Index">Inicio</a>
+
                 <a class="hover:text-yellow-400 transition duration-300 hover:drop-shadow-[0_0_8px_rgba(255,215,0,0.8)]"
                    asp-controller="Auctions" asp-action="Index">Subastas</a>
-                <a class="hover:text-yellow-400 transition duration-300 hover:drop-shadow-[0_0_8px_rgba(255,215,0,0.8)]"
-                   asp-controller="User" asp-action="Details" asp-route-id="@(Context.Session.GetInt32("UserId") ?? 0)">Mi Perfil</a>
+
+                @* Perfil solo si está autenticado *@
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a class="hover:text-yellow-400 transition duration-300 hover:drop-shadow-[0_0_8px_rgba(255,215,0,0.8)]"
+                       asp-controller="Profile" asp-action="Index"
+                       asp-route-id="@(Context.Session.GetInt32("UserId") ?? 0)">
+                        Mi Perfil
+                    </a>
+                }
             </div>
 
             <!-- Derecha -->
             <div class="flex items-center gap-6">
                 <div class="hidden lg:block w-px h-10 bg-yellow-700 opacity-40"></div>
+
                 <div class="hidden lg:flex flex-col text-right font-['Cinzel'] text-red-500 uppercase tracking-widest text-xs gap-1">
-                    <a class="hover:text-yellow-400 transition"
-                       asp-controller="User" asp-action="Index">All Users</a>
-                    <a class="hover:text-yellow-400 transition"
-                       asp-controller="Object" asp-action="Index">All Objects</a>
-                    <a class="hover:text-yellow-400 transition"
-                       asp-controller="Auctions" asp-action="IndexMaintenance">All Auctions</a>
-                    <a class="hover:text-yellow-400 transition"
-                       asp-controller="Report" asp-action="Index">Reportes</a>
+
+                    @* Solo Administrador *@
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a class="hover:text-yellow-400 transition"
+                           asp-controller="User" asp-action="Index">
+                            ⚔ All Users
+                        </a>
+                        <a class="hover:text-yellow-400 transition"
+                           asp-controller="Report" asp-action="Index">
+                            📜 Reportes
+                        </a>
+                    }
+
+                    @* Administrador y Vendedor *@
+                    @if (User.IsInRole("Admin") || User.IsInRole("Vendedor"))
+                    {
+                        <a class="hover:text-yellow-400 transition"
+                           asp-controller="Object" asp-action="Index">
+                            🏰 All Objects
+                        </a>
+                        <a class="hover:text-yellow-400 transition"
+                           asp-controller="Auctions" asp-action="IndexMaintenance">
+                            ⚜ All Auctions
+                        </a>
+                    }
+
+                    @* Solo Vendedor *@
+                    @if (User.IsInRole("Vendedor"))
+                    {
+                        <a class="hover:text-yellow-400 transition"
+                           asp-controller="Object" asp-action="Create">
+                            ➕ Crear Objeto
+                        </a>
+                        <a class="hover:text-yellow-400 transition"
+                           asp-controller="Auctions" asp-action="Create">
+                            ➕ Crear Subasta
+                        </a>
+                    }
+
+                    @* Solo Comprador *@
+                    @if (User.IsInRole("Comprador"))
+                    {
+                        <a class="hover:text-yellow-400 transition"
+                           asp-controller="Pujas" asp-action="MiHistorial">
+                            📜 Mis Pujas
+                        </a>
+                    }
+
                 </div>
+
                 <div class="hidden lg:block w-px h-10 bg-yellow-700 opacity-40"></div>
 
-                @* CORRECCIÓN: era asp-controller="Auth" (no existe) → Account *@
-                <a class="text-red-500 hover:text-yellow-400 font-semibold transition uppercase tracking-wide font-['Cinzel']"
-                   asp-controller="Account" asp-action="Logout">
-                    Cerrar sesión
-                </a>
-            </div>
+                @* Login o Logout según estado de sesión *@
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a class="text-red-500 hover:text-yellow-400 font-semibold transition uppercase tracking-wide font-['Cinzel']"
+                       asp-controller="Account" asp-action="Logout">
+                        Cerrar sesión
+                    </a>
+                }
+                else
+                {
+                    <a class="text-red-500 hover:text-yellow-400 font-semibold transition uppercase tracking-wide font-['Cinzel']"
+                       asp-controller="Account" asp-action="Login">
+                        Iniciar sesión
+                    </a>
+                }
 
+            </div>
         </div>
     </div>
 </nav>

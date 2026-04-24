@@ -1,10 +1,13 @@
-﻿using D_A.Application.DTOs;
+﻿using System;
+using System.Security.Claims;
+using System.Security.Claims;
+using D_A.Application.DTOs;
 using D_A.Application.Services.Interfaces;
 using D_A.Infraestructure.Models;
 using DNDA.Web.Util;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
 
 namespace DNDA.Web.Controllers
 {
@@ -16,7 +19,8 @@ namespace DNDA.Web.Controllers
         private readonly IServiceCountry _serviceCountry;
         private readonly IServiceGender _serviceGenero;
 
-
+        private int GetUserId() =>
+    int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         public UserController(IServiceUser serviceUser, IServiceAuctionBidHistory serviceBid, IServiceAuctions serviceAuctions, IServiceCountry serviceCountry, IServiceGender serviceGender)
         {
             _serviceUser = serviceUser;
@@ -29,6 +33,8 @@ namespace DNDA.Web.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> ToggleBlock(int id)
         {
             var user = await _serviceUser.FindByIdAsync(id);
@@ -47,6 +53,7 @@ namespace DNDA.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ToggleActive(int id)
         {
             var user = await _serviceUser.FindByIdAsync(id);
@@ -68,6 +75,9 @@ namespace DNDA.Web.Controllers
             var collection = await _serviceUser.ListAsync();
             return View(collection);
         }
+
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Details(int id)
         {
             var user = await _serviceUser.FindByIdAsync(id);
@@ -99,6 +109,9 @@ namespace DNDA.Web.Controllers
 
             return View(user);
         }
+
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Delete(int id)
         {
             var user = await _serviceUser.FindByIdAsync(id);
@@ -113,6 +126,10 @@ namespace DNDA.Web.Controllers
 
             return View(user);
         }
+
+
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Edit(int id)
         {
             var user = await _serviceUser.FindByIdAsync(id);
@@ -151,6 +168,9 @@ namespace DNDA.Web.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+
+        [Authorize]
+
         public async Task<IActionResult> Edit(int id, UsersDTO dto)
         {
 
@@ -212,5 +232,29 @@ namespace DNDA.Web.Controllers
         }
 
 
-    }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> ChangePassword(
+            string currentPassword, string newPassword, string confirmNewPassword)
+        {
+            var userId = GetUserId();
+
+            if (newPassword != confirmNewPassword)
+            {
+                TempData["Error"] = "Las contraseñas nuevas no coinciden.";
+                return RedirectToAction("Index");
+            }
+
+            var success = await _serviceUser.ChangePasswordAsync(userId, currentPassword, newPassword);
+
+            TempData[success ? "Success" : "Error"] = success
+                ? "Contraseña actualizada correctamente."
+                : "La contraseña actual es incorrecta.";
+
+            return RedirectToAction("Index");
+        }
+    
+
+}
 }
